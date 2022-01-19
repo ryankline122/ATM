@@ -9,9 +9,6 @@ def login():
     return 0
 
 
-def fakefunction():
-    return 0
-
 def createAccount():
     return 0
 
