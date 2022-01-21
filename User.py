@@ -11,3 +11,5 @@ class User:
         self.password = input("Create a secure password: ")
         self.balance = float(input("Set initial deposit: $"))
 
+        //selmir was here
+
