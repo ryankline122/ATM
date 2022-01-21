@@ -1,28 +1,28 @@
+from User import User
+
 class ATM:
-    def transfer():
+    def transfer(self):
         return 0
 
-    def withdraw():
+    def withdraw(self):
         return 0
 
-    def deposit():
+    def deposit(self):
         return 0
 
-    def balance():
+    def balance(self):
         return 0
 
-    def login():
+    def login(self):
         return 0
 
-    def createAccount():
+    def closeAccount(self):
         return 0
 
-    def closeAccount():
+    def passwordChange(self):
         return 0
 
-    def passwordChange():
+    def usernameChange(self):
         return 0
 
-    def usernameChange():
-        return 0
 
