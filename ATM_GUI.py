@@ -7,8 +7,6 @@ root = tk.Tk()
 root.geometry("800x400")
 
 
-
-
 # Functions
 
 

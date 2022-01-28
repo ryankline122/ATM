@@ -1,5 +1,5 @@
 class User:
-
+    # Constructor
     def __init__(self, name, userID, password, balance, loginStatus):
         self.name = name
         self.userID = userID
@@ -7,18 +7,21 @@ class User:
         self.balance = balance
         self.loginStatus = loginStatus
 
+    # Increases balance by specified amount
     def deposit(self, amount):
-        self.balance += amount
+        self.balance += float(amount)
 
+    # Takes out desired amount
     def withdraw(self, amount):
-        self.balance -= amount
+        self.balance -= float(amount)
 
+    # Prints the users current balance
     def showBalance(self):
         print("Balance: $" + str(self.balance))
 
+    #Allows user to change their password
     def changePassword(self):
         currPass = input("Confirm current password: ")
-
         if (currPass != self.password):
             print("Incorrect password. Try again")
         else:
@@ -30,4 +33,8 @@ class User:
             else:
                 self.password = newPass
                 print("Password set!")
+
+    # For writing a User Object to a string
+    def __toStr___(self):
+        return (self.name + "," +self.userID+ "," +self.password+ "," +str(self.balance)+ "," +str(self.loginStatus))
 
