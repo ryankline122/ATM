@@ -10,34 +10,51 @@ root.geometry("800x400")
 # Functions
 
 
-#create a new user account
+# create a new user account
 def createAccount():
-        myLabel3 = Label(root, text="Testing...")
-        myLabel3.place(x=100, y=150)
+    myLabel3 = Label(root, text="Testing...")
+    myLabel3.place(x=100, y=150)
 
 
-#check if valid username and password and change frame to dashboard
+def transactionLog():
+    placeHolderLabel = Label(root, text="Testing", fg='black')
+    newUserLabel.place(x=665, y=360)
+
+
+seeMore_btn = ImageTk.PhotoImage(Image.open("pngfind.com-black-button-png-50298_80x40.png"))
+
+img_label3 = Label(image=seeMore_btn)
+
+
+# check if valid username and password and change frame to dashboard
 def dashboard():
-
     myLabel = Label(root, text=User.get())
     myLabel.place(x=400, y=355)
 
     myLabel2 = Label(root, text=Password.get())
     myLabel2.place(x=400, y=375)
 
-    top_Frame = LabelFrame(root, width=800, height=400,)
+    top_Frame = LabelFrame(root, width=800, height=400)
     top_Frame.pack(fill="both", expand=1)
 
     # Define a Canvas Widget
     canvas = Canvas(top_Frame, width=390, height=150)
-    canvas.place(x=0,y=0)
+    canvas.place(x=0, y=0)
 
     canvas2 = Canvas(top_Frame, width=390, height=150)
     canvas2.place(x=400, y=0)
 
+    canvas3 = Canvas(top_Frame, width=700, height=150)
+    canvas3.place(x=50, y=180)
+
     # Create a rectangle in Canvas
     canvas.create_rectangle(4, 146, 396, 4, outline='gray', width=2, fill='#343332')
     canvas2.create_rectangle(4, 146, 396, 4, outline='gray', width=2, fill='#343332')
+    canvas3.create_rectangle(4, 146, 696, 4, outline='gray', width=2, fill='#343332')
+
+    recentLogLabel = Label(top_Frame, text="Recent Transactions", padx=10, pady=10, bg='#343332', fg='gray',
+                           font='Times 10 bold')
+    recentLogLabel.place(x=335, y=185)
 
     savingAccountLabel = Label(top_Frame, text="Saving Account", padx=10, pady=10, bg='#343332', fg='gray')
     savingAccountLabel.place(x=5, y=5)
@@ -45,12 +62,13 @@ def dashboard():
     checkingAccountLabel = Label(top_Frame, text="Checking Account", padx=10, pady=10, bg='#343332', fg='gray')
     checkingAccountLabel.place(x=405, y=5)
 
-    availableBalanceLabel = Label(top_Frame, text="Available Balance", padx=10, pady=10, bg='#343332', fg='gray', font="Italics 7")
+    availableBalanceLabel = Label(top_Frame, text="Available Balance", padx=10, pady=10, bg='#343332', fg='gray',
+                                  font="Italics 7")
     availableBalanceLabel.place(x=405, y=105)
 
-    availableBalanceLabel = Label(top_Frame, text="Available Balance", padx=10, pady=10, bg='#343332', fg='gray', font="Italics 7")
+    availableBalanceLabel = Label(top_Frame, text="Available Balance", padx=10, pady=10, bg='#343332', fg='gray',
+                                  font="Italics 7")
     availableBalanceLabel.place(x=5, y=105)
-
 
     checkingAccountMoneyLabel = Label(top_Frame, text="$", bg='#343332', fg='gray')
     checkingAccountMoneyLabel.place(x=405, y=85)
@@ -64,6 +82,9 @@ def dashboard():
     savingAccountBalanceLabel = Label(top_Frame, text="500.00", bg='#343332', fg='gray', font="Times 18 bold")
     savingAccountBalanceLabel.place(x=15, y=80)
 
+    seeMoreBtn = tk.Button(root, image=seeMore_btn, command=transactionLog, borderwidth=0)
+    seeMoreBtn.place(x=360, y=335)
+
 
 User = Entry(root, width=30, fg='black', borderwidth=2)
 User.place(x=300, y=175)
@@ -71,14 +92,13 @@ User.place(x=300, y=175)
 Password = Entry(root, width=30, fg='black', borderwidth=2)
 Password.place(x=300, y=205)
 
-newUserLabel = Label(root, text ="New User?", fg='black')
+newUserLabel = Label(root, text="New User?", fg='black')
 newUserLabel.place(x=665, y=360)
 
 # Buttons
 login_btn = ImageTk.PhotoImage(Image.open("login-button-png-18030_4_75x50.png"))
 
 img_label = Label(image=login_btn)
-
 
 register_btn = ImageTk.PhotoImage(Image.open("register-button-png-18477_4_50x40.png"))
 
