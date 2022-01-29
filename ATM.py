@@ -1,5 +1,10 @@
 from User import User
+import sqlite3
 import sys
+
+# Temporary User
+global currUser
+
 
 # Writes user account info to text file
 def createAccount():
@@ -8,37 +13,49 @@ def createAccount():
     password = input("Create a secure password: ")
     balance = float(input("Set initial deposit: $"))
 
-    # Update me when writing to database instead of text file
-    file = open("user_info", "a")
-    usr = User(name, userID, password, balance, False)
-    file.write(usr.__toStr___() + "\n")
-    file.close()
+    # Creates user database if needed, adds user info upon successful creation
+    db = sqlite3.connect('user_info.db')
+    c = db.cursor()
+    c.execute("""CREATE TABLE IF NOT EXISTS users(
+                   name text,
+                   userID text,
+                   password text,
+                   balance real,
+                   loginStatus text
+                )""")
+    usr = User(name, userID, password, balance, "False")
+    c.execute("INSERT INTO users VALUES(?,?,?,?,?)",(usr.name, usr.userID, usr.password, usr.balance, usr.loginStatus))
+    db.commit()
+    c.close()
+    db.close()
 
-# Reads in user_info text file. Logs user in if userID and password inputs match
+
+# Reads in user_info database. Logs user in if userID and password inputs match
 def login():
     success = False
-    file = open("user_info", "r")
     nameInput = input("Enter your username: ")
     passInput = input("Enter your password: ")
 
-    for i in file:
-        name, userID, password, balance, loginStatus = i.split(",")
-        try:
-            if (nameInput == userID and passInput == password):
-                success = True
-                # Creates User object with information given from the file
-                global currUser
-                currUser = User(name, userID, password, float(balance), loginStatus)
-                currUser.loginStatus = True
-                break
-        except AttributeError:
-            print("No matches for " + nameInput + " enter 'new' to create new account")
-    file.close()
+    db = sqlite3.connect('user_info.db')
+    c = db.cursor()
+    c.execute("SELECT * FROM users where userID=? AND password=?", (nameInput, passInput))
+    row = c.fetchone()
+    if row:
+        success = True
+
 
     if (success):
         print("Login Successful")
+        c.execute("UPDATE users SET loginStatus = 'True' WHERE userID =?", (nameInput,))
     else:
         print("Incorrect UsrID or password")
+
+    #print data
+    c.execute("SELECT * FROM users")
+    print(c.fetchall())
+
+    c.close()
+    db.close()
 
 # Update user_info doc to ensure accurate balance on next login
 def logout():

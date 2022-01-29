@@ -7,6 +7,7 @@ class User:
         self.balance = balance
         self.loginStatus = loginStatus
 
+
     # Increases balance by specified amount
     def deposit(self, amount):
         self.balance += float(amount)
@@ -37,4 +38,31 @@ class User:
     # For writing a User Object to a string
     def __toStr___(self):
         return (self.name + "," +self.userID+ "," +self.password+ "," +str(self.balance)+ "," +str(self.loginStatus))
+
+
+    # Getter/Setter
+
+    # @property
+    # def userID(self):
+    #     return '{}'.format(self.userID)
+    #
+    # @property
+    # def password(self):
+    #     return '{}'.format(self.password)
+    #
+    # @property
+    # def balance(self):
+    #     return '{}'.format(self.balance)
+    #
+    # @password.setter
+    # def password(self, value):
+    #     self._password = value
+    #
+    # @userID.setter
+    # def userID(self, value):
+    #     self._userID = value
+    #
+    # @balance.setter
+    # def balance(self, value):
+    #     self._balance = value
 

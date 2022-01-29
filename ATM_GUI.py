@@ -21,9 +21,9 @@ def transactionLog():
     newUserLabel.place(x=665, y=360)
 
 
-seeMore_btn = ImageTk.PhotoImage(Image.open("pngfind.com-black-button-png-50298_80x40.png"))
+#seeMore_btn = ImageTk.PhotoImage(Image.open("pngfind.com-black-button-png-50298_80x40.png"))
 
-img_label3 = Label(image=seeMore_btn)
+#img_label3 = Label(image=seeMore_btn)
 
 
 # check if valid username and password and change frame to dashboard
@@ -82,8 +82,8 @@ def dashboard():
     savingAccountBalanceLabel = Label(top_Frame, text="500.00", bg='#343332', fg='gray', font="Times 18 bold")
     savingAccountBalanceLabel.place(x=15, y=80)
 
-    seeMoreBtn = tk.Button(root, image=seeMore_btn, command=transactionLog, borderwidth=0)
-    seeMoreBtn.place(x=360, y=335)
+   # seeMoreBtn = tk.Button(root, image=seeMore_btn, command=transactionLog, borderwidth=0)
+    #seeMoreBtn.place(x=360, y=335)
 
 
 User = Entry(root, width=30, fg='black', borderwidth=2)
