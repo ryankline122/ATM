@@ -51,8 +51,6 @@ def login():
         print("Incorrect UsrID or password")
 
     #print data
-    c.execute("SELECT * FROM users")
-    print(c.fetchall())
 
     c.close()
     db.close()
@@ -61,9 +59,19 @@ def login():
 def logout():
     return 0
 
+
+def printData():
+    db = sqlite3.connect("user_info.db")
+    c = db.cursor()
+    c.execute("SELECT * FROM users")
+    print(c.fetchall())
+    c.close()
+    db.close()
+
+
 # Runs command-line application. Provides user with commands to navigate the application
 def main():
-    commands = ["login", "new", "help", "show-balance", "deposit", "withdraw", "transfer", "exit"]
+    commands = ["login", "new", "help", "show-balance", "deposit", "withdraw", "transfer", "data", "exit"]
     action = ""
     while(action != "exit"):
         action = input("Enter a command (Type 'help' for a list of commands): ")
@@ -92,6 +100,9 @@ def main():
             recipient = float(input("Enter the recipients' userID: "))
             currUser.withdraw(amount)
             print("New Balance: $" + str(currUser.balance))
+
+        elif(action.lower() == "data"):
+            printData()
 
         elif(action.lower() == "help"):
             for i in commands:
