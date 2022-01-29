@@ -2,9 +2,6 @@ from User import User
 import sqlite3
 import sys
 
-# Temporary User
-global currUser
-
 
 # Writes user account info to text file
 def createAccount():
@@ -47,10 +44,18 @@ def login():
     if (success):
         print("Login Successful")
         c.execute("UPDATE users SET loginStatus = 'True' WHERE userID =?", (nameInput,))
+        db.commit()
+
+        c.execute("SELECT name FROM users where userID=?", (nameInput,))
+        name = ','.join(c.fetchone())
+
+        c.execute("SELECT balance FROM users where userID=?", (nameInput,))
+        balance = c.fetchone()[0]
+
+        global currUser
+        currUser = User(name, nameInput, passInput, balance, "True")
     else:
         print("Incorrect UsrID or password")
-
-    #print data
 
     c.close()
     db.close()
@@ -65,6 +70,16 @@ def printData():
     c = db.cursor()
     c.execute("SELECT * FROM users")
     print(c.fetchall())
+    c.close()
+    db.close()
+
+
+# Updates the balance of the current user in the database
+def updateBalance():
+    db = sqlite3.connect('user_info.db')
+    c = db.cursor()
+    c.execute("UPDATE users SET balance =? WHERE userID =?", (currUser.balance, currUser.userID,))
+    db.commit()
     c.close()
     db.close()
 
@@ -89,11 +104,13 @@ def main():
             amount = float(input("How much would you like to deposit? $"))
             currUser.deposit(amount)
             print("New Balance: $" + str(currUser.balance))
+            updateBalance()
 
         elif (action.lower() == "withdraw"):
             amount = float(input("How much would you like to withdraw? $"))
             currUser.withdraw(amount)
             print("New Balance: $" + str(currUser.balance))
+            updateBalance()
 
         elif (action.lower() == "transfer"):
             amount = float(input("How much would you like to transfer? $"))
