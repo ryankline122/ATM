@@ -36,10 +36,6 @@ class User:
         c.close()
         db.close()
 
-    # Prints the users current balance
-    def showBalance(self):
-        print("Balance: $" + str(self.balance))
-
     # Allows user to change their password
     def changePassword(self):
         currPass = input("Confirm current password: ")
