@@ -1,9 +1,9 @@
 import os
 import subprocess
 from User import User
+import getpass
 import sqlite3
 import sys
-
 
 # User is prompted to enter their name, desired username (if not taken), set their password, and put in an initial deposit
 def createAccount():
@@ -26,7 +26,15 @@ def createAccount():
     if(exists):
         print("Username already exists. Try again")
     else:
-        password = input("Create a secure password: ")
+        # "Run" --> "Edit Configuration" --> Check "Emulate terminal in output console
+        password = getpass.getpass("Create your password: ", stream=None)
+        confirmPassword = getpass.getpass("Confirm your password: ")
+
+        while(confirmPassword != password):
+            print("Passwords don't match. Try again")
+            password = input("Create a secure password: ")
+            confirmPassword = input("Confirm password: ")
+
         balance = float(input("Set initial deposit: $"))
         usr = User(name, userID, password, balance, "False")
         c.execute("INSERT INTO users VALUES(?,?,?,?,?)",
@@ -67,7 +75,8 @@ def createAccount_GUI(name, userID, password, balance):
 def inUse():
     db = sqlite3.connect('user_info.db')
     c = db.cursor()
-    c.execute("SELECT exists(SELECT userID FROM users where loginStatus=?)", ("True",))
+    c.execute(
+        "SELECT exists(SELECT userID FROM users where loginStatus=?)", ("True",))
     [exists] = c.fetchone()
     if (exists):
         return True
@@ -81,18 +90,21 @@ def login():
     db = sqlite3.connect('user_info.db')
     c = db.cursor()
     if(inUse()):
-           print("Error: In use by another user")
+        print("Error: In use by another user")
     else:
         nameInput = input("Enter your username: ")
-        passInput = input("Enter your password: ")
-        c.execute("SELECT * FROM users where userID=? AND password=?", (nameInput, passInput))
+        # "Run" --> "Edit Configuration" --> Check "Emulate terminal in output console
+        passInput = getpass.getpass("Enter your password: ", stream=None)
+        c.execute("SELECT * FROM users where userID=? AND password=?",
+                  (nameInput, passInput))
         row = c.fetchone()
         if row:
             success = True
 
         if (success):
             print("Login Successful")
-            c.execute("UPDATE users SET loginStatus = 'True' WHERE userID =?", (nameInput,))
+            c.execute(
+                "UPDATE users SET loginStatus = 'True' WHERE userID =?", (nameInput,))
             db.commit()
 
             c.execute("SELECT name FROM users where userID=?", (nameInput,))
@@ -116,14 +128,16 @@ def login_GUI(userID_Input, password_Input):
 
     db = sqlite3.connect('user_info.db')
     c = db.cursor()
-    c.execute("SELECT * FROM users where userID=? AND password=?", (userID_Input, password_Input))
+    c.execute("SELECT * FROM users where userID=? AND password=?",
+              (userID_Input, password_Input))
     row = c.fetchone()
     if row:
         success = True
 
     if (success):
         print("Login Successful")
-        c.execute("UPDATE users SET loginStatus = 'True' WHERE userID =?", (userID_Input,))
+        c.execute(
+            "UPDATE users SET loginStatus = 'True' WHERE userID =?", (userID_Input,))
         db.commit()
 
         c.execute("SELECT name FROM users where userID=?", (userID_Input,))
@@ -150,16 +164,15 @@ def logout():
 
         db = sqlite3.connect('user_info.db')
         c = db.cursor()
-        c.execute("UPDATE users SET loginStatus =? WHERE userID =?", (currUser.loginStatus, currUser.userID,))
+        c.execute("UPDATE users SET loginStatus =? WHERE userID =?",
+                  (currUser.loginStatus, currUser.userID,))
         db.commit()
-        print("Logout Successful. Have a great day!")
+        print("Logging you out")
         c.close()
         db.close()
 
     except NameError:
         print("Error: No account logged in")
-
-
 
 
 # For debugging/testing database
@@ -176,7 +189,8 @@ def printData():
 def updateBalance():
     db = sqlite3.connect('user_info.db')
     c = db.cursor()
-    c.execute("UPDATE users SET balance =? WHERE userID =?", (currUser.balance, currUser.userID,))
+    c.execute("UPDATE users SET balance =? WHERE userID =?",
+              (currUser.balance, currUser.userID,))
     db.commit()
     c.close()
     db.close()
@@ -185,13 +199,14 @@ def updateBalance():
 # TODO: Make a deleteAccount() function
 
 
-
 # Runs command-line application. Provides user with commands to navigate the application
 def main():
-    commands = ["login", "new", "help", "show-balance", "deposit", "withdraw", "transfer", "data", "exit"]
+    commands = ["login", "new", "help", "show-balance",
+                "deposit", "withdraw", "transfer", "data", "exit"]
     action = ""
     while (action != "exit"):
-        action = input("Enter a command (Type 'help' for a list of commands): ")
+        action = input(
+            "Enter a command (Type 'help' for a list of commands): ")
 
         if (action.lower() == "new"):
             createAccount()
@@ -220,7 +235,7 @@ def main():
             amount = float(input("How much would you like to transfer? $"))
             recipient = input("Enter the recipients' userID: ")
             currUser.transfer(amount, recipient)
-            print("New Balance: " +("${:,.2f}".format(currUser.balance)))
+            print("New Balance: " + ("${:,.2f}".format(currUser.balance)))
             updateBalance()
 
         elif (action.lower() == "data"):
