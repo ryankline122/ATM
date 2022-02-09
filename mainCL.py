@@ -64,7 +64,7 @@ def main():
                 if row:
                     success = True
 
-                if (success):
+
                     ATM.login(nameInput, passInput)
                     print("Login Successful")
                 else:

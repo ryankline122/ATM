@@ -1,6 +1,8 @@
+import sqlite3
 import tkinter as tk
 from tkinter import *
 from PIL import ImageTk, Image
+import ATM
 
 import os
 
@@ -16,29 +18,43 @@ def createAccount():
     myLabel3 = Label(root, text="Testing...")
     myLabel3.place(x=100, y=150)
 
-
-def transactionLog():
+#transaction log on hold for now
+#def transactionLog():
     placeHolderLabel = Label(root, text="Testing", fg='black')
-    newUserLabel.place(x=665, y=360)
+   # newUserLabel.place(x=665, y=360)
 
-
-#seeMore_btn = ImageTk.PhotoImage(Image.open("pngfind.com-black-button-png-50298_80x40.png"))
-
-#img_label3 = Label(image=seeMore_btn)
 
 
 # check if valid username and password and change frame to dashboard
 def dashboard():
-    myLabel = Label(root, text=User.get())
-    myLabel.place(x=400, y=355)
 
-    myLabel2 = Label(root, text=Password.get())
-    myLabel2.place(x=400, y=375)
+    success = False
+    Username = User.get()
+    Passw = Password.get()
+    db = sqlite3.connect('user_info.db')
+    c = db.cursor()
 
+    c.execute("SELECT * FROM users where userID=? AND password=?",
+              (Username, Passw))
+
+    row = c.fetchone()
+    if row:
+        success = True
+
+    if (success):
+      ATM.login(Username, Passw)
+      Top_Frame()
+      ATM.logout()
+
+    else:
+        myLabel4 = Label(root, text="Incorrect username or password", fg='red', font="Times 12 bold")
+        myLabel4.place(x=290, y=300)
+
+
+def Top_Frame():
     top_Frame = LabelFrame(root, width=800, height=400)
     top_Frame.pack(fill="both", expand=1)
 
-    # Define a Canvas Widget
     canvas = Canvas(top_Frame, width=390, height=150)
     canvas.place(x=0, y=0)
 
@@ -83,8 +99,9 @@ def dashboard():
     savingAccountBalanceLabel = Label(top_Frame, text="500.00", bg='#343332', fg='gray', font="Times 18 bold")
     savingAccountBalanceLabel.place(x=15, y=80)
 
-   # seeMoreBtn = tk.Button(root, image=seeMore_btn, command=transactionLog, borderwidth=0)
-    #seeMoreBtn.place(x=360, y=335)
+#update balances,etc...
+def update_topFrame():
+    Tk.update()
 
 
 User = Entry(root, width=30, fg='black', borderwidth=2)
