@@ -1,3 +1,5 @@
+#! /usr/bin/env python3
+
 import ATM
 import getpass
 import sqlite3
@@ -119,7 +121,7 @@ def main():
         # LOGOUT
         elif (action.lower() == "logout"):
             ATM.logout()
-            print("Goodbye" + ATM.currUser.name)
+            print("Goodbye " + ATM.currUser.name)
 
 
         # EXIT
