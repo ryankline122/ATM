@@ -5,6 +5,8 @@ import getpass
 import sqlite3
 import sys
 
+max_balance = 999999999999
+
 # Runs command-line application. Provides user with commands to navigate the application
 def main():
     commands = ["login", "new", "help", "balance",
@@ -47,7 +49,10 @@ def main():
                     confirmPassword = getpass.getpass("Confirm your password: ")
                 try:
                     bal = float(input("Set initial deposit: $"))
-                    ATM.createAccount(name, userID, pswrd, bal, False)
+                    if(bal < max_balance):
+                        ATM.createAccount(name, userID, pswrd, bal, False)
+                    else:
+                        print("Error - Balance exceeds limit")
                 except ValueError:
                     print("Error - Invalid balance input")
 
@@ -83,12 +88,12 @@ def main():
             if(ATM.inUse()):
                 try:
                     amount = float(input("How much would you like to deposit? $"))
-                    if(amount > 0):
+                    if(amount > 0 and (ATM.currUser.balance + amount) < max_balance):
                         ATM.currUser.deposit(amount)
                         print("New Balance: " + ("${:,.2f}".format(ATM.currUser.balance)))
                         ATM.updateBalance()
                     else:
-                        print("Error - Cannot deposit negative balance")
+                        print("Error - Balance either exceeds limit or is invalid input")
                 except ValueError:
                     print("Error - Invalid Input")
             else:
