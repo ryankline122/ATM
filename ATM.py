@@ -1,9 +1,5 @@
-import os
-import subprocess
 from User import User
-import getpass
 import sqlite3
-import sys
 
 currUser = User(None,None,None,None,None)
 
@@ -80,6 +76,15 @@ def printData():
     c = db.cursor()
     c.execute("SELECT * FROM users")
     print(c.fetchall())
+    c.close()
+    db.close()
+
+# For logging out users stuck to "True"
+def logoutAll():
+    db = sqlite3.connect("user_info.db")
+    c = db.cursor()
+    c.execute("UPDATE users SET loginStatus =? where loginStatus =?", ("False", "True",))
+    db.commit()
     c.close()
     db.close()
 

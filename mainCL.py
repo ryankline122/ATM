@@ -7,7 +7,7 @@ import sys
 
 # Runs command-line application. Provides user with commands to navigate the application
 def main():
-    commands = ["login", "new", "help", "show-balance",
+    commands = ["login", "new", "help", "balance",
                 "deposit", "withdraw", "transfer", "data", "exit"]
     action = ""
     db = sqlite3.connect('user_info.db')
@@ -43,17 +43,17 @@ def main():
 
                 while (confirmPassword != pswrd):
                     print("Passwords don't match. Try again")
-                    pswrd = input("Create a secure password: ")
-                    confirmPassword = input("Confirm password: ")
-
-                bal = float(input("Set initial deposit: $"))
-                ATM.createAccount(name,userID,pswrd,bal,False)
+                    pswrd = getpass.getpass("Create your password: ", stream=None)
+                    confirmPassword = getpass.getpass("Confirm your password: ")
+                try:
+                    bal = float(input("Set initial deposit: $"))
+                    ATM.createAccount(name, userID, pswrd, bal, False)
+                except ValueError:
+                    print("Error - Invalid balance input")
 
 
         # LOGIN
         elif (action.lower() == "login"):
-            success = False
-
             if (ATM.inUse()):
                 print("Error: In use by another user")
             else:
@@ -64,48 +64,73 @@ def main():
                           (nameInput, passInput))
                 row = c.fetchone()
                 if row:
-                    success = True
-
-
                     ATM.login(nameInput, passInput)
                     print("Login Successful")
                 else:
                     print("Incorrect username or password")
 
+
         # SHOW-BALANCE
-        elif (action.lower() == "show-balance"):
-            # TODO: Catch error if no user is logged in
-            print("Balance: " + ("${:,.2f}".format(ATM.currUser.balance)))
+        elif (action.lower() == "balance"):
+            try:
+                print("Balance: " + ("${:,.2f}".format(ATM.currUser.balance)))
+            except TypeError:
+                print("Error - No user logged in")
 
 
         # DEPOSIT
         elif (action.lower() == "deposit"):
-            # TODO: Catch error if no user is logged in
-            amount = float(input("How much would you like to deposit? $"))
-            ATM.currUser.deposit(amount)
-            print("New Balance: " + ("${:,.2f}".format(ATM.currUser.balance)))
-            ATM.updateBalance()
+            if(ATM.inUse()):
+                try:
+                    amount = float(input("How much would you like to deposit? $"))
+                    if(amount > 0):
+                        ATM.currUser.deposit(amount)
+                        print("New Balance: " + ("${:,.2f}".format(ATM.currUser.balance)))
+                        ATM.updateBalance()
+                    else:
+                        print("Error - Cannot deposit negative balance")
+                except ValueError:
+                    print("Error - Invalid Input")
+            else:
+                print("Error - No user logged in")
 
 
         # WITHDRAW
-        # TODO: Don't let user take out more than is present in their account
         elif (action.lower() == "withdraw"):
-            #TODO: Catch error if no user is logged in
-            amount = float(input("How much would you like to withdraw? $"))
-            ATM.currUser.withdraw(amount)
-            print("New Balance: " + ("${:,.2f}".format(ATM.currUser.balance)))
-            ATM.updateBalance()
+            if(ATM.inUse()):
+                try:
+                    amount = float(input("How much would you like to withdraw? $"))
+                    if(amount <= ATM.currUser.balance):
+                        ATM.currUser.withdraw(amount)
+                        print("New Balance: " + ("${:,.2f}".format(ATM.currUser.balance)))
+                        ATM.updateBalance()
+                    else:
+                        print("Error - insufficient funds")
+                except ValueError:
+                    print("Error - Invalid Input")
+            else:
+                print("Error - No user logged in")
 
 
         # TRANSFER
-        # TODO: Don't allow user to use transfer() on themselves
         elif (action.lower() == "transfer"):
-            # TODO: Catch error if no user is logged in
-            amount = float(input("How much would you like to transfer? $"))
-            recipient = input("Enter the recipients' userID: ")
-            ATM.currUser.transfer(amount, recipient)
-            print("New Balance: " + ("${:,.2f}".format(ATM.currUser.balance)))
-            ATM.updateBalance()
+            if(ATM.inUse()):
+                try:
+                    amount = float(input("How much would you like to transfer? $"))
+                    if(amount <= ATM.currUser.balance):
+                        recipient = input("Enter the recipients' userID: ")
+                        if(recipient != ATM.currUser.userID):
+                            ATM.currUser.transfer(amount, recipient)
+                            print("New Balance: " + ("${:,.2f}".format(ATM.currUser.balance)))
+                            ATM.updateBalance()
+                        else:
+                            print("Error - You are attempting to transfer to yourself")
+                    else:
+                        print("Error - Insufficient funds")
+                except ValueError:
+                    print("Error - Invalid Input")
+            else:
+                print("Error - No user logged in")
 
         # PRINT DATA
         elif (action.lower() == "data"):
@@ -120,18 +145,29 @@ def main():
 
         # LOGOUT
         elif (action.lower() == "logout"):
-            ATM.logout()
-            print("Goodbye " + ATM.currUser.name)
+            if(ATM.inUse()):
+                ATM.logout()
+                print("Goodbye " + ATM.currUser.name)
+            else:
+                print("Error - No user logged in")
+
+
+        # Logs out of all accounts that are currently logged in.
+        # For debugging purposes
+        elif (action.lower() == "close"):
+            ATM.logoutAll()
+            print("Success")
 
 
         # EXIT
         elif (action.lower() == "exit"):
             if(ATM.inUse()):
                 ATM.logout()
-                print("Goodbye")
+                print("Shutting Down")
                 sys.exit()
         else:
             print("Invalid command")
+
 
 # ATM Boot-up
 print("Welcome to our ATM!")
