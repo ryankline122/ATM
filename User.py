@@ -51,3 +51,10 @@ class User:
                 self.password = newPass
                 print("Password set!")
 
+
+    def getBalance(recipient):
+        db = sqlite3.connect('user_info.db')
+        c = db.cursor()
+        c.execute("SELECT balance FROM users WHERE userID=?", (recipient,))
+        balance = c.fetchone()[0]
+        return balance

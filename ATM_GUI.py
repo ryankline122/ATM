@@ -1,6 +1,7 @@
 import sqlite3
 import tkinter as tk
 from tkinter import *
+from tkinter import ttk
 from PIL import ImageTk, Image
 import ATM
 
@@ -23,7 +24,113 @@ def createAccount():
     placeHolderLabel = Label(root, text="Testing", fg='black')
    # newUserLabel.place(x=665, y=360)
 
+#seeMore_btn = ImageTk.PhotoImage(Image.open("pngfind.com-black-button-png-50298_80x40.png"))
 
+#img_label3 = Label(image=seeMore_btn)
+
+def createAccount():
+    top_Frame = LabelFrame(root, width=800, height=400)
+    top_Frame.pack(fill="both", expand=1)
+
+    canvas = Canvas(top_Frame, width=800, height=400, bg='#75706F')
+    canvas.place(x=0, y=0)
+
+    nameLabel = Label(top_Frame, text="What is your name?",
+                          padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
+    nameLabel.place(x=20, y=20)
+    firstName = Entry(root, width=15, fg='black', borderwidth=2)
+    firstName.place(x=225, y=35)
+
+    userNameLabel = Label(top_Frame, text="What would you like your username to be?",
+                          padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
+    userNameLabel.place(x=20, y=90)
+    userName = Entry(root, width=25, fg='black', borderwidth=2)
+    userName.place(x=250, y=105)
+
+    passwordLabel = Label(top_Frame, text="What would you like your password to be?",
+                          padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
+    passwordLabel.place(x=20, y=160)
+    password = Entry(root, width=25, fg='black', borderwidth=2)
+    password.place(x=250, y=170)
+
+    securityQuestionLabel = Label(top_Frame, text="Security Question: What is your favorite color?",
+                                  padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
+    securityQuestionLabel.place(x=20, y=230)
+    secQuestion = Entry(root, width=25, fg='black', borderwidth=2)
+    secQuestion.place(x=275, y=245)
+
+    initialDepositLabel = Label(top_Frame, text="What would you like your initial deposit to be?",
+                                  padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
+    initialDepositLabel.place(x=20, y=300)
+    deposit = Entry(root, width=25, fg='black', borderwidth=2)
+    deposit.place(x=265, y=315)
+
+    doneButton = tk.Button(top_Frame, text="All Done!", padx=17, pady=17, fg="white", bg='#343332')
+    doneButton.place(x=600, y=300)
+
+
+
+def passwordChange():
+    top_Frame = LabelFrame(root, width=800, height=400)
+    top_Frame.pack(fill="both", expand=1)
+
+    canvas = Canvas(top_Frame, width=800, height=400, bg='#75706F')
+    canvas.place(x=0, y=0)
+
+    forgotPassword = Label(top_Frame, text="Forgot Password?", bg='#75706F', fg='Black', font= "Times 36 bold")
+    forgotPassword.place(x=210, y=50)
+
+    userNameLabel = Label(top_Frame, text="What is your username?",
+                          padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
+    userNameLabel.place(x=250, y=135)
+    userName = Entry(root, width=25, fg='black', borderwidth=2)
+    userName.place(x=400, y=150)
+
+    securityQuestionLabel = Label(top_Frame, text="What is your favorite color?",
+                                  padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
+    securityQuestionLabel.place(x=235, y=210)
+    secQuestion = Entry(root, width=25, fg='black', borderwidth=2)
+    secQuestion.place(x=400, y=225)
+
+    passwordLabel = Label(top_Frame, text="What would you like your  new password to be?",
+                          padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
+    passwordLabel.place(x=150, y=285)
+    password = Entry(root, width=25, fg='black', borderwidth=2)
+    password.place(x=400, y=295)
+
+    doneButton = tk.Button(top_Frame, text="All Done!", padx=17, pady=17, fg="white", bg='#343332')
+    doneButton.place(x=600, y=300)
+
+
+def moneyMoves():
+    top_Frame = LabelFrame(root, width=800, height=400)
+    top_Frame.pack(fill="both", expand=1)
+
+    canvas = Canvas(top_Frame, width=800, height=400, bg='#75706F')
+    canvas.place(x=0, y=0)
+
+    moneyTransfer = Label(top_Frame, text="Would you like to deposit or withdraw?",
+                          padx=10, pady=10, fg="black", font="Italics 15", bg='#75706F')
+    moneyTransfer.place(x=225, y=20)
+
+    moneyInputLabel = Label(top_Frame, text="How much?",
+                          padx=10, pady=10, fg="black", font="Italics 15", bg='#75706F')
+    moneyInputLabel.place(x=325, y=120)
+
+    moneyInput = Entry(root, width=23, fg='black', borderwidth=2)
+    moneyInput.place(x=320, y=175)
+
+    doneButton = tk.Button(top_Frame, text="Submit", padx=17, pady=17, fg="white", bg='#343332')
+    doneButton.place(x=600, y=300)
+
+    options = [
+        "Deposit",
+        "Withdraw"
+    ]
+
+    myCombo = ttk.Combobox(top_Frame, value=options)
+    myCombo.current(0)
+    myCombo.pack(pady=80)
 
 # check if valid username and password and change frame to dashboard
 def dashboard():
@@ -55,6 +162,7 @@ def Top_Frame():
     top_Frame = LabelFrame(root, width=800, height=400)
     top_Frame.pack(fill="both", expand=1)
 
+    # Define a Canvas Widget
     canvas = Canvas(top_Frame, width=390, height=150)
     canvas.place(x=0, y=0)
 
@@ -114,6 +222,8 @@ newUserLabel = Label(root, text="New User?", fg='black')
 newUserLabel.place(x=665, y=360)
 
 # Buttons
+welcomeLabel = Label(root, text= "Welcome to the ATM!", font="Italics 36", fg="black")
+welcomeLabel.place(x=175, y=50)
 login_btn = ImageTk.PhotoImage(Image.open("login-button-png-18030_4_75x50.png"))
 
 img_label = Label(image=login_btn)
@@ -123,9 +233,15 @@ register_btn = ImageTk.PhotoImage(Image.open("register-button-png-18477_4_50x40.
 img_label2 = Label(image=register_btn)
 
 loginBtn = tk.Button(root, image=login_btn, command=dashboard, borderwidth=0)
-loginBtn.place(x=365, y=235)
+loginBtn.place(x=355, y=235)
 
 createAccBtn = tk.Button(root, image=register_btn, command=createAccount, borderwidth=0)
 createAccBtn.place(x=725, y=350)
+
+forgotPasswordButton = tk.Button(root, text="Forgot Password?", padx=5, pady=5, fg="white", bg='#343332', command=passwordChange)
+forgotPasswordButton.place(x=670,y=310)
+
+forgotPasswordButto = tk.Button(root, text="Deposit/Withdraw Screen", padx=5, pady=5, fg="white", bg='#343332', command=moneyMoves)
+forgotPasswordButto.place(x=630,y=270)
 
 root.mainloop()
