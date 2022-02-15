@@ -100,4 +100,22 @@ def updateBalance():
     db.close()
 
 
+def updatePassword(password, userID):
+    db = sqlite3.connect('user_info.db')
+    c = db.cursor()
+    c.execute("UPDATE users SET password =? WHERE userID =?",
+              (password, userID,))
+    db.commit()
+    c.close()
+    db.close()
+
+
+def deleteAll():
+    db = sqlite3.connect('user_info.db')
+    c = db.cursor()
+    c.execute('DELETE FROM users')
+    db.commit()
+    c.close()
+    db.close()
+
 # TODO: Make a deleteAccount() function

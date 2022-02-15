@@ -10,6 +10,9 @@ import os
 root = tk.Tk()
 root.geometry("800x400")
 
+db = sqlite3.connect('user_info.db')
+c = db.cursor()
+
 def raise_frame(frame):
     frame.tkraise()
 
@@ -36,6 +39,17 @@ for frame in (homePage, createAccount, passwordChange, moneyMoves, Top_Frame):
 #img_label3 = Label(image=seeMore_btn)
 
 #createAcount Frame Logan Renaau
+def getCreationData():
+
+    nameEntry = firstName.get()
+    userNameEntry = userName1.get()
+    passEntry = password1.get()
+    depositEntry = deposit.get()
+
+    ATM.createAccount(nameEntry, userNameEntry, passEntry, depositEntry, False)
+    raise_frame(homePage)
+
+
 top_Frame = LabelFrame(createAccount, width=800, height=400)
 top_Frame.pack(fill="both", expand=1)
 
@@ -51,14 +65,14 @@ firstName.place(x=225, y=35)
 userNameLabel = Label(top_Frame, text="What would you like your username to be?",
                           padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
 userNameLabel.place(x=20, y=90)
-userName = Entry(top_Frame, width=25, fg='black', borderwidth=2)
-userName.place(x=250, y=105)
+userName1 = Entry(top_Frame, width=25, fg='black', borderwidth=2)
+userName1.place(x=250, y=105)
 
 passwordLabel = Label(top_Frame, text="What would you like your password to be?",
                           padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
 passwordLabel.place(x=20, y=160)
-password = Entry(top_Frame, width=25, fg='black', borderwidth=2)
-password.place(x=250, y=170)
+password1 = Entry(top_Frame, width=25, fg='black', borderwidth=2)
+password1.place(x=250, y=170)
 
 securityQuestionLabel = Label(top_Frame, text="Security Question: What is your favorite color?",
                                   padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
@@ -69,16 +83,28 @@ secQuestion.place(x=275, y=245)
 initialDepositLabel = Label(top_Frame, text="What would you like your initial deposit to be?",
                                   padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
 initialDepositLabel.place(x=20, y=300)
-deposit = Entry(root, width=25, fg='black', borderwidth=2)
+deposit = Entry(top_Frame, width=25, fg='black', borderwidth=2)
 deposit.place(x=265, y=315)
 
-doneButton = tk.Button(top_Frame, text="All Done!", padx=17, pady=17, fg="white", bg='#343332',
-                       command=lambda:raise_frame(Top_Frame))
-doneButton.place(x=600, y=300)
+updateButton = tk.Button(top_Frame, text="Add to database!", padx=17, pady=17, fg="white", bg='#343332'
+                         , command=lambda:getCreationData())
+updateButton.place(x=600, y=225)
+
+#doneButton = tk.Button(top_Frame, text="All Done!", padx=17, pady=17, fg="white", bg='#343332',
+                       #command=lambda:raise_frame(Top_Frame))
+#doneButton.place(x=600, y=300)
 
 
 
 #passChange Frame Logan Reneau
+def passChangeData():
+   userNameData = userName2.get()
+   newPass = password2.get()
+   ATM.updatePassword(newPass, userNameData)
+   raise_frame(homePage)
+
+
+
 top_Frame2 = LabelFrame(passwordChange, width=800, height=400)
 top_Frame2.pack(fill="both", expand=1)
 
@@ -91,8 +117,8 @@ forgotPassword.place(x=210, y=50)
 userNameLabel = Label(top_Frame2, text="What is your username?",
                           padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
 userNameLabel.place(x=250, y=135)
-userName = Entry(top_Frame2, width=25, fg='black', borderwidth=2)
-userName.place(x=400, y=150)
+userName2 = Entry(top_Frame2, width=25, fg='black', borderwidth=2)
+userName2.place(x=400, y=150)
 
 securityQuestionLabel = Label(top_Frame2, text="What is your favorite color?",
                                   padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
@@ -103,11 +129,11 @@ secQuestion.place(x=400, y=225)
 passwordLabel = Label(top_Frame2, text="What would you like your  new password to be?",
                           padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
 passwordLabel.place(x=150, y=285)
-password = Entry(top_Frame2, width=25, fg='black', borderwidth=2)
-password.place(x=400, y=295)
+password2 = Entry(top_Frame2, width=25, fg='black', borderwidth=2)
+password2.place(x=400, y=295)
 
 doneButton = tk.Button(top_Frame2, text="All Done!", padx=17, pady=17, fg="white", bg='#343332',
-                       command=lambda:raise_frame(Top_Frame))
+                       command=lambda:passChangeData())
 doneButton.place(x=600, y=300)
 
 
@@ -128,9 +154,10 @@ moneyInputLabel.place(x=325, y=120)
 
 moneyInput = Entry(top_Frame3, width=23, fg='black', borderwidth=2)
 moneyInput.place(x=320, y=175)
+#moneyInput.get() gets the value within.
 
 doneButton2 = tk.Button(top_Frame3, text="Submit", padx=17, pady=17, fg="white", bg='#343332',
-                        command=lambda:raise_frame(Top_Frame))
+                        command=lambda:raise_frame(homePage))
 doneButton2.place(x=600, y=300)
 
 options = [
@@ -255,6 +282,7 @@ forgotPasswordButton.place(x=670,y=310)
 
 forgotPasswordButto = tk.Button(homePage, text="Deposit/Withdraw Screen", padx=5, pady=5, fg="white", bg='#343332', command=lambda:raise_frame(moneyMoves))
 forgotPasswordButto.place(x=630,y=270)
+
 
 
 raise_frame(homePage)

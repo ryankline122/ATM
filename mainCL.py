@@ -141,12 +141,14 @@ def main():
         elif (action.lower() == "data"):
             ATM.printData()
 
-
         # HELP
         elif (action.lower() == "help"):
             for i in commands:
                 print(i)
 
+        #DELETE ALL
+        elif (action.lower() == "nuke"):
+            ATM.deleteAll()
 
         # LOGOUT
         elif (action.lower() == "logout"):
