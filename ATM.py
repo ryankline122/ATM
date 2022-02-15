@@ -1,16 +1,16 @@
 from User import User
 import sqlite3
 
-currUser = User(None,None,None,None,None)
+currUser = User(None,None,None,None,None,None)
 
 # User is prompted to enter their name, desired username (if not taken), set their password, and put in an initial deposit
-def createAccount(name, userID, password, balance, loginStatus):
+def createAccount(name, userID, password, PIN, balance, loginStatus):
     db = sqlite3.connect('user_info.db')
     c = db.cursor()
     # Checks if user already exists
-    usr = User(name, userID, password, balance, "False")
-    c.execute("INSERT INTO users VALUES(?,?,?,?,?)",
-            (usr.name, usr.userID, usr.password, usr.balance, usr.loginStatus))
+    usr = User(name, userID, password, PIN, balance, "False")
+    c.execute("INSERT INTO users VALUES(?,?,?,?,?,?)",
+            (usr.name, usr.userID, usr.password, usr.PIN, usr.balance, usr.loginStatus))
     db.commit()
     c.close()
     db.close()

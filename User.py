@@ -4,10 +4,11 @@ import sqlite3
 
 class User:
     # Constructor
-    def __init__(self, name, userID, password, balance, loginStatus):
+    def __init__(self, name, userID, password, PIN, balance, loginStatus):
         self.name = name
         self.userID = userID
         self.password = password
+        self.PIN = PIN
         self.balance = balance
         self.loginStatus = loginStatus
 

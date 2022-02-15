@@ -19,6 +19,7 @@ def main():
                     name text,
                     userID text,
                     password text,
+                    PIN text,
                     balance real,
                     loginStatus text
                 )""")
@@ -31,30 +32,50 @@ def main():
 
         # CREATE NEW ACCOUNT
         if (action.lower() == "new"):
-            name = input("Enter your name: ")
-            userID = input("Create a unique userID: ")
-            (c.execute("SELECT exists(SELECT userID FROM users where userID=?)", (userID,)))
-            [exists] = c.fetchone()
+            if(not ATM.inUse()):
+                name = input("Enter your name: ")
+                userID = input("Create a unique userID: ")
+                (c.execute("SELECT exists(SELECT userID FROM users where userID=?)", (userID,)))
+                [exists] = c.fetchone()
 
-            if (exists):
-                print("Username already exists. Try again")
-            else:
-                # "Run" --> "Edit Configuration" --> Check "Emulate terminal in output console
-                pswrd = getpass.getpass("Create your password: ", stream=None)
-                confirmPassword = getpass.getpass("Confirm your password: ")
-
-                while (confirmPassword != pswrd):
-                    print("Passwords don't match. Try again")
+                if (exists):
+                    print("Username already exists. Try again")
+                else:
+                    # "Run" --> "Edit Configuration" --> Check "Emulate terminal in output console
+                    # Setting Password
                     pswrd = getpass.getpass("Create your password: ", stream=None)
                     confirmPassword = getpass.getpass("Confirm your password: ")
-                try:
-                    bal = float(input("Set initial deposit: $"))
-                    if(bal < max_balance):
-                        ATM.createAccount(name, userID, pswrd, bal, False)
-                    else:
-                        print("Error - Balance exceeds limit")
-                except ValueError:
-                    print("Error - Invalid balance input")
+                    while (confirmPassword != pswrd):
+                        print("Passwords don't match. Try again")
+                        pswrd = getpass.getpass("Create your password: ", stream=None)
+                        confirmPassword = getpass.getpass("Confirm your password: ")
+
+                    # Setting PIN
+                    PIN = getpass.getpass("Create your 4 digit PIN number: ", stream=None)
+                    while (len(PIN) != 4):
+                        print("PIN numbers must be 4 digits. Try again")
+                        PIN = getpass.getpass("Create your 4 digit PIN number: ", stream=None)
+                    confirmPIN = getpass.getpass("Confirm your 4 digit PIN number: ")
+
+                    while (confirmPIN != PIN or len(confirmPIN) > 4):
+                        print("PIN numbers don't match. Try again")
+                        PIN = getpass.getpass("Create your PIN number: ", stream=None)
+                        if(len(PIN) == 4):
+                            confirmPIN = getpass.getpass("Confirm your PIN number: ")
+                        else:
+                            print("Error - PIN must be 4 digits")
+
+                    # Setting Balance
+                    try:
+                        bal = float(input("Set initial deposit: $"))
+                        if(bal < max_balance and bal >= 0):
+                            ATM.createAccount(name, userID, pswrd, PIN, bal, False)
+                        else:
+                            print("Error - Initial deposit must be within $0.00-$999 billion")
+                    except ValueError:
+                        print("Error - Invalid balance input")
+            else:
+                print("Error - ATM is currently in use")
 
 
         # LOGIN
