@@ -90,21 +90,46 @@ def logoutAll():
 
 
 # Updates the balance of the current user in the database
-def updateBalance():
+def updateBalance(change, ammount):
     db = sqlite3.connect('user_info.db')
     c = db.cursor()
+    c.execute("SELECT balance FROM users WHERE userID =?", (currUser.userID,))
+    currentBalTup = c.fetchone()
+    currentBal = currentBalTup[0]
+
+    if change:
+        currentBal = float(ammount) + currentBal
+    else:
+        currentBal = currentBal - float(ammount)
+        if currentBal < 0:
+            currentBal = float(ammount) + currentBal
+            # Display Error
+
     c.execute("UPDATE users SET balance =? WHERE userID =?",
-              (currUser.balance, currUser.userID,))
+              (currentBal, currUser.userID,))
     db.commit()
     c.close()
     db.close()
 
 
-def updatePassword(password, userID):
+def updatePassword(password, userID, pinNum):
     db = sqlite3.connect('user_info.db')
     c = db.cursor()
-    c.execute("UPDATE users SET password =? WHERE userID =?",
-              (password, userID,))
+    try:
+        c.execute("SELECT PIN FROM users WHERE userID =?", (userID,))
+        realPin = c.fetchone()
+        print(pinNum)
+        print(realPin)
+        if pinNum == realPin[0]:
+            c.execute("UPDATE users SET password =? WHERE userID =?",
+                      (password, userID,))
+            return True
+        else:
+            return False
+    except TypeError:
+        return False
+        print()
+
     db.commit()
     c.close()
     db.close()
@@ -117,5 +142,18 @@ def deleteAll():
     db.commit()
     c.close()
     db.close()
+
+
+def printDatabase():
+    db = sqlite3.connect('user_info.db')
+    c = db.cursor()
+    c.execute("SELECT PIN FROM users WHERE userID=?", ('Log123',))
+    print(c.fetchall())
+
+def alterColumn():
+    db = sqlite3.connect('user_info.db')
+    c = db.cursor()
+    c.execute()
+
 
 # TODO: Make a deleteAccount() function
