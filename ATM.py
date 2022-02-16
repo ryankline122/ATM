@@ -3,6 +3,20 @@ import sqlite3
 
 currUser = User(None,None,None,None,None,None)
 
+def createTable():
+    db = sqlite3.connect('user_info.db')
+    c = db.cursor()
+    # Creates user database if needed, adds user info upon successful creation
+    c.execute("""CREATE TABLE IF NOT EXISTS users(
+                      name text,
+                      userID text,
+                      password text,
+                      PIN text,
+                      balance real,
+                      loginStatus text
+                  )""")
+
+
 # User is prompted to enter their name, desired username (if not taken), set their password, and put in an initial deposit
 def createAccount(name, userID, password, PIN, balance, loginStatus):
     db = sqlite3.connect('user_info.db')
@@ -90,23 +104,10 @@ def logoutAll():
 
 
 # Updates the balance of the current user in the database
-def updateBalance(change, ammount):
+def updateBalance():
     db = sqlite3.connect('user_info.db')
     c = db.cursor()
-    c.execute("SELECT balance FROM users WHERE userID =?", (currUser.userID,))
-    currentBalTup = c.fetchone()
-    currentBal = currentBalTup[0]
-
-    if change:
-        currentBal = float(ammount) + currentBal
-    else:
-        currentBal = currentBal - float(ammount)
-        if currentBal < 0:
-            currentBal = float(ammount) + currentBal
-            # Display Error
-
-    c.execute("UPDATE users SET balance =? WHERE userID =?",
-              (currentBal, currUser.userID,))
+    c.execute("UPDATE users SET balance =? WHERE userID =?",( currUser.balance, currUser.userID,))
     db.commit()
     c.close()
     db.close()

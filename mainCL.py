@@ -12,17 +12,9 @@ def main():
     commands = ["login", "new", "help", "balance",
                 "deposit", "withdraw", "transfer", "data", "exit"]
     action = ""
-    db = sqlite3.connect('user_info.db')
+    ATM.createTable()
+    db = sqlite3.connect("user_info.db")
     c = db.cursor()
-    # Creates user database if needed, adds user info upon successful creation
-    c.execute("""CREATE TABLE IF NOT EXISTS users(
-                    name text,
-                    userID text,
-                    password text,
-                    PIN text,
-                    balance real,
-                    loginStatus text
-                )""")
 
     # RUNS PROGRAM UNTIL USER ENTERS "exit" COMMAND
     while (action != "exit"):
