@@ -89,6 +89,10 @@ updateButton = tk.Button(top_Frame, text="Add to database!", padx=17, pady=17, f
                          , command=lambda:getCreationData())
 updateButton.place(x=600, y=225)
 
+backButton2 = tk.Button(top_Frame, text="Back", padx=17, pady=17, fg="white", bg='#343332',
+                        command=lambda:raise_frame(homePage))
+backButton2.place(x=635, y=325)
+
 
 #passChange Frame Logan Reneau
 def passChangeData():
@@ -136,6 +140,10 @@ doneButton = tk.Button(top_Frame2, text="All Done!", padx=17, pady=17, fg="white
                        command=lambda:passChangeData())
 doneButton.place(x=600, y=300)
 
+backButton3 = tk.Button(top_Frame2, text="Back", padx=17, pady=17, fg="white", bg='#343332',
+                        command=lambda:raise_frame(homePage))
+backButton3.place(x=50, y=300)
+
 
 # check if valid username and password and change frame to dashboard
 #Selmir
@@ -155,6 +163,7 @@ def dashboard():
 
     if (success):
         ATM.login(Username, Passw)
+        display_text.set("${:,.2f}".format(ATM.currUser.balance))
         raise_frame(Top_Frame)
 
     else:
@@ -162,7 +171,7 @@ def dashboard():
         myLabel4.place(x=290, y=300)
 
 
-#Top_Frame Frame Orignial Selmir
+#Top_Frame Frame Original Selmir
 top_FrameOG = LabelFrame(Top_Frame, width=800, height=400)
 top_FrameOG.pack(fill="both", expand=1)
 
@@ -185,30 +194,32 @@ recentLogLabel = Label(top_FrameOG, text="Recent Transactions", padx=10, pady=10
 recentLogLabel.place(x=335, y=185)
 
 savingAccountLabel = Label(top_FrameOG, text="Saving Account", padx=10, pady=10, bg='#343332', fg='gray')
-savingAccountLabel.place(x=5, y=5)
+savingAccountLabel.place(x=15, y=10)
 
 checkingAccountLabel = Label(top_FrameOG, text="Checking Account", padx=10, pady=10, bg='#343332', fg='gray')
-checkingAccountLabel.place(x=405, y=5)
+checkingAccountLabel.place(x=405, y=10)
 
 availableBalanceLabel = Label(top_FrameOG, text="Available Balance", padx=10, pady=10, bg='#343332', fg='gray',
                                   font="Italics 7")
-availableBalanceLabel.place(x=405, y=105)
+availableBalanceLabel.place(x=410, y=105)
 
 availableBalanceLabel = Label(top_FrameOG, text="Available Balance", padx=10, pady=10, bg='#343332', fg='gray',
                                   font="Italics 7")
-availableBalanceLabel.place(x=5, y=105)
+availableBalanceLabel.place(x=20, y=105)
 
-checkingAccountMoneyLabel = Label(top_FrameOG, text="$", bg='#343332', fg='gray')
-checkingAccountMoneyLabel.place(x=405, y=85)
+#checkingAccountMoneyLabel = Label(top_FrameOG, text="$", bg='#343332', fg='gray')
+#checkingAccountMoneyLabel.place(x=405, y=85)
 
-savingAccountMoneyLabel = Label(top_FrameOG, text="$", bg='#343332', fg='gray')
-savingAccountMoneyLabel.place(x=5, y=85)
+savingAccountMoneyLabel = Label(top_FrameOG, text="$", bg='#343332', fg='gray', font="Times 18 bold")
+savingAccountMoneyLabel.place(x=25, y=80)
 
-checkingAccountBalanceLabel = Label(top_FrameOG, text="500.00", bg='#343332', fg='gray', font="Times 18 bold")
+display_text = tk.StringVar()
+
+checkingAccountBalanceLabel = Label(top_FrameOG, textvariable=display_text, bg='#343332', fg='gray', font="Times 18 bold")
 checkingAccountBalanceLabel.place(x=415, y=80)
 
 savingAccountBalanceLabel = Label(top_FrameOG, text="500.00", bg='#343332', fg='gray', font="Times 18 bold")
-savingAccountBalanceLabel.place(x=15, y=80)
+savingAccountBalanceLabel.place(x=38, y=80)
 
 logoutButton = tk.Button(top_FrameOG, text="Logout", command=lambda:logout())
 logoutButton.place(x=200, y=270)
@@ -216,21 +227,24 @@ logoutButton.place(x=200, y=270)
 moneyMovesButton = tk.Button(top_FrameOG, text="Deposit/Withdraw Screen", padx=5, pady=5, fg="white", bg='#343332', command=lambda:raise_frame(moneyMoves))
 moneyMovesButton.place(x=570,y=270)
 
-
+ #Original Logan updated by selmir
 def moneymoves():
     if ATM.currUser.loginStatus:
         money = moneyInput.get()
         if myCombo.get() == "Deposit":
-            ATM.updateBalance(True, money)
-            raise_frame(top_FrameOG)
+            ATM.currUser.deposit(money)
+            display_text.set("${:,.2f}".format(ATM.currUser.balance))
+            raise_frame(Top_Frame)
         else:
-            ATM.updateBalance(False, money)
-            raise_frame(top_FrameOG)
+            ATM.currUser.withdraw(money)
+            display_text.set("${:,.2f}".format(ATM.currUser.balance))
+            raise_frame(Top_Frame)
 
 
 def logout():
     ATM.logoutAll()
     raise_frame(homePage)
+
 
 
 #moneyMoves Original Logan Reneau
@@ -256,6 +270,10 @@ doneButton2 = tk.Button(top_Frame3, text="Submit", padx=17, pady=17, fg="white",
                         command=lambda:moneymoves())
 doneButton2.place(x=600, y=300)
 
+backButton = tk.Button(top_Frame3, text="Back", padx=17, pady=17, fg="white", bg='#343332',
+                        command=lambda:raise_frame(Top_Frame))
+backButton.place(x=100, y=300)
+
 options = [
     "Deposit",
     "Withdraw"
@@ -274,7 +292,7 @@ def update_topFrame():
     Tk.update()
 
 
-#homePage Frame Original Ryan K, Updated by Logan Reneau
+#homePage Frame Original Selmir Lelak, Updated by Logan Reneau
 User = Entry(homePage, width=30, fg='black', borderwidth=2)
 User.place(x=300, y=175)
 
