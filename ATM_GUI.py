@@ -17,10 +17,11 @@ homePage = Frame(root)
 createAccount = Frame(root)
 moneyMoves = Frame(root)
 passwordChange = Frame(root)
+passwordChange2 = Frame(root)
 Top_Frame = Frame(root)
 Transfer_Frame = Frame(root)
 
-for frame in (homePage, createAccount, passwordChange, moneyMoves, Top_Frame, Transfer_Frame):
+for frame in (homePage, createAccount, passwordChange, passwordChange2, moneyMoves, Top_Frame, Transfer_Frame):
     frame.grid(row=0, column=0, sticky='news')
 
 
@@ -82,7 +83,7 @@ backButton2.place(x=635, y=325)
 
 
 
-
+#password change used for inside top frame
 passwordChangeLabel = LabelFrame(passwordChange, width=800, height=400)
 passwordChangeLabel.pack(fill="both", expand=1)
 
@@ -115,8 +116,46 @@ doneButton = tk.Button(passwordChangeLabel, text="All Done!", padx=17, pady=17, 
 doneButton.place(x=600, y=300)
 
 backButton3 = tk.Button(passwordChangeLabel, text="Back", padx=17, pady=17, fg="white", bg='#343332',
-                        command=lambda:raise_frame(homePage))
+                        command=lambda:raise_frame(Top_Frame)) #CHANGE BACK AFTER DONE TESTING
 backButton3.place(x=50, y=300)
+
+
+
+#password change used for inside home page
+passwordChangeLabel2 = LabelFrame(passwordChange2, width=800, height=400)
+passwordChangeLabel2.pack(fill="both", expand=1)
+
+passwordChangecanvas2 = Canvas(passwordChangeLabel2, width=800, height=400, bg='#75706F')
+passwordChangecanvas2.place(x=0, y=0)
+
+forgotPassword2 = Label(passwordChangeLabel2, text="Change Password", bg='#75706F', fg='Black', font= "Times 36 bold underline")
+forgotPassword2.place(x=210, y=50)
+
+userNameLabel2 = Label(passwordChangeLabel2, text="What is your username?",
+                          padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
+userNameLabel2.place(x=250, y=135)
+userName3 = Entry(passwordChangeLabel2, width=25, fg='black', borderwidth=2)
+userName3.place(x=400, y=150)
+
+securityPINLabel2 = Label(passwordChangeLabel2, text="What is your PIN number?",
+                                  padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
+securityPINLabel2.place(x=235, y=210)
+secPIN2 = Entry(passwordChangeLabel2, show="*", width=25, fg='black', borderwidth=2)
+secPIN2.place(x=400, y=225)
+
+passwordLabel2 = Label(passwordChangeLabel2, text="What would you like your new password to be?",
+                          padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
+passwordLabel2.place(x=150, y=285)
+password3 = Entry(passwordChangeLabel2, show="*", width=25, fg='black', borderwidth=2)
+password3.place(x=400, y=295)
+
+doneButton2 = tk.Button(passwordChangeLabel2, text="All Done!", padx=17, pady=17, fg="white", bg='#343332',
+                       command=lambda:passChangeData2())
+doneButton2.place(x=600, y=300)
+
+backButton4 = tk.Button(passwordChangeLabel2, text="Back", padx=17, pady=17, fg="white", bg='#343332',
+                        command=lambda:raise_frame(homePage)) #CHANGE BACK AFTER DONE TESTING
+backButton4.place(x=50, y=300)
 
 
 # check if valid username and password and change frame to dashboard
@@ -190,7 +229,7 @@ changePasswordButton.place(x=450, y=240)
 
 
 
-#moneyMoves Original Logan Reneau
+#moneyMoves Original Logan Reneau updated by selmir
 depoWithFrame = LabelFrame(moneyMoves, width=800, height=400)
 depoWithFrame.pack(fill="both", expand=1)
 
@@ -259,7 +298,7 @@ loginBtn.place(x=350, y=235)
 createAccBtn = tk.Button(homePage, text="Register", padx=5, pady=5, fg="white", bg='#343332', command=lambda:raise_frame(createAccount), borderwidth=0)
 createAccBtn.place(x=725, y=350)
 
-forgotPasswordButton = tk.Button(homePage, text="Forgot Password?", padx=5, pady=5, fg="white", bg='#343332', command=lambda:raise_frame(passwordChange))
+forgotPasswordButton = tk.Button(homePage, text="Forgot Password?", padx=5, pady=5, fg="white", bg='#343332', command=lambda:raise_frame(passwordChange2))
 forgotPasswordButton.place(x=670,y=305)
 
 #transfer
@@ -295,7 +334,7 @@ doneButtonTransfer = tk.Button(TransferCanvas, text="All Done!", padx=17, pady=1
 doneButtonTransfer.place(x=600, y=300)
 
 backButton3 = tk.Button(TransferCanvas, text="Back", padx=17, pady=17, fg="white", bg='#343332',
-                        command=lambda:raise_frame(homePage))
+                        command=lambda:raise_frame(Top_Frame))
 backButton3.place(x=50, y=300)
 
 def transfer():
@@ -355,7 +394,7 @@ def passChangeData():
 
     if currentPIN == pinNumIn:
         ATM.updatePassword(newPass, userNameData)
-        raise_frame(homePage)
+        raise_frame(Top_Frame)
     else:
         errorLabelPass = Label(passwordChangeLabel, text="Error: Incorrect userID or PIN", fg='Black',
                                font='Italics 12')
@@ -363,6 +402,26 @@ def passChangeData():
     display_text.set("${:,.2f}".format(ATM.currUser.balance))
     userName2.delete(0, END)
     secPIN.delete(0, END)
+    password2.delete(0, END)
+
+    #passchange for forgot password
+def passChangeData2():
+    userNameData = userName3.get()
+    pinNumIn = secPIN2.get()
+    newPass = password3.get()
+
+    currentPIN = ATM.getPIN(userNameData)
+
+    if currentPIN == pinNumIn:
+        ATM.updatePassword(newPass, userNameData)
+        raise_frame(homePage)
+    else:
+        errorLabelPass = Label(passwordChangeLabel, text="Error: Incorrect userID or PIN", fg='Black',
+                               font='Italics 12')
+        errorLabelPass.place(x=575, y=200)
+    display_text.set("${:,.2f}".format(ATM.currUser.balance))
+    userName3.delete(0, END)
+    secPIN2.delete(0, END)
     password2.delete(0, END)
 
 
