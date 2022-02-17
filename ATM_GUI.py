@@ -300,15 +300,15 @@ backButton3.place(x=50, y=300)
 
 def transfer():
     if ATM.currUser.loginStatus:
-        otherUser = userNameTransferEntry.get()
+        recipient = userNameTransferEntry.get()
         currPin = secPINTransfer.get()
-        moneyGiven = transferAmountEntry.get()
+        amount = transferAmountEntry.get()
         pinCheck = ATM.getPIN(ATM.currUser.userID)
-        if ATM.searchUsers(otherUser):
+        if ATM.searchUsers(recipient):
             if pinCheck == currPin:
-                ATM.currUser.withdraw(moneyGiven)
+                ATM.currUser.withdraw(amount)
                 ATM.updateBalance()
-                ATM.transferGUI(otherUser, moneyGiven)
+                ATM.currUser.transfer(amount, recipient)
                 display_text.set("${:,.2f}".format(ATM.currUser.balance))
                 raise_frame(Top_Frame)
             else:
@@ -351,7 +351,7 @@ def passChangeData():
     pinNumIn = secPIN.get()
     newPass = password2.get()
 
-    currentPIN = ATM.getPIN(userNameData)
+    currentPIN = ATM.currUser.PIN
 
     if currentPIN == pinNumIn:
         ATM.updatePassword(newPass, userNameData)

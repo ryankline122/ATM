@@ -29,7 +29,7 @@ class User:
         c = db.cursor()
         c.execute("SELECT balance FROM users where userID=?", (recipient,))
         balance = c.fetchone()[0]
-        balance += amount
+        balance += float(amount)
 
         c.execute("UPDATE users SET balance =? WHERE userID =?", (balance, recipient,))
         db.commit()
@@ -37,19 +37,14 @@ class User:
         db.close()
 
     # Allows user to change their password
-    def changePassword(self):
-        currPass = input("Confirm current password: ")
-        if (currPass != self.password):
-            print("Incorrect password. Try again")
-        else:
-            newPass = input("Enter your new password: ")
-            confirmNewPass = input("Enter new password again to confirm: ")
-
-            if (newPass != confirmNewPass):
-                print("New password doesn't match")
-            else:
-                self.password = newPass
-                print("Password set!")
+    def changePassword(self, newPassword):
+        self.password = newPassword
+        db = sqlite3.connect('user_info.db')
+        c = db.cursor()
+        c.execute("UPDATE users SET password =? WHERE userID =?", (newPassword, self.userID,))
+        db.commit()
+        c.close()
+        db.close()
 
 
     def getBalance(recipient):

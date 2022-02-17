@@ -114,6 +114,7 @@ def updateBalance():
     db.close()
 
 
+# ???
 def updatePassword(password, userID):
     db = sqlite3.connect('user_info.db')
     c = db.cursor()
@@ -125,6 +126,8 @@ def updatePassword(password, userID):
     c.close()
     db.close()
 
+
+# FIXME
 def searchUsers(desiredUser):
     db = sqlite3.connect('user_info.db')
     c = db.cursor()
@@ -136,17 +139,6 @@ def searchUsers(desiredUser):
             return True
     return False
 
-def transferGUI(otherUser, moneyGiven):
-    db = sqlite3.connect('user_info.db')
-    c = db.cursor()
-    c.execute("SELECT balance FROM users WHERE userID =?", (otherUser,))
-    currentBalance = c.fetchone()
-    updatedBalance = currentBalance[0]
-    updatedBalance = updatedBalance + float(moneyGiven)
-    c.execute("UPDATE users SET balance =? WHERE userID =?", (updatedBalance, otherUser))
-    db.commit()
-    c.close()
-    db.close()
 
 def deleteAll():
     db = sqlite3.connect('user_info.db')
@@ -156,23 +148,9 @@ def deleteAll():
     c.close()
     db.close()
 
-def getPIN(userID):
-    db = sqlite3.connect('user_info.db')
-    c = db.cursor()
-    c.execute("SELECT PIN FROM users WHERE userID =?", (userID,))
-    pin = c.fetchone()
-    pin = pin[0]
-    return pin
 
 def printDatabase():
     db = sqlite3.connect('user_info.db')
     c = db.cursor()
     c.execute("SELECT PIN FROM users WHERE userID=?", ('Log123',))
     print(c.fetchall())
-
-def alterColumn():
-    db = sqlite3.connect('user_info.db')
-    c = db.cursor()
-
-
-# TODO: Make a deleteAccount() function
