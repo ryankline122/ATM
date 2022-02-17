@@ -338,7 +338,7 @@ def getCreationData():
 
     firstName.delete(0,END)
     userName1.delete(0,END)
-    secPIN.delete(0,END)
+    secPIN1.delete(0,END)
     password1.delete(0,END)
     deposit.delete(0,END)
 
