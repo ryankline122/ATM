@@ -334,7 +334,7 @@ def getCreationData():
     passEntry = password1.get()
     depositEntry = deposit.get()
 
-    ATM.createAccount(nameEntry, userNameEntry, passEntry, depositEntry, pinNum, False)
+    ATM.createAccount(nameEntry, userNameEntry, passEntry, pinNum, depositEntry, False)
 
     firstName.delete(0,END)
     userName1.delete(0,END)
