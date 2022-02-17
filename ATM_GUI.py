@@ -2,7 +2,6 @@ import sqlite3
 import tkinter as tk
 from tkinter import *
 from tkinter import ttk
-from PIL import ImageTk, Image
 import ATM
 
 import os
@@ -90,7 +89,7 @@ passwordChangeLabel.pack(fill="both", expand=1)
 passwordChangecanvas = Canvas(passwordChangeLabel, width=800, height=400, bg='#75706F')
 passwordChangecanvas.place(x=0, y=0)
 
-forgotPassword = Label(passwordChangeLabel, text="Forgot Password?", bg='#75706F', fg='Black', font= "Times 36 bold")
+forgotPassword = Label(passwordChangeLabel, text="Change Password", bg='#75706F', fg='Black', font= "Times 36 bold underline")
 forgotPassword.place(x=210, y=50)
 
 userNameLabel = Label(passwordChangeLabel, text="What is your username?",
@@ -134,55 +133,58 @@ accountFrame.pack(fill="both", expand=1)
 canvasT4 = Canvas(accountFrame, width=800, height=400, bg='#75706F')
 canvasT4.place(x=0, y=0)
 
-canvasT = Canvas(accountFrame, width=390, height=150, bg='#343332')
-canvasT.place(x=5, y=5)
+#canvasT = Canvas(accountFrame, width=390, height=150, bg='#343332')
+#canvasT.place(x=5, y=5)
 
 canvasT2 = Canvas(accountFrame, width=390, height=150, bg='#343332')
-canvasT2.place(x=395, y=5)
+canvasT2.place(x=210, y=5)
 
 canvasT3 = Canvas(accountFrame, width=700, height=150, bg='#343332')
 canvasT3.place(x=50, y=180)
 
-recentLogLabel = Label(accountFrame, text="Recent Transactions", padx=10, pady=10, bg='#343332', fg='gray',
+recentLogLabel = Label(accountFrame, text="Available Features", padx=10, pady=10, bg='#343332', fg='gray',
                            font='Times 10 bold')
 recentLogLabel.place(x=335, y=185)
 
-savingAccountLabel = Label(accountFrame, text="Saving Account", padx=10, pady=10, bg='#343332', fg='gray')
-savingAccountLabel.place(x=15, y=10)
+#savingAccountLabel = Label(accountFrame, text="Saving Account", padx=10, pady=10, bg='#343332', fg='gray')
+#savingAccountLabel.place(x=15, y=10)
 
-checkingAccountLabel = Label(accountFrame, text="Checking Account", padx=10, pady=10, bg='#343332', fg='gray')
-checkingAccountLabel.place(x=405, y=10)
-
-availableBalanceLabel = Label(accountFrame, text="Available Balance", padx=10, pady=10, bg='#343332', fg='gray',
-                                  font="Italics 7")
-availableBalanceLabel.place(x=410, y=105)
+checkingAccountLabel = Label(accountFrame, text="Account Balance", padx=10, pady=10, bg='#343332', fg='gray')
+checkingAccountLabel.place(x=220, y=10)
 
 availableBalanceLabel = Label(accountFrame, text="Available Balance", padx=10, pady=10, bg='#343332', fg='gray',
                                   font="Italics 7")
-availableBalanceLabel.place(x=20, y=105)
+availableBalanceLabel.place(x=215, y=105)
+
+#availableBalanceLabel = Label(accountFrame, text="Available Balance", padx=10, pady=10, bg='#343332', fg='gray',
+                                  #font="Italics 7")
+#availableBalanceLabel.place(x=20, y=105)
 
 #checkingAccountMoneyLabel = Label(top_FrameOG, text="$", bg='#343332', fg='gray')
 #checkingAccountMoneyLabel.place(x=405, y=85)
 
-savingAccountMoneyLabel = Label(accountFrame, text="$", bg='#343332', fg='gray', font="Times 18 bold")
-savingAccountMoneyLabel.place(x=25, y=80)
+#savingAccountMoneyLabel = Label(accountFrame, text="$", bg='#343332', fg='gray', font="Times 18 bold")
+#savingAccountMoneyLabel.place(x=25, y=80)
 
 display_text = tk.StringVar()
 
 checkingAccountBalanceLabel = Label(accountFrame, textvariable=display_text, bg='#343332', fg='gray', font="Times 18 bold")
-checkingAccountBalanceLabel.place(x=415, y=80)
+checkingAccountBalanceLabel.place(x=225, y=80)
 
-savingAccountBalanceLabel = Label(accountFrame, text="500.00", bg='#343332', fg='gray', font="Times 18 bold")
-savingAccountBalanceLabel.place(x=38, y=80)
+#savingAccountBalanceLabel = Label(accountFrame, text="500.00", bg='#343332', fg='gray', font="Times 18 bold")
+#savingAccountBalanceLabel.place(x=38, y=80)
 
-logoutButton = tk.Button(accountFrame, text="Logout", command=lambda:logout())
-logoutButton.place(x=200, y=270)
+logoutButton = tk.Button(accountFrame, text="Logout", padx=7, pady=7, fg="white", bg='#343332', command=lambda:logout())
+logoutButton.place(x=620, y=240)
 
-moneyMovesButton = tk.Button(accountFrame, text="Deposit/Withdraw Screen", padx=5, pady=5, fg="white", bg='#343332', command=lambda:raise_frame(moneyMoves))
-moneyMovesButton.place(x=570,y=270)
+moneyMovesButton = tk.Button(accountFrame, text="Deposit/Withdraw Screen", padx=7, pady=7, fg="white", bg='#343332', command=lambda:raise_frame(moneyMoves))
+moneyMovesButton.place(x=120,y=240)
 
-transferButton = tk.Button(accountFrame, text="Transfer Portal", padx=5, pady=5, fg="white", bg='#343332', command=lambda:raise_frame(Transfer_Frame))
-transferButton.place(x=350,y=270)
+transferButton = tk.Button(accountFrame, text="Transfer Portal", padx=7, pady=7, fg="white", bg='#343332', command=lambda:raise_frame(Transfer_Frame))
+transferButton.place(x=310, y=240)
+
+changePasswordButton = tk.Button(accountFrame, text="Change Password",padx=7, pady=7, fg="white", bg='#343332', command=lambda:raise_frame(passwordChange))
+changePasswordButton.place(x=450, y=240)
 
 
 
@@ -237,28 +239,28 @@ Password = Entry(homePage, show="*", width=30, fg='black', borderwidth=2)
 Password.place(x=300, y=205)
 
 newUserLabel = Label(homePage, text="New User?", fg='black')
-newUserLabel.place(x=665, y=360)
+newUserLabel.place(x=660, y=360)
 
 # Buttons
 welcomeLabel = Label(homePage, text= "Welcome to the ATM!", font="Italics 36", fg="black")
 welcomeLabel.place(x=175, y=50)
-login_btn = ImageTk.PhotoImage(Image.open("login-button-png-18030_4_75x50.png"))
+#login_btn = ImageTk.PhotoImage(Image.open("login-button-png-18030_4_75x50.png"))
 
-img_label = Label(image=login_btn)
+#img_label = Label(image=login_btn)
 
-register_btn = ImageTk.PhotoImage(Image.open("register-button-png-18477_4_50x40.png"))
+#register_btn = ImageTk.PhotoImage(Image.open("register-button-png-18477_4_50x40.png"))
 
-img_label2 = Label(image=register_btn)
+#img_label2 = Label(image=register_btn)
 
-loginBtn = tk.Button(homePage, image=login_btn, command=lambda:dashboard(),
+loginBtn = tk.Button(homePage, text="Login", padx=25, pady=5, fg="white", bg='#343332', command=lambda:dashboard(),
                     borderwidth=0)
-loginBtn.place(x=355, y=235)
+loginBtn.place(x=350, y=235)
 
-createAccBtn = tk.Button(homePage, image=register_btn, command=lambda:raise_frame(createAccount), borderwidth=0)
+createAccBtn = tk.Button(homePage, text="Register", padx=5, pady=5, fg="white", bg='#343332', command=lambda:raise_frame(createAccount), borderwidth=0)
 createAccBtn.place(x=725, y=350)
 
 forgotPasswordButton = tk.Button(homePage, text="Forgot Password?", padx=5, pady=5, fg="white", bg='#343332', command=lambda:raise_frame(passwordChange))
-forgotPasswordButton.place(x=670,y=310)
+forgotPasswordButton.place(x=670,y=305)
 
 #transfer
 TransferCanvas = LabelFrame(Transfer_Frame, width=800, height=400)
