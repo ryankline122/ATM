@@ -1,3 +1,4 @@
+import ATM
 from User import User
 import sqlite3
 
@@ -113,27 +114,29 @@ def updateBalance():
     db.close()
 
 
-def updatePassword(password, userID, pinNum):
+def updatePassword(password, userID):
     db = sqlite3.connect('user_info.db')
     c = db.cursor()
-    try:
-        c.execute("SELECT PIN FROM users WHERE userID =?", (userID,))
-        realPin = c.fetchone()
-        print(pinNum)
-        print(realPin)
-        if pinNum == realPin[0]:
-            c.execute("UPDATE users SET password =? WHERE userID =?",
-                      (password, userID,))
-            return True
-        else:
-            return False
-    except TypeError:
-        return False
-        print()
-
+    if ATM.currUser.loginStatus:
+        c.execute("UPDATE users SET password =? WHERE userID =?", (password, ATM.currUser.userID,))
+    else:
+        c.execute("UPDATE users SET password =? WHERE userID =?", (password, userID,))
     db.commit()
     c.close()
     db.close()
+
+def searchUsers(desiredUser):
+    db = sqlite3.connect('user_info.db')
+    c = db.cursor()
+    c.execute("SELECT userID FROM users")
+    listOfUsers = c.fetchall()
+    for user in listOfUsers:
+        currentUserInList = user[0]
+        if currentUserInList == desiredUser:
+            return True
+    return False
+
+#def TransferGUI():
 
 
 def deleteAll():
@@ -144,6 +147,13 @@ def deleteAll():
     c.close()
     db.close()
 
+def getPIN(userID):
+    db = sqlite3.connect('user_info.db')
+    c = db.cursor()
+    c.execute("SELECT PIN FROM users WHERE userID =?", (userID,))
+    pin = c.fetchall()
+    pin = pin[0]
+    return pin
 
 def printDatabase():
     db = sqlite3.connect('user_info.db')
@@ -154,7 +164,6 @@ def printDatabase():
 def alterColumn():
     db = sqlite3.connect('user_info.db')
     c = db.cursor()
-    c.execute()
 
 
 # TODO: Make a deleteAccount() function

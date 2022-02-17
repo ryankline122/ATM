@@ -191,4 +191,5 @@ def main():
 
 # ATM Boot-up
 print("Welcome to our ATM!")
+ATM.alterColumn()
 main()

@@ -11,8 +11,7 @@ root = tk.Tk()
 root.geometry("800x400")
 
 
-def raise_frame(frame):
-    frame.tkraise()
+
 
 
 homePage = Frame(root)
@@ -20,8 +19,9 @@ createAccount = Frame(root)
 moneyMoves = Frame(root)
 passwordChange = Frame(root)
 Top_Frame = Frame(root)
+Transfer_Frame = Frame(root)
 
-for frame in (homePage, createAccount, passwordChange, moneyMoves, Top_Frame):
+for frame in (homePage, createAccount, passwordChange, moneyMoves, Top_Frame, Transfer_Frame):
     frame.grid(row=0, column=0, sticky='news')
 
 
@@ -35,18 +35,6 @@ for frame in (homePage, createAccount, passwordChange, moneyMoves, Top_Frame):
 #seeMore_btn = ImageTk.PhotoImage(Image.open("pngfind.com-black-button-png-50298_80x40.png"))
 
 #img_label3 = Label(image=seeMore_btn)
-
-#createAcount Frame Logan Renaau
-def getCreationData():
-
-    nameEntry = firstName.get()
-    userNameEntry = userName1.get()
-    pinNum = secPIN1.get()
-    passEntry = password1.get()
-    depositEntry = deposit.get()
-
-    ATM.createAccount(nameEntry, userNameEntry, passEntry, depositEntry, pinNum, False)
-    raise_frame(homePage)
 
 
 top_Frame = LabelFrame(createAccount, width=800, height=400)
@@ -94,19 +82,6 @@ backButton2 = tk.Button(top_Frame, text="Back", padx=17, pady=17, fg="white", bg
 backButton2.place(x=635, y=325)
 
 
-#passChange Frame Logan Reneau
-def passChangeData():
-    userNameData = userName2.get()
-    pinNumIn = secPIN.get()
-    newPass = password2.get()
-
-    if ATM.updatePassword(newPass, userNameData, pinNumIn) == False:
-        errorLabelPass = Label(top_Frame2, text="Error: Incorrect userID or PIN", fg='Black',
-                               font='Italics 12')
-        errorLabelPass.place(x=575, y=200)
-    else:
-        raise_frame(homePage)
-
 
 
 top_Frame2 = LabelFrame(passwordChange, width=800, height=400)
@@ -147,28 +122,7 @@ backButton3.place(x=50, y=300)
 
 # check if valid username and password and change frame to dashboard
 #Selmir
-def dashboard():
-    success = False
-    Username = User.get()
-    Passw = Password.get()
-    db = sqlite3.connect('user_info.db')
-    c = db.cursor()
 
-    c.execute("SELECT * FROM users where userID=? AND password=?",
-              (Username, Passw))
-
-    row = c.fetchone()
-    if row:
-        success = True
-
-    if (success):
-        ATM.login(Username, Passw)
-        display_text.set("${:,.2f}".format(ATM.currUser.balance))
-        raise_frame(Top_Frame)
-
-    else:
-        myLabel4 = Label(root, text="Incorrect username or password", fg='red', font="Times 12 bold")
-        myLabel4.place(x=290, y=300)
 
 
 #Top_Frame Frame Original Selmir
@@ -227,23 +181,7 @@ logoutButton.place(x=200, y=270)
 moneyMovesButton = tk.Button(top_FrameOG, text="Deposit/Withdraw Screen", padx=5, pady=5, fg="white", bg='#343332', command=lambda:raise_frame(moneyMoves))
 moneyMovesButton.place(x=570,y=270)
 
- #Original Logan updated by selmir
-def moneymoves():
-    if ATM.currUser.loginStatus:
-        money = moneyInput.get()
-        if myCombo.get() == "Deposit":
-            ATM.currUser.deposit(money)
-            display_text.set("${:,.2f}".format(ATM.currUser.balance))
-            raise_frame(Top_Frame)
-        else:
-            ATM.currUser.withdraw(money)
-            display_text.set("${:,.2f}".format(ATM.currUser.balance))
-            raise_frame(Top_Frame)
 
-
-def logout():
-    ATM.logoutAll()
-    raise_frame(homePage)
 
 
 
@@ -288,9 +226,6 @@ myCombo.pack(pady=80)
 #Selmir
 
 
-def update_topFrame():
-    Tk.update()
-
 
 #homePage Frame Original Selmir Lelak, Updated by Logan Reneau
 User = Entry(homePage, width=30, fg='black', borderwidth=2)
@@ -322,6 +257,89 @@ createAccBtn.place(x=725, y=350)
 
 forgotPasswordButton = tk.Button(homePage, text="Forgot Password?", padx=5, pady=5, fg="white", bg='#343332', command=lambda:raise_frame(passwordChange))
 forgotPasswordButton.place(x=670,y=310)
+
+#transfer
+
+
+def getCreationData():
+
+    nameEntry = firstName.get()
+    userNameEntry = userName1.get()
+    pinNum = secPIN1.get()
+    passEntry = password1.get()
+    depositEntry = deposit.get()
+
+    ATM.createAccount(nameEntry, userNameEntry, passEntry, depositEntry, pinNum, False)
+    raise_frame(homePage)
+
+
+#passChange Frame Logan Reneau
+def passChangeData():
+    userNameData = userName2.get()
+    pinNumIn = secPIN.get()
+    newPass = password2.get()
+    currentPIN = ATM.getPIN(userNameData)
+
+    if currentPIN == pinNumIn:
+        ATM.updatePassword(newPass, userNameData)
+        raise_frame(homePage)
+    else:
+        errorLabelPass = Label(top_Frame2, text="Error: Incorrect userID or PIN", fg='Black',
+                               font='Italics 12')
+        errorLabelPass.place(x=575, y=200)
+        userName2.delete(0, END)
+        secPIN.delete(0, END)
+        password2.delete(0, END)
+
+
+
+ #Original Logan updated by selmir
+def moneymoves():
+    if ATM.currUser.loginStatus:
+        money = moneyInput.get()
+        if myCombo.get() == "Deposit":
+            ATM.currUser.deposit(money)
+            display_text.set("${:,.2f}".format(ATM.currUser.balance))
+            raise_frame(Top_Frame)
+        else:
+            ATM.currUser.withdraw(money)
+            display_text.set("${:,.2f}".format(ATM.currUser.balance))
+            raise_frame(Top_Frame)
+
+def dashboard():
+    success = False
+    Username = User.get()
+    Passw = Password.get()
+    db = sqlite3.connect('user_info.db')
+    c = db.cursor()
+
+    c.execute("SELECT * FROM users where userID=? AND password=?",
+              (Username, Passw))
+
+    row = c.fetchone()
+    if row:
+        success = True
+
+    if (success):
+        ATM.login(Username, Passw)
+        display_text.set("${:,.2f}".format(ATM.currUser.balance))
+        raise_frame(Top_Frame)
+
+    else:
+        myLabel4 = Label(root, text="Incorrect username or password", fg='red', font="Times 12 bold")
+        myLabel4.place(x=290, y=300)
+
+
+def logout():
+    ATM.logoutAll()
+    raise_frame(homePage)
+
+
+def update_topFrame():
+    Tk.update()
+
+def raise_frame(frame):
+    frame.tkraise()
 
 
 raise_frame(homePage)
