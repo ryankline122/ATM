@@ -101,13 +101,13 @@ userName2.place(x=400, y=150)
 securityPINLabel = Label(passwordChangeLabel, text="What is your PIN number?",
                                   padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
 securityPINLabel.place(x=235, y=210)
-secPIN = Entry(passwordChangeLabel, width=25, fg='black', borderwidth=2)
+secPIN = Entry(passwordChangeLabel, show="*", width=25, fg='black', borderwidth=2)
 secPIN.place(x=400, y=225)
 
 passwordLabel = Label(passwordChangeLabel, text="What would you like your new password to be?",
                           padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
 passwordLabel.place(x=150, y=285)
-password2 = Entry(passwordChangeLabel, width=25, fg='black', borderwidth=2)
+password2 = Entry(passwordChangeLabel, show="*", width=25, fg='black', borderwidth=2)
 password2.place(x=400, y=295)
 
 doneButton = tk.Button(passwordChangeLabel, text="All Done!", padx=17, pady=17, fg="white", bg='#343332',
@@ -360,9 +360,10 @@ def passChangeData():
         errorLabelPass = Label(passwordChangeLabel, text="Error: Incorrect userID or PIN", fg='Black',
                                font='Italics 12')
         errorLabelPass.place(x=575, y=200)
-        userName2.delete(0, END)
-        secPIN.delete(0, END)
-        password2.delete(0, END)
+    display_text.set("${:,.2f}".format(ATM.currUser.balance))
+    userName2.delete(0, END)
+    secPIN.delete(0, END)
+    password2.delete(0, END)
 
 
 
@@ -372,10 +373,12 @@ def moneymoves():
         money = moneyInput.get()
         if myCombo.get() == "Deposit":
             ATM.currUser.deposit(money)
+            ATM.updateBalance()
             display_text.set("${:,.2f}".format(ATM.currUser.balance))
             raise_frame(Top_Frame)
         else:
             ATM.currUser.withdraw(money)
+            ATM.updateBalance()
             display_text.set("${:,.2f}".format(ATM.currUser.balance))
             raise_frame(Top_Frame)
     moneyInput.delete(0, END)
