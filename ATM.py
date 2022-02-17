@@ -136,8 +136,17 @@ def searchUsers(desiredUser):
             return True
     return False
 
-#def TransferGUI():
-
+def transferGUI(otherUser, moneyGiven):
+    db = sqlite3.connect('user_info.db')
+    c = db.cursor()
+    c.execute("SELECT balance FROM users WHERE userID =?", (otherUser,))
+    currentBalance = c.fetchone()
+    updatedBalance = currentBalance[0]
+    updatedBalance = updatedBalance + float(moneyGiven)
+    c.execute("UPDATE users SET balance =? WHERE userID =?", (updatedBalance, otherUser))
+    db.commit()
+    c.close()
+    db.close()
 
 def deleteAll():
     db = sqlite3.connect('user_info.db')

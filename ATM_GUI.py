@@ -37,85 +37,85 @@ for frame in (homePage, createAccount, passwordChange, moneyMoves, Top_Frame, Tr
 #img_label3 = Label(image=seeMore_btn)
 
 
-top_Frame = LabelFrame(createAccount, width=800, height=400)
-top_Frame.pack(fill="both", expand=1)
+createAccountFrame = LabelFrame(createAccount, width=800, height=400)
+createAccountFrame.pack(fill="both", expand=1)
 
-canvas = Canvas(top_Frame, width=800, height=400, bg='#75706F')
-canvas.place(x=0, y=0)
+createAccountcanvas = Canvas(createAccountFrame, width=800, height=400, bg='#75706F')
+createAccountcanvas.place(x=0, y=0)
 
-nameLabel = Label(top_Frame, text="What is your name?",
+nameLabel = Label(createAccountFrame, text="What is your name?",
                           padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
 nameLabel.place(x=20, y=20)
-firstName = Entry(top_Frame, width=15, fg='black', borderwidth=2)
+firstName = Entry(createAccountFrame, width=15, fg='black', borderwidth=2)
 firstName.place(x=225, y=35)
 
-userNameLabel = Label(top_Frame, text="What would you like your username to be?",
+userNameLabel = Label(createAccountFrame, text="What would you like your username to be?",
                           padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
 userNameLabel.place(x=20, y=90)
-userName1 = Entry(top_Frame, width=25, fg='black', borderwidth=2)
+userName1 = Entry(createAccountFrame, width=25, fg='black', borderwidth=2)
 userName1.place(x=250, y=105)
 
-passwordLabel = Label(top_Frame, text="What would you like your password to be?",
+passwordLabel = Label(createAccountFrame, text="What would you like your password to be?",
                           padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
 passwordLabel.place(x=20, y=160)
-password1 = Entry(top_Frame, width=25, fg='black', borderwidth=2)
+password1 = Entry(createAccountFrame, width=25, fg='black', borderwidth=2)
 password1.place(x=250, y=170)
 
-securityPINNLabel = Label(top_Frame, text="Add a PIN number of 4 digits.",
+securityPINNLabel = Label(createAccountFrame, text="Add a PIN number of 4 digits.",
                                   padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
 securityPINNLabel.place(x=20, y=230)
-secPIN1 = Entry(top_Frame, width=25, fg='black', borderwidth=2)
+secPIN1 = Entry(createAccountFrame, width=25, fg='black', borderwidth=2)
 secPIN1.place(x=275, y=245)
 
-initialDepositLabel = Label(top_Frame, text="What would you like your initial deposit to be?",
+initialDepositLabel = Label(createAccountFrame, text="What would you like your initial deposit to be?",
                                   padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
 initialDepositLabel.place(x=20, y=300)
-deposit = Entry(top_Frame, width=25, fg='black', borderwidth=2)
+deposit = Entry(createAccountFrame, width=25, fg='black', borderwidth=2)
 deposit.place(x=265, y=315)
 
-updateButton = tk.Button(top_Frame, text="Add to database!", padx=17, pady=17, fg="white", bg='#343332'
+updateButton = tk.Button(createAccountFrame, text="Add to database!", padx=17, pady=17, fg="white", bg='#343332'
                          , command=lambda:getCreationData())
 updateButton.place(x=600, y=225)
 
-backButton2 = tk.Button(top_Frame, text="Back", padx=17, pady=17, fg="white", bg='#343332',
+backButton2 = tk.Button(createAccountFrame, text="Back", padx=17, pady=17, fg="white", bg='#343332',
                         command=lambda:raise_frame(homePage))
 backButton2.place(x=635, y=325)
 
 
 
 
-top_Frame2 = LabelFrame(passwordChange, width=800, height=400)
-top_Frame2.pack(fill="both", expand=1)
+passwordChangeLabel = LabelFrame(passwordChange, width=800, height=400)
+passwordChangeLabel.pack(fill="both", expand=1)
 
-canvas = Canvas(top_Frame2, width=800, height=400, bg='#75706F')
-canvas.place(x=0, y=0)
+passwordChangecanvas = Canvas(passwordChangeLabel, width=800, height=400, bg='#75706F')
+passwordChangecanvas.place(x=0, y=0)
 
-forgotPassword = Label(top_Frame2, text="Forgot Password?", bg='#75706F', fg='Black', font= "Times 36 bold")
+forgotPassword = Label(passwordChangeLabel, text="Forgot Password?", bg='#75706F', fg='Black', font= "Times 36 bold")
 forgotPassword.place(x=210, y=50)
 
-userNameLabel = Label(top_Frame2, text="What is your username?",
+userNameLabel = Label(passwordChangeLabel, text="What is your username?",
                           padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
 userNameLabel.place(x=250, y=135)
-userName2 = Entry(top_Frame2, width=25, fg='black', borderwidth=2)
+userName2 = Entry(passwordChangeLabel, width=25, fg='black', borderwidth=2)
 userName2.place(x=400, y=150)
 
-securityPINLabel = Label(top_Frame2, text="What is your PIN number?",
+securityPINLabel = Label(passwordChangeLabel, text="What is your PIN number?",
                                   padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
 securityPINLabel.place(x=235, y=210)
-secPIN = Entry(top_Frame2, width=25, fg='black', borderwidth=2)
+secPIN = Entry(passwordChangeLabel, width=25, fg='black', borderwidth=2)
 secPIN.place(x=400, y=225)
 
-passwordLabel = Label(top_Frame2, text="What would you like your  new password to be?",
+passwordLabel = Label(passwordChangeLabel, text="What would you like your new password to be?",
                           padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
 passwordLabel.place(x=150, y=285)
-password2 = Entry(top_Frame2, width=25, fg='black', borderwidth=2)
+password2 = Entry(passwordChangeLabel, width=25, fg='black', borderwidth=2)
 password2.place(x=400, y=295)
 
-doneButton = tk.Button(top_Frame2, text="All Done!", padx=17, pady=17, fg="white", bg='#343332',
+doneButton = tk.Button(passwordChangeLabel, text="All Done!", padx=17, pady=17, fg="white", bg='#343332',
                        command=lambda:passChangeData())
 doneButton.place(x=600, y=300)
 
-backButton3 = tk.Button(top_Frame2, text="Back", padx=17, pady=17, fg="white", bg='#343332',
+backButton3 = tk.Button(passwordChangeLabel, text="Back", padx=17, pady=17, fg="white", bg='#343332',
                         command=lambda:raise_frame(homePage))
 backButton3.place(x=50, y=300)
 
@@ -126,62 +126,62 @@ backButton3.place(x=50, y=300)
 
 
 #Top_Frame Frame Original Selmir
-top_FrameOG = LabelFrame(Top_Frame, width=800, height=400)
-top_FrameOG.pack(fill="both", expand=1)
+accountFrame = LabelFrame(Top_Frame, width=800, height=400)
+accountFrame.pack(fill="both", expand=1)
 
 # Define a Canvas Widget
 
-canvasT4 = Canvas(top_FrameOG, width=800, height=400, bg='#75706F')
+canvasT4 = Canvas(accountFrame, width=800, height=400, bg='#75706F')
 canvasT4.place(x=0, y=0)
 
-canvasT = Canvas(top_FrameOG, width=390, height=150, bg='#343332')
+canvasT = Canvas(accountFrame, width=390, height=150, bg='#343332')
 canvasT.place(x=5, y=5)
 
-canvasT2 = Canvas(top_FrameOG, width=390, height=150, bg='#343332')
+canvasT2 = Canvas(accountFrame, width=390, height=150, bg='#343332')
 canvasT2.place(x=395, y=5)
 
-canvasT3 = Canvas(top_FrameOG, width=700, height=150, bg='#343332')
+canvasT3 = Canvas(accountFrame, width=700, height=150, bg='#343332')
 canvasT3.place(x=50, y=180)
 
-recentLogLabel = Label(top_FrameOG, text="Recent Transactions", padx=10, pady=10, bg='#343332', fg='gray',
+recentLogLabel = Label(accountFrame, text="Recent Transactions", padx=10, pady=10, bg='#343332', fg='gray',
                            font='Times 10 bold')
 recentLogLabel.place(x=335, y=185)
 
-savingAccountLabel = Label(top_FrameOG, text="Saving Account", padx=10, pady=10, bg='#343332', fg='gray')
+savingAccountLabel = Label(accountFrame, text="Saving Account", padx=10, pady=10, bg='#343332', fg='gray')
 savingAccountLabel.place(x=15, y=10)
 
-checkingAccountLabel = Label(top_FrameOG, text="Checking Account", padx=10, pady=10, bg='#343332', fg='gray')
+checkingAccountLabel = Label(accountFrame, text="Checking Account", padx=10, pady=10, bg='#343332', fg='gray')
 checkingAccountLabel.place(x=405, y=10)
 
-availableBalanceLabel = Label(top_FrameOG, text="Available Balance", padx=10, pady=10, bg='#343332', fg='gray',
+availableBalanceLabel = Label(accountFrame, text="Available Balance", padx=10, pady=10, bg='#343332', fg='gray',
                                   font="Italics 7")
 availableBalanceLabel.place(x=410, y=105)
 
-availableBalanceLabel = Label(top_FrameOG, text="Available Balance", padx=10, pady=10, bg='#343332', fg='gray',
+availableBalanceLabel = Label(accountFrame, text="Available Balance", padx=10, pady=10, bg='#343332', fg='gray',
                                   font="Italics 7")
 availableBalanceLabel.place(x=20, y=105)
 
 #checkingAccountMoneyLabel = Label(top_FrameOG, text="$", bg='#343332', fg='gray')
 #checkingAccountMoneyLabel.place(x=405, y=85)
 
-savingAccountMoneyLabel = Label(top_FrameOG, text="$", bg='#343332', fg='gray', font="Times 18 bold")
+savingAccountMoneyLabel = Label(accountFrame, text="$", bg='#343332', fg='gray', font="Times 18 bold")
 savingAccountMoneyLabel.place(x=25, y=80)
 
 display_text = tk.StringVar()
 
-checkingAccountBalanceLabel = Label(top_FrameOG, textvariable=display_text, bg='#343332', fg='gray', font="Times 18 bold")
+checkingAccountBalanceLabel = Label(accountFrame, textvariable=display_text, bg='#343332', fg='gray', font="Times 18 bold")
 checkingAccountBalanceLabel.place(x=415, y=80)
 
-savingAccountBalanceLabel = Label(top_FrameOG, text="500.00", bg='#343332', fg='gray', font="Times 18 bold")
+savingAccountBalanceLabel = Label(accountFrame, text="500.00", bg='#343332', fg='gray', font="Times 18 bold")
 savingAccountBalanceLabel.place(x=38, y=80)
 
-logoutButton = tk.Button(top_FrameOG, text="Logout", command=lambda:logout())
+logoutButton = tk.Button(accountFrame, text="Logout", command=lambda:logout())
 logoutButton.place(x=200, y=270)
 
-moneyMovesButton = tk.Button(top_FrameOG, text="Deposit/Withdraw Screen", padx=5, pady=5, fg="white", bg='#343332', command=lambda:raise_frame(moneyMoves))
+moneyMovesButton = tk.Button(accountFrame, text="Deposit/Withdraw Screen", padx=5, pady=5, fg="white", bg='#343332', command=lambda:raise_frame(moneyMoves))
 moneyMovesButton.place(x=570,y=270)
 
-transferButton = tk.Button(top_FrameOG, text="Transfer Portal", padx=5, pady=5, fg="white", bg='#343332', command=lambda:raise_frame(Transfer_Frame))
+transferButton = tk.Button(accountFrame, text="Transfer Portal", padx=5, pady=5, fg="white", bg='#343332', command=lambda:raise_frame(Transfer_Frame))
 transferButton.place(x=350,y=270)
 
 
@@ -189,29 +189,28 @@ transferButton.place(x=350,y=270)
 
 
 #moneyMoves Original Logan Reneau
-top_Frame3 = LabelFrame(moneyMoves, width=800, height=400)
-top_Frame3.pack(fill="both", expand=1)
+depoWithFrame = LabelFrame(moneyMoves, width=800, height=400)
+depoWithFrame.pack(fill="both", expand=1)
 
-canvasM = Canvas(top_Frame3, width=800, height=400, bg='#75706F')
+canvasM = Canvas(depoWithFrame, width=800, height=400, bg='#75706F')
 canvasM.place(x=0, y=0)
 
-moneyTransfer = Label(top_Frame3, text="Would you like to deposit or withdraw?",
+moneyTransfer = Label(depoWithFrame, text="Would you like to deposit or withdraw?",
                           padx=10, pady=10, fg="black", font="Italics 15", bg='#75706F')
 moneyTransfer.place(x=225, y=20)
 
-moneyInputLabel = Label(top_Frame3, text="How much?",
+moneyInputLabel = Label(depoWithFrame, text="How much?",
                           padx=10, pady=10, fg="black", font="Italics 15", bg='#75706F')
 moneyInputLabel.place(x=325, y=120)
 
-moneyInput = Entry(top_Frame3, width=23, fg='black', borderwidth=2)
+moneyInput = Entry(depoWithFrame, width=23, fg='black', borderwidth=2)
 moneyInput.place(x=320, y=175)
-#moneyInput.get() gets the value within.
 
-doneButton2 = tk.Button(top_Frame3, text="Submit", padx=17, pady=17, fg="white", bg='#343332',
+doneButton2 = tk.Button(depoWithFrame, text="Submit", padx=17, pady=17, fg="white", bg='#343332',
                         command=lambda:moneymoves())
 doneButton2.place(x=600, y=300)
 
-backButton = tk.Button(top_Frame3, text="Back", padx=17, pady=17, fg="white", bg='#343332',
+backButton = tk.Button(depoWithFrame, text="Back", padx=17, pady=17, fg="white", bg='#343332',
                         command=lambda:raise_frame(Top_Frame))
 backButton.place(x=100, y=300)
 
@@ -220,7 +219,7 @@ options = [
     "Withdraw"
 ]
 
-myCombo = ttk.Combobox(top_Frame3, value=options)
+myCombo = ttk.Combobox(depoWithFrame, value=options)
 myCombo.current(0)
 myCombo.pack(pady=80)
 
@@ -234,7 +233,7 @@ myCombo.pack(pady=80)
 User = Entry(homePage, width=30, fg='black', borderwidth=2)
 User.place(x=300, y=175)
 
-Password = Entry(homePage, width=30, fg='black', borderwidth=2)
+Password = Entry(homePage, show="*", width=30, fg='black', borderwidth=2)
 Password.place(x=300, y=205)
 
 newUserLabel = Label(homePage, text="New User?", fg='black')
@@ -280,22 +279,50 @@ userNameTransferEntry.place(x=400, y=150)
 securityPINTransferLabel = Label(TransferCanvas, text="What is your PIN number?",
                                   padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
 securityPINTransferLabel.place(x=235, y=210)
-secPINTransfer = Entry(TransferCanvas, width=25, fg='black', borderwidth=2)
+secPINTransfer = Entry(TransferCanvas, show="*", width=25, fg='black', borderwidth=2)
 secPINTransfer.place(x=400, y=225)
 
-transferAmountLabel = Label(TransferCanvas, text="What would you like your  new password to be?",
+transferAmountLabel = Label(TransferCanvas, text="How much would you like to send?",
                           padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
-transferAmountLabel.place(x=150, y=285)
+transferAmountLabel.place(x=180, y=285)
 transferAmountEntry = Entry(TransferCanvas, width=25, fg='black', borderwidth=2)
 transferAmountEntry.place(x=400, y=295)
 
 doneButtonTransfer = tk.Button(TransferCanvas, text="All Done!", padx=17, pady=17, fg="white", bg='#343332',
-                       command=lambda:raise_frame(Top_Frame))
+                       command=lambda:transfer())
 doneButtonTransfer.place(x=600, y=300)
 
 backButton3 = tk.Button(TransferCanvas, text="Back", padx=17, pady=17, fg="white", bg='#343332',
                         command=lambda:raise_frame(homePage))
 backButton3.place(x=50, y=300)
+
+def transfer():
+    if ATM.currUser.loginStatus:
+        otherUser = userNameTransferEntry.get()
+        currPin = secPINTransfer.get()
+        moneyGiven = transferAmountEntry.get()
+        pinCheck = ATM.getPIN(ATM.currUser.userID)
+        if ATM.searchUsers(otherUser):
+            if pinCheck == currPin:
+                ATM.currUser.withdraw(moneyGiven)
+                ATM.updateBalance()
+                ATM.transferGUI(otherUser, moneyGiven)
+                display_text.set("${:,.2f}".format(ATM.currUser.balance))
+                raise_frame(Top_Frame)
+            else:
+                wrongPinLabel = Label(TransferCanvas, text="Incorrect PIN", fg='red', font="Times 12 bold")
+                wrongPinLabel.place(x=290, y=300)
+        else:
+            wrongUserIDLabel = Label(TransferCanvas, text="Error: userID DNE", fg='red', font="Times 12 bold")
+            wrongUserIDLabel.place(x=290, y=200)
+    userNameTransferEntry.delete(0, END)
+    secPINTransfer.delete(0, END)
+    transferAmountEntry.delete(0, END)
+
+
+
+
+
 
 def getCreationData():
 
@@ -306,6 +333,13 @@ def getCreationData():
     depositEntry = deposit.get()
 
     ATM.createAccount(nameEntry, userNameEntry, passEntry, depositEntry, pinNum, False)
+
+    firstName.delete(0,END)
+    userName1.delete(0,END)
+    secPIN.delete(0,END)
+    password1.delete(0,END)
+    deposit.delete(0,END)
+
     raise_frame(homePage)
 
 
@@ -321,7 +355,7 @@ def passChangeData():
         ATM.updatePassword(newPass, userNameData)
         raise_frame(homePage)
     else:
-        errorLabelPass = Label(top_Frame2, text="Error: Incorrect userID or PIN", fg='Black',
+        errorLabelPass = Label(passwordChangeLabel, text="Error: Incorrect userID or PIN", fg='Black',
                                font='Italics 12')
         errorLabelPass.place(x=575, y=200)
         userName2.delete(0, END)
@@ -342,6 +376,7 @@ def moneymoves():
             ATM.currUser.withdraw(money)
             display_text.set("${:,.2f}".format(ATM.currUser.balance))
             raise_frame(Top_Frame)
+    moneyInput.delete(0, END)
 
 def dashboard():
     success = False
@@ -360,11 +395,14 @@ def dashboard():
     if (success):
         ATM.login(Username, Passw)
         display_text.set("${:,.2f}".format(ATM.currUser.balance))
+        User.delete(0, END)
+        Password.delete(0, END)
         raise_frame(Top_Frame)
 
     else:
         myLabel4 = Label(root, text="Incorrect username or password", fg='red', font="Times 12 bold")
         myLabel4.place(x=290, y=300)
+
 
 
 def logout():
