@@ -151,7 +151,7 @@ def getPIN(userID):
     db = sqlite3.connect('user_info.db')
     c = db.cursor()
     c.execute("SELECT PIN FROM users WHERE userID =?", (userID,))
-    pin = c.fetchall()
+    pin = c.fetchone()
     pin = pin[0]
     return pin
 

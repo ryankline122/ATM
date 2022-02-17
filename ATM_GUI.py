@@ -181,6 +181,9 @@ logoutButton.place(x=200, y=270)
 moneyMovesButton = tk.Button(top_FrameOG, text="Deposit/Withdraw Screen", padx=5, pady=5, fg="white", bg='#343332', command=lambda:raise_frame(moneyMoves))
 moneyMovesButton.place(x=570,y=270)
 
+transferButton = tk.Button(top_FrameOG, text="Transfer Portal", padx=5, pady=5, fg="white", bg='#343332', command=lambda:raise_frame(Transfer_Frame))
+transferButton.place(x=350,y=270)
+
 
 
 
@@ -259,7 +262,40 @@ forgotPasswordButton = tk.Button(homePage, text="Forgot Password?", padx=5, pady
 forgotPasswordButton.place(x=670,y=310)
 
 #transfer
+TransferCanvas = LabelFrame(Transfer_Frame, width=800, height=400)
+TransferCanvas.pack(fill="both", expand=1)
 
+greyTransferCanvas = Canvas(TransferCanvas, width=800, height=400, bg='#75706F')
+greyTransferCanvas.place(x=0, y=0)
+
+transferLabel = Label(TransferCanvas, text="Transfer Portal", bg='#75706F', fg='Black', font= "Times 36 bold underline")
+transferLabel.place(x=210, y=50)
+
+userNameTransferLabel = Label(TransferCanvas, text="What userID to send to?",
+                          padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
+userNameTransferLabel.place(x=250, y=135)
+userNameTransferEntry = Entry(TransferCanvas, width=25, fg='black', borderwidth=2)
+userNameTransferEntry.place(x=400, y=150)
+
+securityPINTransferLabel = Label(TransferCanvas, text="What is your PIN number?",
+                                  padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
+securityPINTransferLabel.place(x=235, y=210)
+secPINTransfer = Entry(TransferCanvas, width=25, fg='black', borderwidth=2)
+secPINTransfer.place(x=400, y=225)
+
+transferAmountLabel = Label(TransferCanvas, text="What would you like your  new password to be?",
+                          padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
+transferAmountLabel.place(x=150, y=285)
+transferAmountEntry = Entry(TransferCanvas, width=25, fg='black', borderwidth=2)
+transferAmountEntry.place(x=400, y=295)
+
+doneButtonTransfer = tk.Button(TransferCanvas, text="All Done!", padx=17, pady=17, fg="white", bg='#343332',
+                       command=lambda:raise_frame(Top_Frame))
+doneButtonTransfer.place(x=600, y=300)
+
+backButton3 = tk.Button(TransferCanvas, text="Back", padx=17, pady=17, fg="white", bg='#343332',
+                        command=lambda:raise_frame(homePage))
+backButton3.place(x=50, y=300)
 
 def getCreationData():
 
@@ -278,6 +314,7 @@ def passChangeData():
     userNameData = userName2.get()
     pinNumIn = secPIN.get()
     newPass = password2.get()
+
     currentPIN = ATM.getPIN(userNameData)
 
     if currentPIN == pinNumIn:
