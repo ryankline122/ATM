@@ -56,10 +56,13 @@ def login(userID, password):
     name = ','.join(c.fetchone())
     c.execute("SELECT balance FROM users where userID=?", (userID,))
     balance = c.fetchone()[0]
+    c.execute("SELECT PIN FROM users where userID=?", (userID,))
+    PIN = c.fetchone()[0]
 
     currUser.name = name
     currUser.userID = userID
     currUser.password = password
+    currUser.PIN = PIN
     currUser.balance = balance
     currUser.loginStatus = True
 
