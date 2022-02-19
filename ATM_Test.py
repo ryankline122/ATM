@@ -3,8 +3,7 @@ import unittest
 import ATM
 
 # In the terminal:
-# "python -m pytest --cov=ATM
-# "python -m pytest -v --cov=ATM --cov-report=html
+# "python -m pytest --cov-report=html --cov=(filename) --cov-branch
 
 class TestAccountCreation(unittest.TestCase):
 
@@ -45,7 +44,7 @@ class TestAccountCreation(unittest.TestCase):
         ATM.deleteAll()
 
 
-    def test_login1(self):
+    def test_login_checkName(self):
         ATM.createTable()
 
         ATM.createAccount("John", "jdoe123", "passphrase", 1234, 100.99, False)
@@ -55,7 +54,7 @@ class TestAccountCreation(unittest.TestCase):
 
         ATM.deleteAll()
 
-    def test_login2(self):
+    def test_login_checkUserID(self):
         ATM.createTable()
 
         ATM.createAccount("John", "jdoe123", "passphrase", 1234, 100.99, False)
@@ -66,7 +65,7 @@ class TestAccountCreation(unittest.TestCase):
         ATM.deleteAll()
 
 
-    def test_login3(self):
+    def test_login_checkPassword(self):
         ATM.createTable()
 
         ATM.createAccount("John", "jdoe123", "passphrase", 1234, 100.99, False)
@@ -77,7 +76,7 @@ class TestAccountCreation(unittest.TestCase):
         ATM.deleteAll()
 
 
-    def test_login4(self):
+    def test_login_checkPIN(self):
         ATM.createTable()
 
         ATM.createAccount("John", "jdoe123", "passphrase", '1234', 100.99, False)
@@ -88,7 +87,7 @@ class TestAccountCreation(unittest.TestCase):
         ATM.deleteAll()
 
 
-    def test_login5(self):
+    def test_login_checkBalance(self):
         ATM.createTable()
 
         ATM.createAccount("John", "jdoe123", "passphrase", 1234, 100.99, False)
@@ -99,7 +98,7 @@ class TestAccountCreation(unittest.TestCase):
         ATM.deleteAll()
 
 
-    def test_login6(self):
+    def test_login_status(self):
         ATM.createTable()
 
         ATM.createAccount("John", "jdoe123", "passphrase", 1234, 100.99, False)
@@ -108,6 +107,62 @@ class TestAccountCreation(unittest.TestCase):
         self.assertEqual(True, ATM.currUser.loginStatus)
 
         ATM.deleteAll()
+
+
+    def test_logout(self):
+        ATM.createTable()
+
+        ATM.createAccount("John", "jdoe123", "passphrase", 1234, 100.99, False)
+        ATM.login("jdoe123", "passphrase")
+        ATM.logout()
+
+        self.assertEqual("False", ATM.currUser.loginStatus)
+
+
+    def test_forgotPassword(self):
+        ATM.createTable()
+        ATM.createAccount("John", "jdoe123", "passphrase", 1234, 100.99, False)
+        ATM.forgotPassword("jdoe123", "1234", "newpassword")
+
+        db = sqlite3.connect('user_info.db')
+        c = db.cursor()
+        c.execute("SELECT userID FROM users")
+        c.execute("SELECT password FROM users where userID=?", ("jdoe123",))
+        currPass = ','.join(c.fetchone())
+
+        self.assertEqual("newpassword", currPass)
+        ATM.deleteAll()
+
+
+    def test_forgotPassword_incorrectPIN(self):
+        with self.assertRaises(ValueError):
+            ATM.createTable()
+            ATM.createAccount("John", "jdoe123", "passphrase", 1234, 100.99, False)
+            ATM.forgotPassword("jdoe123", "4567", "newpassword")
+
+            db = sqlite3.connect('user_info.db')
+            c = db.cursor()
+            c.execute("SELECT userID FROM users")
+            c.execute("SELECT password FROM users where userID=?", ("jdoe123",))
+
+        ATM.deleteAll()
+
+
+    def test_userExists_True(self):
+        ATM.createTable()
+        ATM.createAccount("John", "jdoe123", "passphrase", 1234, 100.99, False)
+
+        self.assertEqual(True, ATM.userExists("jdoe123"))
+        ATM.deleteAll()
+
+
+    def test_userExists_False(self):
+        ATM.createTable()
+        ATM.createAccount("John", "jdoe123", "passphrase", 1234, 100.99, False)
+
+        self.assertEqual(False, ATM.userExists("janedoe"))
+        ATM.deleteAll()
+
 
 if __name__ == '__main__':
     unittest.main()

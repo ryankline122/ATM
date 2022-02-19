@@ -160,12 +160,17 @@ def main():
         elif (action.lower() == "nuke"):
             ATM.deleteAll()
 
+
+        # Forgot Password
         elif (action.lower() == "forgot-password"):
             usernameInput = input("Enter your userID: ")
-            pinInput = input("Enter your PIN number: ")
-            newPass = input("Set your new password: ")
 
-            ATM.forgotPassword(usernameInput, pinInput, newPass)
+            if(ATM.userExists(usernameInput)):
+                pinInput = input("Enter your PIN number: ")
+                newPass = input("Set your new password: ")
+                ATM.forgotPassword(usernameInput, pinInput, newPass)
+            else:
+                print("Incorrect username")
 
         # LOGOUT
         elif (action.lower() == "logout"):
