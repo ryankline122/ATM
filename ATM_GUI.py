@@ -373,15 +373,19 @@ def getCreationData():
     passEntry = password1.get()
     depositEntry = deposit.get()
 
-    ATM.createAccount(nameEntry, userNameEntry, passEntry, pinNum, depositEntry, False)
+    if ATM.userExists(userNameEntry):
+        userName1.delete(0, END)
+        userNameExistsLabel = Label (createAccountFrame, text= "Error: UserID already exits", fg="red", font="Italics 14")
+        userNameExistsLabel.place(x=450, y=150)
 
-    firstName.delete(0,END)
-    userName1.delete(0,END)
-    secPIN1.delete(0,END)
-    password1.delete(0,END)
-    deposit.delete(0,END)
-
-    raise_frame(homePage)
+    else:
+        ATM.createAccount(nameEntry, userNameEntry, passEntry, pinNum, depositEntry, False)
+        firstName.delete(0,END)
+        userName1.delete(0,END)
+        secPIN1.delete(0,END)
+        password1.delete(0,END)
+        deposit.delete(0,END)
+        raise_frame(homePage)
 
 
 #passChange Frame Logan Reneau
@@ -477,6 +481,6 @@ def update_topFrame():
 def raise_frame(frame):
     frame.tkraise()
 
-
+ATM.logoutAll()
 raise_frame(homePage)
 root.mainloop()

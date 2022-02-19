@@ -154,3 +154,10 @@ def deleteAll():
     db.commit()
     c.close()
     db.close()
+
+
+def printDatabase():
+    db = sqlite3.connect('user_info.db')
+    c = db.cursor()
+    c.execute("SELECT PIN FROM users WHERE userID=?", ('Log123',))
+    print(c.fetchall())
