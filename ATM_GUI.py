@@ -379,7 +379,6 @@ def transfer():
 
 
 def getCreationData():
-
     nameEntry = firstName.get()
     userNameEntry = userName1.get()
     pinNum = secPIN1.get()
