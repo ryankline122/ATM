@@ -27,11 +27,8 @@ def main():
             if(not ATM.inUse()):
                 name = input("Enter your name: ")
                 userID = input("Create a unique userID: ")
-                (c.execute("SELECT exists(SELECT userID FROM users where userID=?)", (userID,)))
-                [exists] = c.fetchone()
-
-                if (exists):
-                    print("Username already exists. Try again")
+                if(ATM.userExists(userID)):
+                    print("Error - UserID already in use. Try again")
                 else:
                     # "Run" --> "Edit Configuration" --> Check "Emulate terminal in output console
                     # Setting Password
@@ -162,6 +159,13 @@ def main():
         #DELETE ALL
         elif (action.lower() == "nuke"):
             ATM.deleteAll()
+
+        elif (action.lower() == "forgot-password"):
+            usernameInput = input("Enter your userID: ")
+            pinInput = input("Enter your PIN number: ")
+            newPass = input("Set your new password: ")
+
+            ATM.forgotPassword(usernameInput, pinInput, newPass)
 
         # LOGOUT
         elif (action.lower() == "logout"):

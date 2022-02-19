@@ -83,7 +83,7 @@ backButton2.place(x=635, y=325)
 
 
 
-#password change used for inside top frame
+#password change while logged in
 passwordChangeLabel = LabelFrame(passwordChange, width=800, height=400)
 passwordChangeLabel.pack(fill="both", expand=1)
 
@@ -93,21 +93,21 @@ passwordChangecanvas.place(x=0, y=0)
 forgotPassword = Label(passwordChangeLabel, text="Change Password", bg='#75706F', fg='Black', font= "Times 36 bold underline")
 forgotPassword.place(x=210, y=50)
 
-userNameLabel = Label(passwordChangeLabel, text="What is your username?",
+currentPass = Label(passwordChangeLabel, text="Confirm your current password?",
                           padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
-userNameLabel.place(x=250, y=135)
-userName2 = Entry(passwordChangeLabel, width=25, fg='black', borderwidth=2)
-userName2.place(x=400, y=150)
+currentPass.place(x=200, y=135)
+currentPassInput = Entry(passwordChangeLabel, show="*", width=25, fg='black', borderwidth=2)
+currentPassInput.place(x=400, y=150)
 
-securityPINLabel = Label(passwordChangeLabel, text="What is your PIN number?",
+securityPINLabel = Label(passwordChangeLabel, text="Confirm your PIN number",
                                   padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
 securityPINLabel.place(x=235, y=210)
 secPIN = Entry(passwordChangeLabel, show="*", width=25, fg='black', borderwidth=2)
 secPIN.place(x=400, y=225)
 
-passwordLabel = Label(passwordChangeLabel, text="What would you like your new password to be?",
+passwordLabel = Label(passwordChangeLabel, text="Set new password",
                           padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
-passwordLabel.place(x=150, y=285)
+passwordLabel.place(x=275, y=285)
 password2 = Entry(passwordChangeLabel, show="*", width=25, fg='black', borderwidth=2)
 password2.place(x=400, y=295)
 
@@ -150,7 +150,7 @@ password3 = Entry(passwordChangeLabel2, show="*", width=25, fg='black', borderwi
 password3.place(x=400, y=295)
 
 doneButton2 = tk.Button(passwordChangeLabel2, text="All Done!", padx=17, pady=17, fg="white", bg='#343332',
-                       command=lambda:passChangeData2())
+                       command=lambda:forgotPassword())
 doneButton2.place(x=600, y=300)
 
 backButton4 = tk.Button(passwordChangeLabel2, text="Back", padx=17, pady=17, fg="white", bg='#343332',
@@ -342,8 +342,8 @@ def transfer():
         recipient = userNameTransferEntry.get()
         currPin = secPINTransfer.get()
         amount = transferAmountEntry.get()
-        pinCheck = ATM.getPIN(ATM.currUser.userID)
-        if ATM.searchUsers(recipient):
+        pinCheck = ATM.currUser.PIN
+        if ATM.userExists(recipient):
             if pinCheck == currPin:
                 ATM.currUser.withdraw(amount)
                 ATM.updateBalance()
@@ -386,43 +386,39 @@ def getCreationData():
 
 #passChange Frame Logan Reneau
 def passChangeData():
-    userNameData = userName2.get()
     pinNumIn = secPIN.get()
     newPass = password2.get()
 
-    currentPIN = ATM.currUser.PIN
-
-    if currentPIN == pinNumIn:
-        ATM.updatePassword(newPass, userNameData)
+    if ATM.currUser.PIN == pinNumIn and ATM.currUser.password == currentPassInput.get():
+        ATM.currUser.changePassword(newPass)
         raise_frame(Top_Frame)
     else:
         errorLabelPass = Label(passwordChangeLabel, text="Error: Incorrect userID or PIN", fg='Black',
                                font='Italics 12')
         errorLabelPass.place(x=575, y=200)
-    display_text.set("${:,.2f}".format(ATM.currUser.balance))
-    userName2.delete(0, END)
+    currentPassInput.delete(0, END)
     secPIN.delete(0, END)
     password2.delete(0, END)
 
-    #passchange for forgot password
-def passChangeData2():
+
+#Home screen forgot password button
+def forgotPassword():
     userNameData = userName3.get()
     pinNumIn = secPIN2.get()
     newPass = password3.get()
+    errorLabelPass = Label(passwordChangeLabel, text="Error: Incorrect userID or PIN", fg='Black',
+                           font='Italics 12')
 
-    currentPIN = ATM.getPIN(userNameData)
-
-    if currentPIN == pinNumIn:
-        ATM.updatePassword(newPass, userNameData)
+    if(ATM.userExists(userNameData)):
+        try:
+            ATM.forgotPassword(userNameData, pinNumIn, newPass)
+        except:
+            ValueError(errorLabelPass.place(x=575, y=200))
         raise_frame(homePage)
-    else:
-        errorLabelPass = Label(passwordChangeLabel, text="Error: Incorrect userID or PIN", fg='Black',
-                               font='Italics 12')
-        errorLabelPass.place(x=575, y=200)
-    display_text.set("${:,.2f}".format(ATM.currUser.balance))
+
     userName3.delete(0, END)
     secPIN2.delete(0, END)
-    password2.delete(0, END)
+    password3.delete(0, END)
 
 
 
@@ -441,6 +437,7 @@ def moneymoves():
             display_text.set("${:,.2f}".format(ATM.currUser.balance))
             raise_frame(Top_Frame)
     moneyInput.delete(0, END)
+
 
 def dashboard():
     success = False

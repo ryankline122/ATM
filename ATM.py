@@ -117,30 +117,34 @@ def updateBalance():
     db.close()
 
 
-# ???
-def updatePassword(password, userID):
+# Allows a user to change their password by using their PIN number
+def forgotPassword(userID, PIN, newPassword):
     db = sqlite3.connect('user_info.db')
     c = db.cursor()
-    if ATM.currUser.loginStatus:
-        c.execute("UPDATE users SET password =? WHERE userID =?", (password, ATM.currUser.userID,))
+    c.execute("SELECT PIN FROM users WHERE userID=?", (userID,))
+    usrPIN = c.fetchone()[0]
+
+    if(PIN == usrPIN):
+        c.execute("UPDATE users SET password=? WHERE userID=?", (newPassword, userID,))
+        db.commit()
     else:
-        c.execute("UPDATE users SET password =? WHERE userID =?", (password, userID,))
-    db.commit()
+        raise ValueError("Incorrect PIN")
     c.close()
     db.close()
 
 
-# FIXME
-def searchUsers(desiredUser):
+# Checks if the given userID exists in the database
+def userExists(userID):
     db = sqlite3.connect('user_info.db')
     c = db.cursor()
     c.execute("SELECT userID FROM users")
-    listOfUsers = c.fetchall()
-    for user in listOfUsers:
-        currentUserInList = user[0]
-        if currentUserInList == desiredUser:
-            return True
-    return False
+    (c.execute("SELECT exists(SELECT userID FROM users where userID=?)", (userID,)))
+    [exists] = c.fetchone()
+
+    if (exists):
+        return True
+    else:
+        return False
 
 
 def deleteAll():
@@ -150,10 +154,3 @@ def deleteAll():
     db.commit()
     c.close()
     db.close()
-
-
-def printDatabase():
-    db = sqlite3.connect('user_info.db')
-    c = db.cursor()
-    c.execute("SELECT PIN FROM users WHERE userID=?", ('Log123',))
-    print(c.fetchall())
