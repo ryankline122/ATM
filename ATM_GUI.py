@@ -428,19 +428,38 @@ def forgotPassword():
 
  #Original Logan updated by selmir
 def moneymoves():
+    depositErrorLabel = Label(depoWithFrame, text="Error: Account has reached its maximum.", fg="red",
+                              font="Italics 12")
+
+    withdrawErrorLabel = Label(depoWithFrame, text="Error: Account does not have enough funds.", fg="red",
+                               font="Italics 12")
+
     if ATM.currUser.loginStatus:
         money = moneyInput.get()
+        balancePreMoneyMove = ATM.currUser.balance
         if myCombo.get() == "Deposit":
-            ATM.currUser.deposit(money)
-            ATM.updateBalance()
-            display_text.set("${:,.2f}".format(ATM.currUser.balance))
-            raise_frame(Top_Frame)
+            try:
+                ATM.currUser.deposit(money)
+            except:
+                ValueError(depositErrorLabel.place(x=450, y=220))
         else:
-            ATM.currUser.withdraw(money)
+            try:
+                ATM.currUser.withdraw(money)
+            except:
+                ValueError(withdrawErrorLabel.place(x=450, y=250))
+
+        if balancePreMoneyMove == ATM.currUser.balance:
+            moneyInput.delete(0, END)
+        else:
+            depositErrorLabel.destroy()
+            withdrawErrorLabel.destroy()
             ATM.updateBalance()
             display_text.set("${:,.2f}".format(ATM.currUser.balance))
+            moneyInput.delete(0, END)
             raise_frame(Top_Frame)
-    moneyInput.delete(0, END)
+
+
+
 
 
 def dashboard():
