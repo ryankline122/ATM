@@ -1,5 +1,7 @@
 import sqlite3
 
+import ATM
+
 
 class User:
     # Constructor
@@ -13,35 +15,34 @@ class User:
 
     # Increases balance by specified amount
     def deposit(self, amount):
-        total = self.balance + float(amount)
-        if total < 9999999999999999999999999:
+        if (amount > 0 and self.balance + amount < ATM.max_balance):
             self.balance += float(amount)
         else:
-            raise ValueError("Too Many Funds")
+            raise ValueError("Invalid Balance")
 
     # Takes out desired amount
     def withdraw(self, amount):
-        # If enough money in account, reduce balance
-        if float(amount) < self.balance:
+        if (amount > 0 and float(amount) < self.balance):
             self.balance -= float(amount)
         else:
-            raise ValueError("Not Enough Funds")
+            raise ValueError("Insufficient Funds")
 
     def transfer(self, amount, recipient):
-        # If enough money in account, reduce balance
-        self.balance -= float(amount)
+        self.withdraw(amount)
 
-        # Connect to database, if recipient exists, increase balance by amount
-        db = sqlite3.connect('user_info.db')
-        c = db.cursor()
-        c.execute("SELECT balance FROM users where userID=?", (recipient,))
-        balance = c.fetchone()[0]
-        balance += float(amount)
+        if(ATM.userExists(recipient) and amount > 0 and float(amount) < self.balance):
+            db = sqlite3.connect('user_info.db')
+            c = db.cursor()
+            c.execute("SELECT balance FROM users where userID=?", (recipient,))
+            balance = c.fetchone()[0]
+            balance += float(amount)
+            c.execute("UPDATE users SET balance =? WHERE userID =?", (balance, recipient,))
+            db.commit()
+            c.close()
+            db.close()
+        else:
+            raise Exception("Recipient does not exist or Invalid Balance")
 
-        c.execute("UPDATE users SET balance =? WHERE userID =?", (balance, recipient,))
-        db.commit()
-        c.close()
-        db.close()
 
     # Allows user to change their password
     def changePassword(self, newPassword):
@@ -53,10 +54,3 @@ class User:
         c.close()
         db.close()
 
-
-    def getBalance(recipient):
-        db = sqlite3.connect('user_info.db')
-        c = db.cursor()
-        c.execute("SELECT balance FROM users WHERE userID=?", (recipient,))
-        balance = c.fetchone()[0]
-        return balance
