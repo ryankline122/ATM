@@ -28,9 +28,7 @@ class User:
             raise ValueError("Not Enough Funds")
 
     def transfer(self, amount, recipient):
-        # If enough money in account, reduce balance
-        self.balance -= float(amount)
-
+        self.withdraw(amount)
         # Connect to database, if recipient exists, increase balance by amount
         db = sqlite3.connect('user_info.db')
         c = db.cursor()

@@ -58,14 +58,26 @@ userName1.place(x=250, y=105)
 passwordLabel = Label(createAccountFrame, text="What would you like your password to be?",
                           padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
 passwordLabel.place(x=20, y=160)
-password1 = Entry(createAccountFrame, width=25, fg='black', borderwidth=2)
+password1 = Entry(createAccountFrame, show="*", width=25, fg='black', borderwidth=2)
 password1.place(x=250, y=170)
+
+confirmPasswordLabel = Label(createAccountFrame, text="Confirm Password",
+                          padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
+confirmPasswordLabel.place(x=450, y=160)
+confirmPasswordEntry = Entry(createAccountFrame, show="*", width=25, fg='black', borderwidth=2)
+confirmPasswordEntry.place(x=575, y=170)
 
 securityPINNLabel = Label(createAccountFrame, text="Add a PIN number of 4 digits.",
                                   padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
 securityPINNLabel.place(x=20, y=230)
-secPIN1 = Entry(createAccountFrame, width=25, fg='black', borderwidth=2)
-secPIN1.place(x=275, y=245)
+secPIN1 = Entry(createAccountFrame, show="*", width=25, fg='black', borderwidth=2)
+secPIN1.place(x=225, y=245)
+
+confirmSecurityPINNLabel = Label(createAccountFrame, text="Confirm PIN",
+                                  padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
+confirmSecurityPINNLabel.place(x=475, y=230)
+confirmSecPIN1 = Entry(createAccountFrame, show="*", width=25, fg='black', borderwidth=2)
+confirmSecPIN1.place(x=575, y=245)
 
 initialDepositLabel = Label(createAccountFrame, text="What would you like your initial deposit to be?",
                                   padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
@@ -75,11 +87,11 @@ deposit.place(x=265, y=315)
 
 updateButton = tk.Button(createAccountFrame, text="Add to database!", padx=17, pady=17, fg="white", bg='#343332'
                          , command=lambda:getCreationData())
-updateButton.place(x=600, y=225)
+updateButton.place(x=525, y=325)
 
 backButton2 = tk.Button(createAccountFrame, text="Back", padx=17, pady=17, fg="white", bg='#343332',
                         command=lambda:raise_frame(homePage))
-backButton2.place(x=635, y=325)
+backButton2.place(x=675, y=325)
 
 
 
@@ -343,11 +355,11 @@ def transfer():
         currPin = secPINTransfer.get()
         amount = transferAmountEntry.get()
         pinCheck = ATM.currUser.PIN
+
         if ATM.userExists(recipient):
             if pinCheck == currPin:
-                ATM.currUser.withdraw(amount)
-                ATM.updateBalance()
                 ATM.currUser.transfer(amount, recipient)
+                ATM.updateBalance()
                 display_text.set("${:,.2f}".format(ATM.currUser.balance))
                 raise_frame(Top_Frame)
             else:
@@ -356,6 +368,7 @@ def transfer():
         else:
             wrongUserIDLabel = Label(TransferCanvas, text="Error: userID DNE", fg='red', font="Times 12 bold")
             wrongUserIDLabel.place(x=290, y=200)
+
     userNameTransferEntry.delete(0, END)
     secPINTransfer.delete(0, END)
     transferAmountEntry.delete(0, END)
@@ -372,21 +385,39 @@ def getCreationData():
     pinNum = secPIN1.get()
     passEntry = password1.get()
     depositEntry = deposit.get()
+    confirmPinNum = confirmSecPIN1.get()
+    confirmPassEntry = confirmPasswordEntry.get()
 
     if ATM.userExists(userNameEntry):
         userName1.delete(0, END)
         userNameExistsLabel = Label (createAccountFrame, text= "Error: UserID already exits", fg="red", font="Italics 14")
-        userNameExistsLabel.place(x=450, y=150)
+        userNameExistsLabel.place(x=450, y=50)
 
     else:
-        ATM.createAccount(nameEntry, userNameEntry, passEntry, pinNum, depositEntry, False)
-        firstName.delete(0,END)
-        userName1.delete(0,END)
-        secPIN1.delete(0,END)
-        password1.delete(0,END)
-        deposit.delete(0,END)
-        raise_frame(homePage)
+        if passEntry == confirmPassEntry:
+            if pinNum == confirmPinNum:
+                ATM.createAccount(nameEntry, userNameEntry, passEntry, pinNum, depositEntry, False)
+                firstName.delete(0,END)
+                userName1.delete(0,END)
+                secPIN1.delete(0,END)
+                password1.delete(0,END)
+                deposit.delete(0,END)
+                confirmPasswordEntry.delete(0, END)
+                confirmSecPIN1.delete(0, END)
+                raise_frame(homePage)
+            else:
+                confirmationErrorLabel = Label(createAccountFrame, text="Error: PINs do not match", fg="red",
+                                        font="Italics 14")
+                confirmationErrorLabel.place(x=450, y=100)
+                confirmSecPIN1.delete(0, END)
+                secPIN1.delete(0, END)
 
+        else:
+            confirmationErrorLabel = Label(createAccountFrame, text="Error: Passwords do not match", fg="red",
+                                           font="Italics 14")
+            confirmationErrorLabel.place(x=450, y=125)
+            password1.delete(0, END)
+            confirmPasswordEntry.delete(0, END)
 
 #passChange Frame Logan Reneau
 def passChangeData():
@@ -439,20 +470,18 @@ def moneymoves():
         balancePreMoneyMove = ATM.currUser.balance
         if myCombo.get() == "Deposit":
             try:
-                ATM.currUser.deposit(money)
+                ATM.currUser.deposit(float(money))
             except:
                 ValueError(depositErrorLabel.place(x=450, y=220))
         else:
             try:
-                ATM.currUser.withdraw(money)
+                ATM.currUser.withdraw(float(money))
             except:
                 ValueError(withdrawErrorLabel.place(x=450, y=250))
 
         if balancePreMoneyMove == ATM.currUser.balance:
             moneyInput.delete(0, END)
         else:
-            depositErrorLabel.destroy()
-            withdrawErrorLabel.destroy()
             ATM.updateBalance()
             display_text.set("${:,.2f}".format(ATM.currUser.balance))
             moneyInput.delete(0, END)
