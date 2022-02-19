@@ -1,7 +1,7 @@
 import sqlite3
 import tkinter as tk
 from tkinter import *
-from tkinter import ttk
+from tkinter import ttk, messagebox
 import ATM
 
 import os
@@ -406,15 +406,15 @@ def forgotPassword():
     userNameData = userName3.get()
     pinNumIn = secPIN2.get()
     newPass = password3.get()
-    errorLabelPass = Label(passwordChangeLabel, text="Error: Incorrect userID or PIN", fg='Black',
-                           font='Italics 12')
+    # errorLabelPass = Label(passwordChangeLabel, text="Error: Incorrect userID or PIN", fg='Black',
+    #                        font='Italics 12')
 
     if(ATM.userExists(userNameData)):
         try:
             ATM.forgotPassword(userNameData, pinNumIn, newPass)
+            raise_frame(homePage)
         except:
-            ValueError(errorLabelPass.place(x=575, y=200))
-        raise_frame(homePage)
+            ValueError(messagebox.showerror("Error", "Message"))
 
     userName3.delete(0, END)
     secPIN2.delete(0, END)

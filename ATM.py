@@ -1,4 +1,3 @@
-import ATM
 from User import User
 import sqlite3
 
@@ -72,36 +71,13 @@ def login(userID, password):
 
 # Update user_info doc to ensure accurate balance on next login
 def logout():
-    try:
-        currUser.loginStatus = "False"
-        updateBalance()
+    currUser.loginStatus = "False"
+    updateBalance()
 
-        db = sqlite3.connect('user_info.db')
-        c = db.cursor()
-        c.execute("UPDATE users SET loginStatus =? WHERE userID =?",
-                  (currUser.loginStatus, currUser.userID,))
-        db.commit()
-        c.close()
-        db.close()
-
-    except NameError:
-        print("Error: No account logged in")
-
-
-# For debugging/testing database
-def printData():
-    db = sqlite3.connect("user_info.db")
+    db = sqlite3.connect('user_info.db')
     c = db.cursor()
-    c.execute("SELECT * FROM users")
-    print(c.fetchall())
-    c.close()
-    db.close()
-
-# For logging out users stuck to "True"
-def logoutAll():
-    db = sqlite3.connect("user_info.db")
-    c = db.cursor()
-    c.execute("UPDATE users SET loginStatus =? where loginStatus =?", ("False", "True",))
+    c.execute("UPDATE users SET loginStatus =? WHERE userID =?",
+                (currUser.loginStatus, currUser.userID,))
     db.commit()
     c.close()
     db.close()
@@ -128,7 +104,7 @@ def forgotPassword(userID, PIN, newPassword):
         c.execute("UPDATE users SET password=? WHERE userID=?", (newPassword, userID,))
         db.commit()
     else:
-        raise ValueError("Incorrect PIN")
+        raise ValueError
     c.close()
     db.close()
 
@@ -147,6 +123,31 @@ def userExists(userID):
         return False
 
 
+
+
+# DEBUGGING
+
+# Prints all user data
+def printData():
+    db = sqlite3.connect("user_info.db")
+    c = db.cursor()
+    c.execute("SELECT * FROM users")
+    print(c.fetchall())
+    c.close()
+    db.close()
+
+
+# For logging out users stuck to "True"
+def logoutAll():
+    db = sqlite3.connect("user_info.db")
+    c = db.cursor()
+    c.execute("UPDATE users SET loginStatus =? where loginStatus =?", ("False", "True",))
+    db.commit()
+    c.close()
+    db.close()
+
+
+# Erases all user data
 def deleteAll():
     db = sqlite3.connect('user_info.db')
     c = db.cursor()
