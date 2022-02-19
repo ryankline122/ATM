@@ -13,12 +13,19 @@ class User:
 
     # Increases balance by specified amount
     def deposit(self, amount):
-        self.balance += float(amount)
+        total = self.balance + float(amount)
+        if total < 9999999999999999999999999:
+            self.balance += float(amount)
+        else:
+            raise ValueError("Too Many Funds")
 
     # Takes out desired amount
     def withdraw(self, amount):
         # If enough money in account, reduce balance
-        self.balance -= float(amount)
+        if float(amount) < self.balance:
+            self.balance -= float(amount)
+        else:
+            raise ValueError("Not Enough Funds")
 
     def transfer(self, amount, recipient):
         # If enough money in account, reduce balance
