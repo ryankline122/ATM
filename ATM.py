@@ -2,6 +2,7 @@ from User import User
 import sqlite3
 
 currUser = User(None,None,None,None,None,None)
+max_balance = 999999999999
 
 def createTable():
     db = sqlite3.connect('user_info.db')
@@ -21,13 +22,13 @@ def createTable():
 def createAccount(name, userID, password, PIN, balance, loginStatus):
     db = sqlite3.connect('user_info.db')
     c = db.cursor()
-    # Checks if user already exists
     usr = User(name, userID, password, PIN, balance, "False")
     c.execute("INSERT INTO users VALUES(?,?,?,?,?,?)",
             (usr.name, usr.userID, usr.password, usr.PIN, usr.balance, usr.loginStatus))
     db.commit()
     c.close()
     db.close()
+    login(userID, password)
 
 
 # Returns True if there is a user currently logged in
@@ -155,10 +156,3 @@ def deleteAll():
     db.commit()
     c.close()
     db.close()
-
-
-def printDatabase():
-    db = sqlite3.connect('user_info.db')
-    c = db.cursor()
-    c.execute("SELECT PIN FROM users WHERE userID=?", ('Log123',))
-    print(c.fetchall())
