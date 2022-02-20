@@ -44,7 +44,7 @@ class User:
         :param amount: Amount to be deposited
         :type amount: float
         """
-        if (float(amount) > 0 and self.balance + float(amount) < ATM.MAX_BALANCE):
+        if float(amount) > 0 and self.balance + float(amount) < ATM.MAX_BALANCE:
             self.balance += float(amount)
         else:
             raise ValueError("Invalid Balance")
