@@ -524,12 +524,12 @@ def moneymoves():
             try:
                 ATM.currUser.deposit(float(money))
             except:
-                ValueError(messagebox.showerror("Error", "Make sure to you are not: Putting in a negative number or Reaching the maximum account balance."))
+                ValueError(messagebox.showerror("Error", "Make sure that you are: Putting in only integers and that integer is greater than 0 and less than 999999999999"))
         else:
             try:
                 ATM.currUser.withdraw(float(money))
             except:
-                ValueError(messagebox.showerror("Error", "Make sure to you are not: Putting in a negative number or taking out insufficent amount of funds"))
+                ValueError(messagebox.showerror("Error", "Make sure that you are: Putting in only integers and that integer is greater than 0 and not greater than your account balance"))
 
         if balancePreMoneyMove == ATM.currUser.balance:
             moneyInput.delete(0, END)
