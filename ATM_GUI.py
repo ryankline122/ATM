@@ -86,7 +86,7 @@ deposit = Entry(createAccountFrame, width=25, fg='black', borderwidth=2)
 deposit.place(x=265, y=315)
 
 updateButton = tk.Button(createAccountFrame, text="Add to database!", padx=17, pady=17, fg="white", bg='#343332'
-                         , command=lambda:getCreationData())
+                         , command=lambda:checkEntryBoxes())
 updateButton.place(x=525, y=325)
 
 backButton2 = tk.Button(createAccountFrame, text="Back", padx=17, pady=17, fg="white", bg='#343332',
@@ -281,6 +281,13 @@ myCombo.pack(pady=80)
 #Selmir
 
 
+def toggle_password():
+    if Password.cget("show") == '*':
+        Password.config(show='')
+        viewPass_btn.config(text='Hide Password')
+    else:
+        Password.config(show='*')
+        viewPass_btn.config(text='Show Password')
 
 #homePage Frame Original Selmir Lelak, Updated by Logan Reneau
 User = Entry(homePage, width=30, fg='black', borderwidth=2)
@@ -292,6 +299,12 @@ Password.place(x=300, y=205)
 newUserLabel = Label(homePage, text="New User?", fg='black')
 newUserLabel.place(x=660, y=360)
 
+UserNameLabel = Label(homePage, text="Username", font="Italics 12", fg="gray")
+UserNameLabel.place(x=215, y=173)
+
+PasswordLabel = Label(homePage, text="Password", font="Italics 12", fg="gray")
+PasswordLabel.place(x=215, y=203)
+
 # Buttons
 welcomeLabel = Label(homePage, text= "Welcome to the ATM!", font="Italics 36", fg="black")
 welcomeLabel.place(x=175, y=50)
@@ -302,6 +315,9 @@ welcomeLabel.place(x=175, y=50)
 #register_btn = ImageTk.PhotoImage(Image.open("register-button-png-18477_4_50x40.png"))
 
 #img_label2 = Label(image=register_btn)
+
+viewPass_btn = tk.Button(homePage, text='Show Password', width=15, fg="white", bg='#343332', command=toggle_password)
+viewPass_btn.place(x=500, y=200)
 
 loginBtn = tk.Button(homePage, text="Login", padx=25, pady=5, fg="white", bg='#343332', command=lambda:dashboard(),
                     borderwidth=0)
@@ -371,9 +387,30 @@ def transfer():
     secPINTransfer.delete(0, END)
     transferAmountEntry.delete(0, END)
 
+def checkEntryBoxes():
 
-
-
+    if len(firstName.get()) == 0:
+        messagebox.showerror("Invalid input", "You cannot leave \"What is your name?\" empty")
+    elif len(userName1.get()) == 0:
+        messagebox.showerror("Invalid input", "You cannot leave \"What would you like your username to be?\" empty")
+    elif len(password1.get()) == 0:
+        messagebox.showerror("Invalid input", "You cannot leave \"What would you like your password to be?\" empty")
+    elif len(confirmPasswordEntry.get()) == 0:
+        messagebox.showerror("Invalid input", "You cannot leave \"Confirm Password\" empty")
+    elif len(secPIN1.get()) == 0:
+        messagebox.showerror("Invalid input", "You cannot leave \"Add a PIN number of 4 digits.\" empty")
+    elif len(confirmSecPIN1.get()) == 0:
+        messagebox.showerror("Invalid input", "You cannot leave \"Confirm PIN\" empty")
+    else:
+        try:
+            int(deposit.get())
+            if(int(deposit.get()) <0 or int(deposit.get()) > ATM.max_balance):
+                messagebox.showerror("Invalid input for initial deposit",
+                                 "Your deposit must be an integer that is >0 and <999999999999")
+            else:
+                getCreationData()
+        except ValueError:
+            messagebox.showerror("Invalid input for initial deposit", "Your deposit must be an integer that is >0 and <999999999999")
 
 
 def getCreationData():
@@ -395,7 +432,7 @@ def getCreationData():
     else:
         if passEntry == confirmPassEntry:
             if pinNum == confirmPinNum:
-                ATM.createAccount(nameEntry, userNameEntry, passEntry, pinNum, depositEntry, False)
+                ATM.createAccount(nameEntry, userNameEntry, passEntry, pinNum, depositEntry)
                 firstName.delete(0,END)
                 userName1.delete(0,END)
                 secPIN1.delete(0,END)
@@ -515,9 +552,13 @@ def dashboard():
         raise_frame(Top_Frame)
 
     else:
-        messagebox.showerror("Error", "Incorrect userID or Password")
-        #myLabel4 = Label(root, text="Incorrect username or password", fg='red', font="Times 12 bold")
-        #myLabel4.place(x=290, y=300)
+        if len(User.get()) == 0:
+            messagebox.showerror("Invalid input", "You cannot leave \"Username\" empty")
+        elif len(Password.get()) == 0:
+            messagebox.showerror("Invalid input", "You cannot leave \"Password\" empty")
+        else:
+            myLabel4 = Label(root, text="Incorrect username or password", fg='red', font="Times 12 bold")
+            myLabel4.place(x=290, y=300)
 
 
 
