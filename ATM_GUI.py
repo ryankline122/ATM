@@ -280,12 +280,13 @@ myCombo.pack(pady=80)
 #update balances,etc...
 #Selmir
 
+
 def toggle_password():
-    if Password.cget('show') == '*':
+    if Password.cget("show") == '*':
         Password.config(show='')
         viewPass_btn.config(text='Hide Password')
     else:
-        viewPass_btn.config(show="*")
+        Password.config(show='*')
         viewPass_btn.config(text='Show Password')
 
 #homePage Frame Original Selmir Lelak, Updated by Logan Reneau
