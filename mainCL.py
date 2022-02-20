@@ -1,13 +1,19 @@
+"""
+Module to run the command line version of the application
+"""
 #! /usr/bin/env python3
 
-import ATM
-import getpass
 import sqlite3
 import sys
+import getpass
+import ATM
 
 
-# Runs command-line application. Provides user with commands to navigate the application
 def main():
+    """
+    Runs command-line application. Provides user with commands to navigate the application
+    :return:
+    """
     commands = ["login", "new", "help", "balance",
                 "deposit", "withdraw", "transfer", "data", "exit"]
     action = ""
@@ -56,8 +62,8 @@ def main():
                     # Setting Balance
                     try:
                         bal = float(input("Set initial deposit: $"))
-                        if(bal < ATM.max_balance and bal >= 0):
-                            ATM.createAccount(name, userID, pswrd, PIN, bal, False)
+                        if ATM.MAX_BALANCE > bal >= 0:
+                            ATM.createAccount(name, userID, pswrd, PIN, bal)
                         else:
                             print("Error - Initial deposit must be within $0.00-$999 billion")
                     except ValueError:
@@ -97,7 +103,7 @@ def main():
             if(ATM.inUse()):
                 try:
                     amount = float(input("How much would you like to deposit? $"))
-                    if(amount > 0 and (ATM.currUser.balance + amount) < ATM.max_balance):
+                    if(amount > 0 and (ATM.currUser.balance + amount) < ATM.MAX_BALANCE):
                         ATM.currUser.deposit(amount)
                         print("New Balance: " + ("${:,.2f}".format(ATM.currUser.balance)))
                         ATM.updateBalance()

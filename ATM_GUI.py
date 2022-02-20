@@ -417,7 +417,7 @@ def checkEntryBoxes():
     else:
         try:
             int(deposit.get())
-            if(int(deposit.get()) <0 or int(deposit.get()) > ATM.max_balance):
+            if(int(deposit.get()) <0 or int(deposit.get()) > ATM.MAX_BALANCE):
                 messagebox.showerror("Invalid input for initial deposit",
                                  "Your deposit must be an integer that is >0 and <999999999999")
             else:
