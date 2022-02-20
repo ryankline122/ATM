@@ -15,14 +15,14 @@ class User:
 
     # Increases balance by specified amount
     def deposit(self, amount):
-        if (amount > 0 and self.balance + amount < ATM.max_balance):
+        if (float(amount)  > 0 and self.balance + float(amount)  < ATM.max_balance):
             self.balance += float(amount)
         else:
             raise ValueError("Invalid Balance")
 
     # Takes out desired amount
     def withdraw(self, amount):
-        if (amount > 0 and float(amount) < self.balance):
+        if (float(amount) > 0 and float(amount) < self.balance):
             self.balance -= float(amount)
         else:
             raise ValueError("Insufficient Funds")
