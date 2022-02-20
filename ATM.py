@@ -1,13 +1,33 @@
-from User import User
-import sqlite3
+"""
+Module for all backend functionality of the ATM Application.
 
-currUser = User(None,None,None,None,None,None)
-max_balance = 999999999999
+Functions:
+    createTable()\n
+    createAccount(string, string, string, string, float, string)\n
+    inUse()\n
+    login(string, string)\n
+    logout()\n
+    updateBalance()\n
+    forgotPassword(string, string, string)\n
+    userExists(string)\n
+    printData()\n
+    logoutAll()\n
+    deleteAll()\n
+"""
+import sqlite3
+from User import User
+
+currUser = User(None, None, None, None, None, None)
+MAX_BALANCE = 999999999999
+
 
 def createTable():
+    """
+    Creates a SQLite database to store user data if one does not already exist
+    """
     db = sqlite3.connect('user_info.db')
     c = db.cursor()
-    # Creates user database if needed, adds user info upon successful creation
+    # Creates user database if needed
     c.execute("""CREATE TABLE IF NOT EXISTS users(
                       name text,
                       userID text,
@@ -18,34 +38,58 @@ def createTable():
                   )""")
 
 
-# User is prompted to enter their name, desired username (if not taken), set their password, and put in an initial deposit
-def createAccount(name, userID, password, PIN, balance, loginStatus):
+def createAccount(name, userID, password, PIN, balance):
+    """
+    Creates a new entry in the database with the given parameters
+
+        :param name: Name of the user
+        :type name: str
+        :param userID: The userID to be associated with the user
+        :type userID: str
+        :param password: The password to be associated with the user
+        :type password: str
+        :param PIN: A 4 digit number to be associated with the user
+        :type PIN: str
+        :param balance: Represents the users starting balance
+        :type balance: float
+        :param loginStatus: Boolean value to represent loginStatus
+        :type loginStatus: str
+
+    """
     db = sqlite3.connect('user_info.db')
     c = db.cursor()
     usr = User(name, userID, password, PIN, balance, "False")
     c.execute("INSERT INTO users VALUES(?,?,?,?,?,?)",
-            (usr.name, usr.userID, usr.password, usr.PIN, usr.balance, usr.loginStatus))
+              (usr.name, usr.userID, usr.password, usr.PIN, usr.balance, usr.loginStatus))
     db.commit()
     c.close()
     db.close()
     login(userID, password)
 
 
-# Returns True if there is a user currently logged in
 def inUse():
+    """
+    Gives the current use status of the ATM\n
+    :return: Boolean
+    """
     db = sqlite3.connect('user_info.db')
     c = db.cursor()
     c.execute(
         "SELECT exists(SELECT userID FROM users where loginStatus=?)", ("True",))
     [exists] = c.fetchone()
-    if (exists):
-        return True
-    else:
-        return False
+    return exists
 
 
-# Reads in user_info database. Logs user in if userID and password inputs match
 def login(userID, password):
+    """
+    Sets the currUser parameters to the info of the user logging in
+
+    :param userID: The userID of the user logging in
+    :type userID: str
+    :param password: The password of the user logging in
+    :type password: str
+
+    """
     db = sqlite3.connect('user_info.db')
     c = db.cursor()
 
@@ -70,38 +114,51 @@ def login(userID, password):
     db.close()
 
 
-# Update user_info doc to ensure accurate balance on next login
 def logout():
+    """
+    Sets currUser's login status to "False" and calls updateBalance()
+    """
     currUser.loginStatus = "False"
     updateBalance()
 
     db = sqlite3.connect('user_info.db')
     c = db.cursor()
     c.execute("UPDATE users SET loginStatus =? WHERE userID =?",
-                (currUser.loginStatus, currUser.userID,))
+              (currUser.loginStatus, currUser.userID,))
     db.commit()
     c.close()
     db.close()
 
 
-# Updates the balance of the current user in the database
 def updateBalance():
+    """
+     Updates the balance of the current user in the database
+    """
     db = sqlite3.connect('user_info.db')
     c = db.cursor()
-    c.execute("UPDATE users SET balance =? WHERE userID =?",( currUser.balance, currUser.userID,))
+    c.execute("UPDATE users SET balance =? WHERE userID =?", (currUser.balance, currUser.userID,))
     db.commit()
     c.close()
     db.close()
 
 
-# Allows a user to change their password by using their PIN number
 def forgotPassword(userID, PIN, newPassword):
+    """
+    Allows a user to change their password by confirming their PIN number
+
+    :param userID: The userID of the user wanted to change their password
+    :type userID: str
+    :param PIN: The PIN number associated with the given userID
+    :type PIN: str
+    :param newPassword: The user's desired new password
+    :type newPassword: str
+    """
     db = sqlite3.connect('user_info.db')
     c = db.cursor()
     c.execute("SELECT PIN FROM users WHERE userID=?", (userID,))
     usrPIN = c.fetchone()[0]
 
-    if(PIN == usrPIN):
+    if PIN == usrPIN:
         c.execute("UPDATE users SET password=? WHERE userID=?", (newPassword, userID,))
         db.commit()
     else:
@@ -110,26 +167,29 @@ def forgotPassword(userID, PIN, newPassword):
     db.close()
 
 
-# Checks if the given userID exists in the database
 def userExists(userID):
+    """
+    Checks if the given userID exists in the database
+
+    :param userID: The userID to search for
+    :type userID: str
+    :return: Boolean
+    """
     db = sqlite3.connect('user_info.db')
     c = db.cursor()
     c.execute("SELECT userID FROM users")
     (c.execute("SELECT exists(SELECT userID FROM users where userID=?)", (userID,)))
     [exists] = c.fetchone()
 
-    if (exists):
-        return True
-    else:
-        return False
-
-
+    return exists
 
 
 # DEBUGGING
 
-# Prints all user data
 def printData():
+    """
+    Prints all user data to the console
+    """
     db = sqlite3.connect("user_info.db")
     c = db.cursor()
     c.execute("SELECT * FROM users")
@@ -138,8 +198,10 @@ def printData():
     db.close()
 
 
-# For logging out users stuck to "True"
 def logoutAll():
+    """
+    Logs out all users
+    """
     db = sqlite3.connect("user_info.db")
     c = db.cursor()
     c.execute("UPDATE users SET loginStatus =? where loginStatus =?", ("False", "True",))
@@ -148,8 +210,10 @@ def logoutAll():
     db.close()
 
 
-# Erases all user data
 def deleteAll():
+    """
+    FOR DEBUGGING: Erases all user data
+    """
     db = sqlite3.connect('user_info.db')
     c = db.cursor()
     c.execute('DELETE FROM users')

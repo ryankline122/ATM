@@ -1,5 +1,4 @@
 import sqlite3
-
 import ATM
 
 
@@ -15,7 +14,7 @@ class User:
 
     # Increases balance by specified amount
     def deposit(self, amount):
-        if (float(amount)  > 0 and self.balance + float(amount)  < ATM.max_balance):
+        if (float(amount)  > 0 and self.balance + float(amount)  < ATM.MAX_BALANCE):
             self.balance += float(amount)
         else:
             raise ValueError("Invalid Balance")
