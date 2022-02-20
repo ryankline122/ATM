@@ -371,20 +371,30 @@ def transfer():
         currPin = secPINTransfer.get()
         amount = transferAmountEntry.get()
         pinCheck = ATM.currUser.PIN
-
-        if ATM.userExists(recipient):
-            if recipient != ATM.currUser.userID:
-                if pinCheck == currPin:
-                    ATM.currUser.transfer(amount, recipient)
-                    ATM.updateBalance()
-                    display_text.set("${:,.2f}".format(ATM.currUser.balance))
-                    raise_frame(Top_Frame)
+    if ((len(transferAmountEntry.get())) != 0 and (len(userNameTransferEntry.get())) != 0 and (len(secPINTransfer.get())) != 0):
+        try:
+            float(transferAmountEntry.get())
+            if ATM.userExists(recipient):
+                if recipient != ATM.currUser.userID:
+                    if pinCheck == currPin:
+                        if (float(transferAmountEntry.get()) >0 and float(transferAmountEntry.get()) <=ATM.currUser.balance):
+                            ATM.currUser.transfer(amount, recipient)
+                            ATM.updateBalance()
+                            display_text.set("${:,.2f}".format(ATM.currUser.balance))
+                            raise_frame(Top_Frame)
+                        else:
+                            messagebox.showerror("Error", "Amount must be greater than 0 and cannot be greater than your current balance")
+                    else:
+                        messagebox.showerror("Error", "PIN was incorrect.")
                 else:
-                    messagebox.showerror("Error", "PIN was incorrect.")
+                    messagebox.showerror("Error", "Cannot send money to yourself")
             else:
-                messagebox.showerror("Error", "Cannot send money to yourself")
-        else:
-            messagebox.showerror("Error", "UserID does not exist.")
+                messagebox.showerror("Error", "UserID does not exist.")
+        except ValueError:
+            messagebox.showerror("Invalid input for transfer amount",
+                             "the transfer amount must be an integer")
+    else:
+        messagebox.showerror("Error", "message field cannot be left empty")
 
     userNameTransferEntry.delete(0, END)
     secPINTransfer.delete(0, END)

@@ -21,15 +21,14 @@ class User:
 
     # Takes out desired amount
     def withdraw(self, amount):
-        if (float(amount) > 0 and float(amount) < self.balance):
+        if (float(amount) > 0 and float(amount) <= self.balance):
             self.balance -= float(amount)
         else:
             raise ValueError("Insufficient Funds")
 
     def transfer(self, amount, recipient):
-        self.withdraw(amount)
 
-        if(ATM.userExists(recipient) and amount > 0 and float(amount) < self.balance):
+        if(ATM.userExists(recipient) and float(amount) > 0 and float(amount) <= self.balance):
             db = sqlite3.connect('user_info.db')
             c = db.cursor()
             c.execute("SELECT balance FROM users where userID=?", (recipient,))
@@ -41,7 +40,7 @@ class User:
             db.close()
         else:
             raise Exception("Recipient does not exist or Invalid Balance")
-
+        self.withdraw(amount)
 
     # Allows user to change their password
     def changePassword(self, newPassword):

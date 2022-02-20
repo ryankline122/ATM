@@ -48,7 +48,7 @@ def createAccount(name, userID, password, PIN, balance):
         :type userID: str
         :param password: The password to be associated with the user
         :type password: str
-        :param PIN: A 4 digit number to be associated with the user
+        :param PIN: A 4-digit number to be associated with the user
         :type PIN: str
         :param balance: Represents the users starting balance
         :type balance: float
