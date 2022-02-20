@@ -38,9 +38,9 @@ class User:
             db.commit()
             c.close()
             db.close()
+            self.withdraw(amount)
         else:
             raise Exception("Recipient does not exist or Invalid Balance")
-        self.withdraw(amount)
 
     # Allows user to change their password
     def changePassword(self, newPassword):
