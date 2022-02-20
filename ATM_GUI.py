@@ -363,11 +363,9 @@ def transfer():
                 display_text.set("${:,.2f}".format(ATM.currUser.balance))
                 raise_frame(Top_Frame)
             else:
-                wrongPinLabel = Label(TransferCanvas, text="Incorrect PIN", fg='red', font="Times 12 bold")
-                wrongPinLabel.place(x=290, y=300)
+                messagebox.showerror("Error", "PIN was incorrect.")
         else:
-            wrongUserIDLabel = Label(TransferCanvas, text="Error: userID DNE", fg='red', font="Times 12 bold")
-            wrongUserIDLabel.place(x=290, y=200)
+            messagebox.showerror("Error", "UserID does not exist.")
 
     userNameTransferEntry.delete(0, END)
     secPINTransfer.delete(0, END)
@@ -389,8 +387,10 @@ def getCreationData():
 
     if ATM.userExists(userNameEntry):
         userName1.delete(0, END)
-        userNameExistsLabel = Label (createAccountFrame, text= "Error: UserID already exits", fg="red", font="Italics 14")
-        userNameExistsLabel.place(x=450, y=50)
+        messagebox.showerror("Error", "UserID already exists.")
+        #userNameExistsLabel = Label (createAccountFrame, text= "Error: UserID already exits", fg="red",
+        #                   font="Italics 14")
+        #userNameExistsLabel.place(x=450, y=50)
 
     else:
         if passEntry == confirmPassEntry:
@@ -405,16 +405,18 @@ def getCreationData():
                 confirmSecPIN1.delete(0, END)
                 raise_frame(homePage)
             else:
-                confirmationErrorLabel = Label(createAccountFrame, text="Error: PINs do not match", fg="red",
-                                        font="Italics 14")
-                confirmationErrorLabel.place(x=450, y=100)
+                messagebox.showerror("Error", "PINs do not match.")
+                #confirmationErrorLabel = Label(createAccountFrame, text="Error: PINs do not match", fg="red",
+                                        #font="Italics 14")
+                #confirmationErrorLabel.place(x=450, y=100)
                 confirmSecPIN1.delete(0, END)
                 secPIN1.delete(0, END)
 
         else:
-            confirmationErrorLabel = Label(createAccountFrame, text="Error: Passwords do not match", fg="red",
-                                           font="Italics 14")
-            confirmationErrorLabel.place(x=450, y=125)
+            messagebox.showerror("Error", "Passwords do not match.")
+            #confirmationErrorLabel = Label(createAccountFrame, text="Error: Passwords do not match", fg="red",
+                                         #  font="Italics 14")
+            #confirmationErrorLabel.place(x=450, y=125)
             password1.delete(0, END)
             confirmPasswordEntry.delete(0, END)
 
@@ -427,9 +429,10 @@ def passChangeData():
         ATM.currUser.changePassword(newPass)
         raise_frame(Top_Frame)
     else:
-        errorLabelPass = Label(passwordChangeLabel, text="Error: Incorrect userID or PIN", fg='Black',
-                               font='Italics 12')
-        errorLabelPass.place(x=575, y=200)
+        messagebox.showerror("Error", "Incorrect userID or PIN")
+        #errorLabelPass = Label(passwordChangeLabel, text="Error: Incorrect userID or PIN", fg='Black',
+          #                     font='Italics 12')
+        #errorLabelPass.place(x=575, y=200)
     currentPassInput.delete(0, END)
     secPIN.delete(0, END)
     password2.delete(0, END)
@@ -471,12 +474,12 @@ def moneymoves():
             try:
                 ATM.currUser.deposit(float(money))
             except:
-                ValueError(depositErrorLabel.place(x=450, y=220))
+                ValueError(messagebox.showerror("Error", "Account has reached its maximum"))
         else:
             try:
                 ATM.currUser.withdraw(float(money))
             except:
-                ValueError(withdrawErrorLabel.place(x=450, y=250))
+                ValueError(messagebox.showerror("Error", "Account does not have enough funds."))
 
         if balancePreMoneyMove == ATM.currUser.balance:
             moneyInput.delete(0, END)
@@ -512,8 +515,9 @@ def dashboard():
         raise_frame(Top_Frame)
 
     else:
-        myLabel4 = Label(root, text="Incorrect username or password", fg='red', font="Times 12 bold")
-        myLabel4.place(x=290, y=300)
+        messagebox.showerror("Error", "Incorrect userID or Password")
+        #myLabel4 = Label(root, text="Incorrect username or password", fg='red', font="Times 12 bold")
+        #myLabel4.place(x=290, y=300)
 
 
 
