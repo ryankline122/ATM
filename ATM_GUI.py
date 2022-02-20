@@ -280,7 +280,13 @@ myCombo.pack(pady=80)
 #update balances,etc...
 #Selmir
 
-
+def toggle_password():
+    if Password.cget('show') == '*':
+        Password.config(show='')
+        viewPass_btn.config(text='Hide Password')
+    else:
+        viewPass_btn.config(show="*")
+        viewPass_btn.config(text='Show Password')
 
 #homePage Frame Original Selmir Lelak, Updated by Logan Reneau
 User = Entry(homePage, width=30, fg='black', borderwidth=2)
@@ -308,6 +314,9 @@ welcomeLabel.place(x=175, y=50)
 #register_btn = ImageTk.PhotoImage(Image.open("register-button-png-18477_4_50x40.png"))
 
 #img_label2 = Label(image=register_btn)
+
+viewPass_btn = tk.Button(homePage, text='Show Password', width=15, fg="white", bg='#343332', command=toggle_password)
+viewPass_btn.place(x=500, y=200)
 
 loginBtn = tk.Button(homePage, text="Login", padx=25, pady=5, fg="white", bg='#343332', command=lambda:dashboard(),
                     borderwidth=0)
@@ -545,7 +554,6 @@ def dashboard():
         else:
             myLabel4 = Label(root, text="Incorrect username or password", fg='red', font="Times 12 bold")
             myLabel4.place(x=290, y=300)
-
 
 
 def logout():
