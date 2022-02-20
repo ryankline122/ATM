@@ -403,16 +403,15 @@ def checkEntryBoxes():
         messagebox.showerror("Invalid input", "You cannot leave \"Add a PIN number of 4 digits.\" empty")
     elif len(confirmSecPIN1.get()) == 0:
         messagebox.showerror("Invalid input", "You cannot leave \"Confirm PIN\" empty")
-    else:
-        checkDepositInput()
-
-def checkDepositInput():
     try:
         int(deposit.get())
-        getCreationData()
+        if(int(deposit.get()) <0 or int(deposit.get()) > ATM.max_balance):
+            messagebox.showerror("Invalid input for initial deposit",
+                                 "Your deposit must be an integer that is >0 and <999999999999")
+        else:
+            getCreationData()
     except ValueError:
-        wrongDepositInput = Label(createAccountFrame, text="Error: Invalid Input. Please only enter integers", fg='red', font="Times 12 bold")
-        wrongDepositInput.place(x=400, y=20)
+        messagebox.showerror("Invalid input for initial deposit", "Your deposit must be an integer that is >0 and <999999999999")
 
 
 def getCreationData():
