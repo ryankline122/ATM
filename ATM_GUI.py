@@ -373,13 +373,16 @@ def transfer():
         pinCheck = ATM.currUser.PIN
 
         if ATM.userExists(recipient):
-            if pinCheck == currPin:
-                ATM.currUser.transfer(amount, recipient)
-                ATM.updateBalance()
-                display_text.set("${:,.2f}".format(ATM.currUser.balance))
-                raise_frame(Top_Frame)
+            if recipient != ATM.currUser.userID:
+                if pinCheck == currPin:
+                    ATM.currUser.transfer(amount, recipient)
+                    ATM.updateBalance()
+                    display_text.set("${:,.2f}".format(ATM.currUser.balance))
+                    raise_frame(Top_Frame)
+                else:
+                    messagebox.showerror("Error", "PIN was incorrect.")
             else:
-                messagebox.showerror("Error", "PIN was incorrect.")
+                messagebox.showerror("Error", "Cannot send money to yourself")
         else:
             messagebox.showerror("Error", "UserID does not exist.")
 
@@ -498,7 +501,7 @@ def forgotPassword():
 
  #Original Logan updated by selmir
 def moneymoves():
-    depositErrorLabel = Label(depoWithFrame, text="Error: Account has reached its maximum.", fg="red",
+    depositErrorLabel = Label(depoWithFrame, text="Error: Accoun.", fg="red",
                               font="Italics 12")
 
     withdrawErrorLabel = Label(depoWithFrame, text="Error: Account does not have enough funds.", fg="red",
@@ -511,12 +514,12 @@ def moneymoves():
             try:
                 ATM.currUser.deposit(float(money))
             except:
-                ValueError(messagebox.showerror("Error", "Account has reached its maximum"))
+                ValueError(messagebox.showerror("Error", "Make sure to you are not: Putting in a negative number or Reaching the maximum account balance."))
         else:
             try:
                 ATM.currUser.withdraw(float(money))
             except:
-                ValueError(messagebox.showerror("Error", "Account does not have enough funds."))
+                ValueError(messagebox.showerror("Error", "Make sure to you are not: Putting in a negative number or taking out insufficent amount of funds"))
 
         if balancePreMoneyMove == ATM.currUser.balance:
             moneyInput.delete(0, END)
