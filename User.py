@@ -1,9 +1,34 @@
+"""
+Module to store the User class and its methods
+
+Functions:
+    __init__(self, str, str, str, str, str, float, loginStatus)\n
+    deposit(self, float)\n
+    withdraw(self, float)\n
+    transfer(self, float, str)\n
+    changePassword(self, str)\n
+"""
 import sqlite3
 import ATM
 
 
 class User:
-    # Constructor
+    """
+    A class to represent a user within the ATM database
+    name : str
+        Name of the user
+    userID : str
+        Username associated with the user
+    password : str
+        Password associated with the user
+    PIN : str
+        4 digit PIN number associated with the user
+    balance : float
+        Value that represents the users balance
+    loginStatus : str
+        Boolean value to store the status of the user
+    """
+
     def __init__(self, name, userID, password, PIN, balance, loginStatus):
         self.name = name
         self.userID = userID
@@ -12,23 +37,40 @@ class User:
         self.balance = balance
         self.loginStatus = loginStatus
 
-    # Increases balance by specified amount
     def deposit(self, amount):
-        if (float(amount)  > 0 and self.balance + float(amount)  < ATM.MAX_BALANCE):
+        """
+        Adds amount to the users current balance
+
+        :param amount: Amount to be deposited
+        :type amount: float
+        """
+        if (float(amount) > 0 and self.balance + float(amount) < ATM.MAX_BALANCE):
             self.balance += float(amount)
         else:
             raise ValueError("Invalid Balance")
 
-    # Takes out desired amount
     def withdraw(self, amount):
+        """
+        Subtracts amount from the users current balance
+
+        :param amount: Amount to be withdrawn
+        :type amount: float
+        """
         if (float(amount) > 0 and float(amount) <= self.balance):
             self.balance -= float(amount)
         else:
             raise ValueError("Insufficient Funds")
 
     def transfer(self, amount, recipient):
+        """
+        Transfers funds from this user to another
 
-        if(ATM.userExists(recipient) and float(amount) > 0 and float(amount) <= self.balance):
+        :param amount: Amount to be transferred
+        :type amount: float
+        :param recipient: username of the the recipient
+        :type recipient: str
+        """
+        if (ATM.userExists(recipient) and float(amount) > 0 and float(amount) <= self.balance):
             db = sqlite3.connect('user_info.db')
             c = db.cursor()
             c.execute("SELECT balance FROM users where userID=?", (recipient,))
@@ -42,8 +84,13 @@ class User:
         else:
             raise Exception("Recipient does not exist or Invalid Balance")
 
-    # Allows user to change their password
     def changePassword(self, newPassword):
+        """
+        Allows user to change their password
+
+        :param newPassword: The desired password for the user
+        :type newPassword: str
+        """
         self.password = newPassword
         db = sqlite3.connect('user_info.db')
         c = db.cursor()
@@ -51,4 +98,3 @@ class User:
         db.commit()
         c.close()
         db.close()
-
