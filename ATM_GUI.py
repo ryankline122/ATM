@@ -44,56 +44,65 @@ createAccountcanvas = Canvas(createAccountFrame, width=800, height=400, bg='#757
 createAccountcanvas.place(x=0, y=0)
 
 nameLabel = Label(createAccountFrame, text="What is your name?",
-                          padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
+                          padx=67, pady=15, bg='#343332', fg='white', font="Italics 7")
 nameLabel.place(x=20, y=20)
-firstName = Entry(createAccountFrame, width=15, fg='black', borderwidth=2)
-firstName.place(x=225, y=35)
-
-userNameLabel = Label(createAccountFrame, text="What would you like your username to be?",
-                          padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
-userNameLabel.place(x=20, y=90)
-userName1 = Entry(createAccountFrame, width=25, fg='black', borderwidth=2)
-userName1.place(x=250, y=105)
+firstName = Entry(createAccountFrame, width=20, fg='black', borderwidth=2)
+firstName.place(x=270, y=35)
 
 passwordLabel = Label(createAccountFrame, text="What would you like your password to be?",
-                          padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
-passwordLabel.place(x=20, y=160)
-password1 = Entry(createAccountFrame, show="*", width=25, fg='black', borderwidth=2)
-password1.place(x=250, y=170)
+                          padx=21, pady=15, bg='#343332', fg='white', font="Italics 7")
+passwordLabel.place(x=20, y=90)
+password1 = Entry(createAccountFrame, show="*", width=20, fg='black', borderwidth=2)
+password1.place(x=270, y=103)
 
 confirmPasswordLabel = Label(createAccountFrame, text="Confirm Password",
-                          padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
-confirmPasswordLabel.place(x=450, y=160)
-confirmPasswordEntry = Entry(createAccountFrame, show="*", width=25, fg='black', borderwidth=2)
-confirmPasswordEntry.place(x=575, y=170)
-
-securityPINNLabel = Label(createAccountFrame, text="Add a PIN number of 4 digits.",
-                                  padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
-securityPINNLabel.place(x=20, y=230)
-secPIN1 = Entry(createAccountFrame, show="*", width=25, fg='black', borderwidth=2)
-secPIN1.place(x=225, y=245)
-
-confirmSecurityPINNLabel = Label(createAccountFrame, text="Confirm PIN",
-                                  padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
-confirmSecurityPINNLabel.place(x=475, y=230)
-confirmSecPIN1 = Entry(createAccountFrame, show="*", width=25, fg='black', borderwidth=2)
-confirmSecPIN1.place(x=575, y=245)
+                          padx=72, pady=15, bg='#343332', fg='white', font="Italics 7")
+confirmPasswordLabel.place(x=20, y=160)
+confirmPasswordEntry = Entry(createAccountFrame, show="*", width=20, fg='black', borderwidth=2)
+confirmPasswordEntry.place(x=270, y=170)
 
 initialDepositLabel = Label(createAccountFrame, text="What would you like your initial deposit to be?",
                                   padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
-initialDepositLabel.place(x=20, y=300)
-deposit = Entry(createAccountFrame, width=25, fg='black', borderwidth=2)
-deposit.place(x=265, y=315)
+initialDepositLabel.place(x=20, y=230)
+deposit = Entry(createAccountFrame, width=20, fg='black', borderwidth=2)
+deposit.place(x=270, y=240)
 
-updateButton = tk.Button(createAccountFrame, text="Add to database!", padx=17, pady=17, fg="white", bg='#343332'
+
+userNameLabel = Label(createAccountFrame, text="What would you like your username to be?",
+                          padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
+userNameLabel.place(x=415, y=20)
+userName1 = Entry(createAccountFrame, width=20, fg='black', borderwidth=2)
+userName1.place(x=645, y=35)
+
+
+securityPINNLabel = Label(createAccountFrame, text="Add a PIN number of 4 digits.",
+                                  padx=42, pady=15, bg='#343332', fg='white', font="Italics 7")
+securityPINNLabel.place(x=415, y=90)
+secPIN1 = Entry(createAccountFrame, show="*", width=20, fg='black', borderwidth=2)
+secPIN1.place(x=645, y=103)
+
+confirmSecurityPINNLabel = Label(createAccountFrame, text="Confirm PIN",
+                                  padx=78, pady=15, bg='#343332', fg='white', font="Italics 7")
+confirmSecurityPINNLabel.place(x=415, y=160)
+confirmSecPIN1 = Entry(createAccountFrame, show="*", width=20, fg='black', borderwidth=2)
+confirmSecPIN1.place(x=645, y=170)
+
+
+updateButton = tk.Button(createAccountFrame, text="Add to database!", padx=60, pady=17, fg="white", bg='#343332' #17
                          , command=lambda:checkEntryBoxes())
-updateButton.place(x=525, y=325)
+updateButton.place(x=500, y=275)
 
 backButton2 = tk.Button(createAccountFrame, text="Back", padx=17, pady=17, fg="white", bg='#343332',
                         command=lambda:raise_frame(homePage))
-backButton2.place(x=675, y=325)
+backButton2.place(x=30, y=325)
 
-
+def toggle_password3():
+    if password2.cget("show") == '*':
+        password2.config(show='')
+        viewPass_btn3.config(text='Hide Password')
+    else:
+        password2.config(show='*')
+        viewPass_btn3.config(text='Show Password')
 
 #password change while logged in
 passwordChangeLabel = LabelFrame(passwordChange, width=800, height=400)
@@ -125,13 +134,23 @@ password2.place(x=400, y=295)
 
 doneButton = tk.Button(passwordChangeLabel, text="All Done!", padx=17, pady=17, fg="white", bg='#343332',
                        command=lambda:passChangeData())
-doneButton.place(x=600, y=300)
+doneButton.place(x=590, y=330)
 
 backButton3 = tk.Button(passwordChangeLabel, text="Back", padx=17, pady=17, fg="white", bg='#343332',
                         command=lambda:raise_frame(Top_Frame)) #CHANGE BACK AFTER DONE TESTING
-backButton3.place(x=50, y=300)
+backButton3.place(x=50, y=330)
 
+viewPass_btn3 = tk.Button(passwordChangeLabel, text="Show Password", width = 15, fg="white", bg='#343332',
+                        command=lambda:toggle_password3())
+viewPass_btn3.place(x=575, y=293)
 
+def toggle_password2():
+    if password3.cget("show") == '*':
+        password3.config(show='')
+        viewPass_btn2.config(text='Hide Password')
+    else:
+        password3.config(show='*')
+        viewPass_btn2.config(text='Show Password')
 
 #password change used for inside home page
 passwordChangeLabel2 = LabelFrame(passwordChange2, width=800, height=400)
@@ -163,11 +182,15 @@ password3.place(x=400, y=295)
 
 doneButton2 = tk.Button(passwordChangeLabel2, text="All Done!", padx=17, pady=17, fg="white", bg='#343332',
                        command=lambda:forgotPassword())
-doneButton2.place(x=600, y=300)
+doneButton2.place(x=590, y=330)
 
 backButton4 = tk.Button(passwordChangeLabel2, text="Back", padx=17, pady=17, fg="white", bg='#343332',
                         command=lambda:raise_frame(homePage)) #CHANGE BACK AFTER DONE TESTING
-backButton4.place(x=50, y=300)
+backButton4.place(x=50, y=330)
+
+viewPass_btn2 = tk.Button(passwordChangeLabel2, text="Show Password", width = 15, fg="white", bg='#343332',
+                        command=lambda:toggle_password2())
+viewPass_btn2.place(x=575, y=293)
 
 
 # check if valid username and password and change frame to dashboard
@@ -475,14 +498,15 @@ def passChangeData():
     pinNumIn = secPIN.get()
     newPass = password2.get()
 
-    if ATM.currUser.PIN == pinNumIn and ATM.currUser.password == currentPassInput.get():
-        ATM.currUser.changePassword(newPass)
-        raise_frame(Top_Frame)
+    if (ATM.currUser.PIN == pinNumIn and ATM.currUser.password == currentPassInput.get()):
+        if(ATM.currUser.password != newPass):
+            ATM.currUser.changePassword(newPass)
+            raise_frame(Top_Frame)
+        else:
+            messagebox.showerror("Error", "New password cannot be the same as old password")
     else:
         messagebox.showerror("Error", "Incorrect userID or PIN")
-        #errorLabelPass = Label(passwordChangeLabel, text="Error: Incorrect userID or PIN", fg='Black',
-          #                     font='Italics 12')
-        #errorLabelPass.place(x=575, y=200)
+
     currentPassInput.delete(0, END)
     secPIN.delete(0, END)
     password2.delete(0, END)
@@ -497,11 +521,14 @@ def forgotPassword():
     #                        font='Italics 12')
 
     if(ATM.userExists(userNameData)):
-        try:
-            ATM.forgotPassword(userNameData, pinNumIn, newPass)
-            raise_frame(homePage)
-        except:
-            ValueError(messagebox.showerror("Error", "Message"))
+        if(ATM.currUser.password != newPass):
+            try:
+                ATM.forgotPassword(userNameData, pinNumIn, newPass)
+                raise_frame(homePage)
+            except:
+                ValueError(messagebox.showerror("Error", "Could not change password"))
+        else:
+            messagebox.showerror("Error", "New password cannot be the same as old password")
 
     userName3.delete(0, END)
     secPIN2.delete(0, END)
@@ -511,11 +538,11 @@ def forgotPassword():
 
  #Original Logan updated by selmir
 def moneymoves():
-    depositErrorLabel = Label(depoWithFrame, text="Error: Accoun.", fg="red",
-                              font="Italics 12")
+    #depositErrorLabel = Label(depoWithFrame, text="Error: Accoun.", fg="red",
+    #                          font="Italics 12")
 
-    withdrawErrorLabel = Label(depoWithFrame, text="Error: Account does not have enough funds.", fg="red",
-                               font="Italics 12")
+   # withdrawErrorLabel = Label(depoWithFrame, text="Error: Account does not have enough funds.", fg="red",
+   #                            font="Italics 12")
 
     if ATM.currUser.loginStatus:
         money = moneyInput.get()
