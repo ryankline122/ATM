@@ -25,6 +25,7 @@ for frame in (homePage, createAccount, passwordChange, passwordChange2, moneyMov
     frame.grid(row=0, column=0, sticky='news')
 
 
+
 # Functions
 
 #transaction log on hold for now
