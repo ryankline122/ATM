@@ -27,7 +27,6 @@ def createTable():
     """
     db = sqlite3.connect('user_info.db')
     c = db.cursor()
-    # Creates user database if needed
     c.execute("""CREATE TABLE IF NOT EXISTS users(
                       name text,
                       userID text,
@@ -52,8 +51,6 @@ def createAccount(name, userID, password, PIN, balance):
         :type PIN: int
         :param balance: Represents the users starting balance
         :type balance: float
-        :param loginStatus: Boolean value to represent loginStatus
-        :type loginStatus: str
 
     """
     db = sqlite3.connect('user_info.db')
@@ -92,7 +89,6 @@ def login(userID, password):
     """
     db = sqlite3.connect('user_info.db')
     c = db.cursor()
-
     c.execute(
         "UPDATE users SET loginStatus = 'True' WHERE userID =?", (userID,))
     db.commit()
@@ -184,11 +180,9 @@ def userExists(userID):
     return exists
 
 
-# DEBUGGING
-
 def printData():
     """
-    Prints all user data to the console
+    FOR DEBUGGING: Prints all user data to the console
     """
     db = sqlite3.connect("user_info.db")
     c = db.cursor()
@@ -200,7 +194,7 @@ def printData():
 
 def logoutAll():
     """
-    Logs out all users
+    FOR DEBUGGING: Logs out all users
     """
     db = sqlite3.connect("user_info.db")
     c = db.cursor()

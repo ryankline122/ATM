@@ -1,17 +1,284 @@
+"""
+Module for running the ATM application on the front-end
+
+Functions:
+    toggle_password()\n
+    transfer()\n
+    checkEntryBoxes()\n
+    moneyMoves()\n
+    dashboard()\n
+    logout()\n
+    raise_frame(frame)\n
+    getCreationData()\n
+    passChangeData()\n
+    forgotPassword()\n
+"""
 import sqlite3
 import tkinter as tk
 from tkinter import *
 from tkinter import ttk, messagebox
 import ATM
 
-import os
 
+
+def toggle_password3():
+    """
+    Allows user to toggle between show/hide password in the input box
+    """
+    if password2.cget("show") == '*':
+        password2.config(show='')
+        viewPass_btn3.config(text='Hide Password')
+    else:
+        password2.config(show='*')
+        viewPass_btn3.config(text='Show Password')
+
+
+def toggle_password2():
+    """
+    Allows user to toggle between show/hide password in the input box
+    """
+    if password3.cget("show") == '*':
+        password3.config(show='')
+        viewPass_btn2.config(text='Hide Password')
+    else:
+        password3.config(show='*')
+        viewPass_btn2.config(text='Show Password')
+
+
+def toggle_password():
+    """
+    Allows user to toggle between show/hide password in the input box
+    """
+    if Password.cget("show") == '*':
+        Password.config(show='')
+        viewPass_btn.config(text='Hide Password')
+    else:
+        Password.config(show='*')
+        viewPass_btn.config(text='Show Password')
+
+
+def transfer():
+    """
+    Takes the input from transfer fields, verifies the information, and calls User transfer method
+    if all input it valid
+    """
+    if ATM.currUser.loginStatus:
+        recipient = userNameTransferEntry.get()
+        currPin = secPINTransfer.get()
+        amount = transferAmountEntry.get()
+        pinCheck = ATM.currUser.PIN
+    if ((len(transferAmountEntry.get())) != 0 and (len(userNameTransferEntry.get())) != 0 and (len(secPINTransfer.get())) != 0):
+        try:
+            float(transferAmountEntry.get())
+            if ATM.userExists(recipient):
+                if recipient != ATM.currUser.userID:
+                    if pinCheck == currPin:
+                        if (float(transferAmountEntry.get()) >0 and float(transferAmountEntry.get()) <=ATM.currUser.balance):
+                            ATM.currUser.transfer(amount, recipient)
+                            ATM.updateBalance()
+                            display_text.set("${:,.2f}".format(ATM.currUser.balance))
+                            raise_frame(Top_Frame)
+                        else:
+                            messagebox.showerror("Error", "Amount must be greater than 0 and cannot be greater than your current balance")
+                    else:
+                        messagebox.showerror("Error", "PIN was incorrect.")
+                else:
+                    messagebox.showerror("Error", "Cannot send money to yourself")
+            else:
+                messagebox.showerror("Error", "UserID does not exist.")
+        except ValueError:
+            messagebox.showerror("Invalid input for transfer amount",
+                             "the transfer amount must be an integer")
+    else:
+        messagebox.showerror("Error", "message field cannot be left empty")
+    userNameTransferEntry.delete(0, END)
+    secPINTransfer.delete(0, END)
+    transferAmountEntry.delete(0, END)
+
+
+def checkEntryBoxes():
+    """
+    Ensures all input boxes have been correctly filled out
+    """
+    if len(firstName.get()) == 0:
+        messagebox.showerror("Invalid input", "You cannot leave \"What is your name?\" empty")
+    elif len(userName1.get()) == 0:
+        messagebox.showerror("Invalid input", "You cannot leave \"What would you like your username to be?\" empty")
+    elif len(password1.get()) == 0:
+        messagebox.showerror("Invalid input", "You cannot leave \"What would you like your password to be?\" empty")
+    elif len(confirmPasswordEntry.get()) == 0:
+        messagebox.showerror("Invalid input", "You cannot leave \"Confirm Password\" empty")
+    elif len(secPIN1.get()) == 0:
+        messagebox.showerror("Invalid input", "You cannot leave \"Add a PIN number of 4 digits.\" empty")
+    elif len(confirmSecPIN1.get()) == 0:
+        messagebox.showerror("Invalid input", "You cannot leave \"Confirm PIN\" empty")
+    else:
+        try:
+            float(deposit.get())
+            if(float(deposit.get()) < 0 or float(deposit.get()) > ATM.MAX_BALANCE):
+                messagebox.showerror("Invalid input for initial deposit",
+                                 "Your deposit must be an integer that is >0 and <999999999999")
+            else:
+                getCreationData()
+        except ValueError:
+            messagebox.showerror("Invalid input for initial deposit", "Your deposit must be an integer that is >0 and <999999999999")
+
+
+def moneymoves():
+    """
+    Handles the deposit/withdraw functionality
+    """
+    if ATM.currUser.loginStatus:
+        money = moneyInput.get()
+        balancePreMoneyMove = ATM.currUser.balance
+        if myCombo.get() == "Deposit":
+            try:
+                ATM.currUser.deposit(float(money))
+            except ValueError:
+                messagebox.showerror("Error", "Make sure that you are: Putting in only integers and that integer is greater than 0 and less than 999999999999")
+        else:
+            try:
+                ATM.currUser.withdraw(float(money))
+            except ValueError:
+                messagebox.showerror("Error", "Make sure that you are: Putting in only integers and that integer is greater than 0 and not greater than your account balance")
+
+        if balancePreMoneyMove == ATM.currUser.balance:
+            moneyInput.delete(0, END)
+        else:
+            ATM.updateBalance()
+            display_text.set("${:,.2f}".format(ATM.currUser.balance))
+            moneyInput.delete(0, END)
+            raise_frame(Top_Frame)
+
+
+def dashboard():
+    """
+    Populates the main account screen with accurate user data
+    """
+    success = False
+    Username = User.get()
+    Passw = Password.get()
+    db = sqlite3.connect('user_info.db')
+    c = db.cursor()
+    c.execute("SELECT * FROM users where userID=? AND password=?",
+              (Username, Passw))
+    row = c.fetchone()
+    if row:
+        success = True
+
+    if success:
+        ATM.login(Username, Passw)
+        display_text.set("${:,.2f}".format(ATM.currUser.balance))
+        User.delete(0, END)
+        Password.delete(0, END)
+        raise_frame(Top_Frame)
+    else:
+        if len(User.get()) == 0:
+            messagebox.showerror("Invalid input", "You cannot leave \"Username\" empty")
+        elif len(Password.get()) == 0:
+            messagebox.showerror("Invalid input", "You cannot leave \"Password\" empty")
+        else:
+            myLabel4 = Label(root, text="Incorrect username or password", fg='red', font="Times 12 bold")
+            myLabel4.place(x=290, y=300)
+
+def logout():
+    """
+    Logs out the current user and returns to login page
+    """
+    ATM.logout()
+    raise_frame(homePage)
+
+
+def raise_frame(f):
+    """
+    Raises the next frame
+    """
+    f.tkraise()
+
+def getCreationData():
+    """
+    Collects input from new user registration
+    """
+    nameEntry = firstName.get()
+    userNameEntry = userName1.get()
+    pinNum = secPIN1.get()
+    passEntry = password1.get()
+    depositEntry = deposit.get()
+    confirmPinNum = confirmSecPIN1.get()
+    confirmPassEntry = confirmPasswordEntry.get()
+
+    if ATM.userExists(userNameEntry):
+        userName1.delete(0, END)
+        messagebox.showerror("Error", "UserID already exists.")
+    else:
+        if passEntry == confirmPassEntry:
+            if pinNum == confirmPinNum:
+                ATM.createAccount(nameEntry, userNameEntry, passEntry, pinNum, depositEntry)
+                firstName.delete(0,END)
+                userName1.delete(0,END)
+                secPIN1.delete(0,END)
+                password1.delete(0,END)
+                deposit.delete(0,END)
+                confirmPasswordEntry.delete(0, END)
+                confirmSecPIN1.delete(0, END)
+                raise_frame(homePage)
+            else:
+                messagebox.showerror("Error", "PINs do not match.")
+                confirmSecPIN1.delete(0, END)
+                secPIN1.delete(0, END)
+
+        else:
+            messagebox.showerror("Error", "Passwords do not match.")
+            password1.delete(0, END)
+            confirmPasswordEntry.delete(0, END)
+
+
+def passChangeData():
+    """
+    Collects data and calls User.changePassword when changing password while logged in
+    """
+    pinNumIn = secPIN.get()
+    newPass = password2.get()
+
+    if (ATM.currUser.PIN == pinNumIn and ATM.currUser.password == currentPassInput.get()):
+        if ATM.currUser.password != newPass:
+            ATM.currUser.changePassword(newPass)
+            raise_frame(Top_Frame)
+        else:
+            messagebox.showerror("Error", "New password cannot be the same as old password")
+    else:
+        messagebox.showerror("Error", "Incorrect userID or PIN")
+
+    currentPassInput.delete(0, END)
+    secPIN.delete(0, END)
+    password2.delete(0, END)
+
+
+def forgotPassword():
+    """
+    Collects data and calls ATM.forgotPassword when changing password without being logged in
+    """
+    userNameData = userName3.get()
+    pinNumIn = secPIN2.get()
+    newPass = password3.get()
+
+    if ATM.userExists(userNameData):
+        if ATM.currUser.password != newPass:
+            try:
+                ATM.forgotPassword(userNameData, pinNumIn, newPass)
+                raise_frame(homePage)
+            except ValueError:
+                messagebox.showerror("Error", "Could not change password")
+        else:
+            messagebox.showerror("Error", "New password cannot be the same as old password")
+    userName3.delete(0, END)
+    secPIN2.delete(0, END)
+    password3.delete(0, END)
+
+
+# GUI ELEMENTS
 root = tk.Tk()
 root.geometry("800x400")
-
-
-
-
 
 homePage = Frame(root)
 createAccount = Frame(root)
@@ -23,20 +290,6 @@ Transfer_Frame = Frame(root)
 
 for frame in (homePage, createAccount, passwordChange, passwordChange2, moneyMoves, Top_Frame, Transfer_Frame):
     frame.grid(row=0, column=0, sticky='news')
-
-
-
-# Functions
-
-#transaction log on hold for now
-#def transactionLog():
-
-# newUserLabel.place(x=665, y=360)
-
-#seeMore_btn = ImageTk.PhotoImage(Image.open("pngfind.com-black-button-png-50298_80x40.png"))
-
-#img_label3 = Label(image=seeMore_btn)
-
 
 createAccountFrame = LabelFrame(createAccount, width=800, height=400)
 createAccountFrame.pack(fill="both", expand=1)
@@ -68,13 +321,11 @@ initialDepositLabel.place(x=20, y=230)
 deposit = Entry(createAccountFrame, width=20, fg='black', borderwidth=2)
 deposit.place(x=270, y=240)
 
-
 userNameLabel = Label(createAccountFrame, text="What would you like your username to be?",
                           padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
 userNameLabel.place(x=415, y=20)
 userName1 = Entry(createAccountFrame, width=20, fg='black', borderwidth=2)
 userName1.place(x=645, y=35)
-
 
 securityPINNLabel = Label(createAccountFrame, text="Add a PIN number of 4 digits.",
                                   padx=42, pady=15, bg='#343332', fg='white', font="Italics 7")
@@ -97,13 +348,6 @@ backButton2 = tk.Button(createAccountFrame, text="Back", padx=17, pady=17, fg="w
                         command=lambda:raise_frame(homePage))
 backButton2.place(x=30, y=325)
 
-def toggle_password3():
-    if password2.cget("show") == '*':
-        password2.config(show='')
-        viewPass_btn3.config(text='Hide Password')
-    else:
-        password2.config(show='*')
-        viewPass_btn3.config(text='Show Password')
 
 #password change while logged in
 passwordChangeLabel = LabelFrame(passwordChange, width=800, height=400)
@@ -112,8 +356,8 @@ passwordChangeLabel.pack(fill="both", expand=1)
 passwordChangecanvas = Canvas(passwordChangeLabel, width=800, height=400, bg='#75706F')
 passwordChangecanvas.place(x=0, y=0)
 
-forgotPassword = Label(passwordChangeLabel, text="Change Password", bg='#75706F', fg='Black', font= "Times 36 bold underline")
-forgotPassword.place(x=210, y=50)
+forgotPasswordLabel = Label(passwordChangeLabel, text="Change Password", bg='#75706F', fg='Black', font= "Times 36 bold underline")
+forgotPasswordLabel.place(x=210, y=50)
 
 currentPass = Label(passwordChangeLabel, text="Confirm your current password?",
                           padx=15, pady=15, bg='#343332', fg='white', font="Italics 7")
@@ -144,14 +388,6 @@ backButton3.place(x=50, y=330)
 viewPass_btn3 = tk.Button(passwordChangeLabel, text="Show Password", width = 15, fg="white", bg='#343332',
                         command=lambda:toggle_password3())
 viewPass_btn3.place(x=575, y=293)
-
-def toggle_password2():
-    if password3.cget("show") == '*':
-        password3.config(show='')
-        viewPass_btn2.config(text='Hide Password')
-    else:
-        password3.config(show='*')
-        viewPass_btn2.config(text='Show Password')
 
 #password change used for inside home page
 passwordChangeLabel2 = LabelFrame(passwordChange2, width=800, height=400)
@@ -194,22 +430,14 @@ viewPass_btn2 = tk.Button(passwordChangeLabel2, text="Show Password", width = 15
 viewPass_btn2.place(x=575, y=293)
 
 
-# check if valid username and password and change frame to dashboard
-#Selmir
-
-
-
 #Top_Frame Frame Original Selmir
 accountFrame = LabelFrame(Top_Frame, width=800, height=400)
 accountFrame.pack(fill="both", expand=1)
 
 # Define a Canvas Widget
-
 canvasT4 = Canvas(accountFrame, width=800, height=400, bg='#75706F')
 canvasT4.place(x=0, y=0)
 
-#canvasT = Canvas(accountFrame, width=390, height=150, bg='#343332')
-#canvasT.place(x=5, y=5)
 
 canvasT2 = Canvas(accountFrame, width=390, height=150, bg='#343332')
 canvasT2.place(x=210, y=5)
@@ -221,8 +449,6 @@ recentLogLabel = Label(accountFrame, text="Available Features", padx=10, pady=10
                            font='Times 10 bold')
 recentLogLabel.place(x=335, y=185)
 
-#savingAccountLabel = Label(accountFrame, text="Saving Account", padx=10, pady=10, bg='#343332', fg='gray')
-#savingAccountLabel.place(x=15, y=10)
 
 checkingAccountLabel = Label(accountFrame, text="Account Balance", padx=10, pady=10, bg='#343332', fg='gray')
 checkingAccountLabel.place(x=220, y=10)
@@ -231,23 +457,10 @@ availableBalanceLabel = Label(accountFrame, text="Available Balance", padx=10, p
                                   font="Italics 7")
 availableBalanceLabel.place(x=215, y=105)
 
-#availableBalanceLabel = Label(accountFrame, text="Available Balance", padx=10, pady=10, bg='#343332', fg='gray',
-                                  #font="Italics 7")
-#availableBalanceLabel.place(x=20, y=105)
-
-#checkingAccountMoneyLabel = Label(top_FrameOG, text="$", bg='#343332', fg='gray')
-#checkingAccountMoneyLabel.place(x=405, y=85)
-
-#savingAccountMoneyLabel = Label(accountFrame, text="$", bg='#343332', fg='gray', font="Times 18 bold")
-#savingAccountMoneyLabel.place(x=25, y=80)
-
 display_text = tk.StringVar()
 
 checkingAccountBalanceLabel = Label(accountFrame, textvariable=display_text, bg='#343332', fg='gray', font="Times 18 bold")
 checkingAccountBalanceLabel.place(x=225, y=80)
-
-#savingAccountBalanceLabel = Label(accountFrame, text="500.00", bg='#343332', fg='gray', font="Times 18 bold")
-#savingAccountBalanceLabel.place(x=38, y=80)
 
 logoutButton = tk.Button(accountFrame, text="Logout", padx=7, pady=7, fg="white", bg='#343332', command=lambda:logout())
 logoutButton.place(x=620, y=240)
@@ -260,9 +473,6 @@ transferButton.place(x=310, y=240)
 
 changePasswordButton = tk.Button(accountFrame, text="Change Password",padx=7, pady=7, fg="white", bg='#343332', command=lambda:raise_frame(passwordChange))
 changePasswordButton.place(x=450, y=240)
-
-
-
 
 
 #moneyMoves Original Logan Reneau updated by selmir
@@ -301,18 +511,6 @@ myCombo.current(0)
 myCombo.pack(pady=80)
 
 
-#update balances,etc...
-#Selmir
-
-
-def toggle_password():
-    if Password.cget("show") == '*':
-        Password.config(show='')
-        viewPass_btn.config(text='Hide Password')
-    else:
-        Password.config(show='*')
-        viewPass_btn.config(text='Show Password')
-
 #homePage Frame Original Selmir Lelak, Updated by Logan Reneau
 User = Entry(homePage, width=30, fg='black', borderwidth=2)
 User.place(x=300, y=175)
@@ -332,13 +530,6 @@ PasswordLabel.place(x=215, y=203)
 # Buttons
 welcomeLabel = Label(homePage, text= "Welcome to the ATM!", font="Italics 36", fg="black")
 welcomeLabel.place(x=175, y=50)
-#login_btn = ImageTk.PhotoImage(Image.open("login-button-png-18030_4_75x50.png"))
-
-#img_label = Label(image=login_btn)
-
-#register_btn = ImageTk.PhotoImage(Image.open("register-button-png-18477_4_50x40.png"))
-
-#img_label2 = Label(image=register_btn)
 
 viewPass_btn = tk.Button(homePage, text='Show Password', width=15, fg="white", bg='#343332', command=toggle_password)
 viewPass_btn.place(x=500, y=200)
@@ -388,231 +579,6 @@ doneButtonTransfer.place(x=600, y=300)
 backButton3 = tk.Button(TransferCanvas, text="Back", padx=17, pady=17, fg="white", bg='#343332',
                         command=lambda:raise_frame(Top_Frame))
 backButton3.place(x=50, y=300)
-
-def transfer():
-    if ATM.currUser.loginStatus:
-        recipient = userNameTransferEntry.get()
-        currPin = secPINTransfer.get()
-        amount = transferAmountEntry.get()
-        pinCheck = ATM.currUser.PIN
-    if ((len(transferAmountEntry.get())) != 0 and (len(userNameTransferEntry.get())) != 0 and (len(secPINTransfer.get())) != 0):
-        try:
-            float(transferAmountEntry.get())
-            if ATM.userExists(recipient):
-                if recipient != ATM.currUser.userID:
-                    if pinCheck == currPin:
-                        if (float(transferAmountEntry.get()) >0 and float(transferAmountEntry.get()) <=ATM.currUser.balance):
-                            ATM.currUser.transfer(amount, recipient)
-                            ATM.updateBalance()
-                            display_text.set("${:,.2f}".format(ATM.currUser.balance))
-                            raise_frame(Top_Frame)
-                        else:
-                            messagebox.showerror("Error", "Amount must be greater than 0 and cannot be greater than your current balance")
-                    else:
-                        messagebox.showerror("Error", "PIN was incorrect.")
-                else:
-                    messagebox.showerror("Error", "Cannot send money to yourself")
-            else:
-                messagebox.showerror("Error", "UserID does not exist.")
-        except ValueError:
-            messagebox.showerror("Invalid input for transfer amount",
-                             "the transfer amount must be an integer")
-    else:
-        messagebox.showerror("Error", "message field cannot be left empty")
-
-    userNameTransferEntry.delete(0, END)
-    secPINTransfer.delete(0, END)
-    transferAmountEntry.delete(0, END)
-
-def checkEntryBoxes():
-
-    if len(firstName.get()) == 0:
-        messagebox.showerror("Invalid input", "You cannot leave \"What is your name?\" empty")
-    elif len(userName1.get()) == 0:
-        messagebox.showerror("Invalid input", "You cannot leave \"What would you like your username to be?\" empty")
-    elif len(password1.get()) == 0:
-        messagebox.showerror("Invalid input", "You cannot leave \"What would you like your password to be?\" empty")
-    elif len(confirmPasswordEntry.get()) == 0:
-        messagebox.showerror("Invalid input", "You cannot leave \"Confirm Password\" empty")
-    elif len(secPIN1.get()) == 0:
-        messagebox.showerror("Invalid input", "You cannot leave \"Add a PIN number of 4 digits.\" empty")
-    elif len(confirmSecPIN1.get()) == 0:
-        messagebox.showerror("Invalid input", "You cannot leave \"Confirm PIN\" empty")
-    else:
-        try:
-            float(deposit.get())
-            if(float(deposit.get()) < 0 or float(deposit.get()) > ATM.MAX_BALANCE):
-                messagebox.showerror("Invalid input for initial deposit",
-                                 "Your deposit must be an integer that is >0 and <999999999999")
-            else:
-                getCreationData()
-        except ValueError:
-            messagebox.showerror("Invalid input for initial deposit", "Your deposit must be an integer that is >0 and <999999999999")
-
-
-def getCreationData():
-    nameEntry = firstName.get()
-    userNameEntry = userName1.get()
-    pinNum = secPIN1.get()
-    passEntry = password1.get()
-    depositEntry = deposit.get()
-    confirmPinNum = confirmSecPIN1.get()
-    confirmPassEntry = confirmPasswordEntry.get()
-
-    if ATM.userExists(userNameEntry):
-        userName1.delete(0, END)
-        messagebox.showerror("Error", "UserID already exists.")
-        #userNameExistsLabel = Label (createAccountFrame, text= "Error: UserID already exits", fg="red",
-        #                   font="Italics 14")
-        #userNameExistsLabel.place(x=450, y=50)
-
-    else:
-        if passEntry == confirmPassEntry:
-            if pinNum == confirmPinNum:
-                ATM.createAccount(nameEntry, userNameEntry, passEntry, pinNum, depositEntry)
-                firstName.delete(0,END)
-                userName1.delete(0,END)
-                secPIN1.delete(0,END)
-                password1.delete(0,END)
-                deposit.delete(0,END)
-                confirmPasswordEntry.delete(0, END)
-                confirmSecPIN1.delete(0, END)
-                raise_frame(homePage)
-            else:
-                messagebox.showerror("Error", "PINs do not match.")
-                #confirmationErrorLabel = Label(createAccountFrame, text="Error: PINs do not match", fg="red",
-                                        #font="Italics 14")
-                #confirmationErrorLabel.place(x=450, y=100)
-                confirmSecPIN1.delete(0, END)
-                secPIN1.delete(0, END)
-
-        else:
-            messagebox.showerror("Error", "Passwords do not match.")
-            #confirmationErrorLabel = Label(createAccountFrame, text="Error: Passwords do not match", fg="red",
-                                         #  font="Italics 14")
-            #confirmationErrorLabel.place(x=450, y=125)
-            password1.delete(0, END)
-            confirmPasswordEntry.delete(0, END)
-
-#passChange Frame Logan Reneau
-def passChangeData():
-    pinNumIn = secPIN.get()
-    newPass = password2.get()
-
-    if (ATM.currUser.PIN == pinNumIn and ATM.currUser.password == currentPassInput.get()):
-        if(ATM.currUser.password != newPass):
-            ATM.currUser.changePassword(newPass)
-            raise_frame(Top_Frame)
-        else:
-            messagebox.showerror("Error", "New password cannot be the same as old password")
-    else:
-        messagebox.showerror("Error", "Incorrect userID or PIN")
-
-    currentPassInput.delete(0, END)
-    secPIN.delete(0, END)
-    password2.delete(0, END)
-
-
-#Home screen forgot password button
-def forgotPassword():
-    userNameData = userName3.get()
-    pinNumIn = secPIN2.get()
-    newPass = password3.get()
-    # errorLabelPass = Label(passwordChangeLabel, text="Error: Incorrect userID or PIN", fg='Black',
-    #                        font='Italics 12')
-
-    if(ATM.userExists(userNameData)):
-        if(ATM.currUser.password != newPass):
-            try:
-                ATM.forgotPassword(userNameData, pinNumIn, newPass)
-                raise_frame(homePage)
-            except:
-                ValueError(messagebox.showerror("Error", "Could not change password"))
-        else:
-            messagebox.showerror("Error", "New password cannot be the same as old password")
-
-    userName3.delete(0, END)
-    secPIN2.delete(0, END)
-    password3.delete(0, END)
-
-
-
- #Original Logan updated by selmir
-def moneymoves():
-    #depositErrorLabel = Label(depoWithFrame, text="Error: Accoun.", fg="red",
-    #                          font="Italics 12")
-
-   # withdrawErrorLabel = Label(depoWithFrame, text="Error: Account does not have enough funds.", fg="red",
-   #                            font="Italics 12")
-
-    if ATM.currUser.loginStatus:
-        money = moneyInput.get()
-        balancePreMoneyMove = ATM.currUser.balance
-        if myCombo.get() == "Deposit":
-            try:
-                ATM.currUser.deposit(float(money))
-            except:
-                ValueError(messagebox.showerror("Error", "Make sure that you are: Putting in only integers and that integer is greater than 0 and less than 999999999999"))
-        else:
-            try:
-                ATM.currUser.withdraw(float(money))
-            except:
-                ValueError(messagebox.showerror("Error", "Make sure that you are: Putting in only integers and that integer is greater than 0 and not greater than your account balance"))
-
-        if balancePreMoneyMove == ATM.currUser.balance:
-            moneyInput.delete(0, END)
-        else:
-            ATM.updateBalance()
-            display_text.set("${:,.2f}".format(ATM.currUser.balance))
-            moneyInput.delete(0, END)
-            raise_frame(Top_Frame)
-
-
-
-
-
-def dashboard():
-    success = False
-    Username = User.get()
-    Passw = Password.get()
-    db = sqlite3.connect('user_info.db')
-    c = db.cursor()
-
-    c.execute("SELECT * FROM users where userID=? AND password=?",
-              (Username, Passw))
-
-    row = c.fetchone()
-    if row:
-        success = True
-
-    if (success):
-        ATM.login(Username, Passw)
-        display_text.set("${:,.2f}".format(ATM.currUser.balance))
-        User.delete(0, END)
-        Password.delete(0, END)
-        raise_frame(Top_Frame)
-
-    else:
-        if len(User.get()) == 0:
-            messagebox.showerror("Invalid input", "You cannot leave \"Username\" empty")
-        elif len(Password.get()) == 0:
-            messagebox.showerror("Invalid input", "You cannot leave \"Password\" empty")
-        else:
-            myLabel4 = Label(root, text="Incorrect username or password", fg='red', font="Times 12 bold")
-            myLabel4.place(x=290, y=300)
-
-
-
-def logout():
-    ATM.logoutAll()
-    raise_frame(homePage)
-
-
-def update_topFrame():
-    Tk.update()
-
-def raise_frame(frame):
-    frame.tkraise()
 
 ATM.logoutAll()
 raise_frame(homePage)
