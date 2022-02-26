@@ -1,8 +1,11 @@
-## Welcome to GitHub Pages
+## ATM Project
 
-You can use the [editor on GitHub](https://github.com/ryankline122/ATM/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
-
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+This site contains all files used in the ATM project
+**Version**
+1.0 
+02/26/2022
+**Authors:**
+Ryan Kline, Logan Reneau, Selmir Lelak
 
 ### Markdown
 
