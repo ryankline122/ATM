@@ -2,7 +2,7 @@
 
 This site contains all files used in the ATM project
 
-**Version**\n
+## **Version**
 
 1.0 
 
