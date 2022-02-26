@@ -14,13 +14,13 @@ Ryan Kline, Logan Reneau, Selmir Lelak
 
 ### Files
 
-ATM.py: Module for all backend functionality of the ATM Application.
+**ATM.py**: Module for all backend functionality of the ATM Application.
 
-ATM_GUI.py: Module for running the ATM application on the front-end
+**ATM_GUI.py**: Module for running the ATM application on the front-end
 
-User.py: A class to represent a user within the ATM database
+**User.py**: A class to represent a user within the ATM database
 
-ATM_Test.py: Module to test functions and methods in ATM.py and User.py
+**ATM_Test.py**: Module to test functions and methods in ATM.py and User.py
 
-mainCL.py: Module to run the command line version of the application
+**mainCL.py**: Module to run the command line version of the application
  
