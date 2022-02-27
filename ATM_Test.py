@@ -10,7 +10,7 @@ import ATM
 
 class TestAccountCreation(unittest.TestCase):
 
-    def test_newAccount(self):
+    def testNewAccount(self):
         ATM.createTable()
 
         db = sqlite3.connect('user_info.db')
@@ -23,7 +23,7 @@ class TestAccountCreation(unittest.TestCase):
 
         ATM.deleteAll()
 
-    def test_inUse_False(self):
+    def testInUseFalse(self):
         ATM.createTable()
         ATM.createAccount("John", "jdoe123", "passphrase", 1234, 100.99)
         ATM.logout()
@@ -34,7 +34,7 @@ class TestAccountCreation(unittest.TestCase):
         ATM.deleteAll()
 
 
-    def test_inUse_True(self):
+    def testInUseTrue(self):
         ATM.createTable()
         ATM.createAccount("John", "jdoe123", "passphrase", 1234, 100.99)
         res = ATM.inUse()
@@ -44,7 +44,7 @@ class TestAccountCreation(unittest.TestCase):
         ATM.deleteAll()
 
 
-    def test_login_checkName(self):
+    def testloginCheckName(self):
         ATM.createTable()
 
         ATM.createAccount("John", "jdoe123", "passphrase", 1234, 100.99)
@@ -54,7 +54,7 @@ class TestAccountCreation(unittest.TestCase):
 
         ATM.deleteAll()
 
-    def test_login_checkUserID(self):
+    def testLoginCheckUserID(self):
         ATM.createTable()
         ATM.createAccount("John", "jdoe123", "passphrase", 1234, 100.99)
 
@@ -62,7 +62,7 @@ class TestAccountCreation(unittest.TestCase):
         ATM.deleteAll()
 
 
-    def test_login_checkPassword(self):
+    def testloginCheckPassword(self):
         ATM.createTable()
         ATM.createAccount("John", "jdoe123", "passphrase", 1234, 100.99)
 
@@ -70,7 +70,7 @@ class TestAccountCreation(unittest.TestCase):
         ATM.deleteAll()
 
 
-    def test_login_checkPIN(self):
+    def testloginCheckPIN(self):
         ATM.createTable()
         ATM.createAccount("John", "jdoe123", "passphrase", 1234, 100.99)
 
@@ -78,7 +78,7 @@ class TestAccountCreation(unittest.TestCase):
         ATM.deleteAll()
 
 
-    def test_login_checkBalance(self):
+    def testLoginCheckBalance(self):
         ATM.createTable()
         ATM.createAccount("John", "jdoe123", "passphrase", 1234, 100.99)
 
@@ -86,7 +86,7 @@ class TestAccountCreation(unittest.TestCase):
         ATM.deleteAll()
 
 
-    def test_login_status(self):
+    def testLoginStatus(self):
         ATM.createTable()
         ATM.createAccount("John", "jdoe123", "passphrase", 1234, 100.99)
 
@@ -94,7 +94,7 @@ class TestAccountCreation(unittest.TestCase):
         ATM.deleteAll()
 
 
-    def test_logout(self):
+    def testLogout(self):
         ATM.createTable()
 
         ATM.createAccount("John", "jdoe123", "passphrase", 1234, 100.99)
@@ -104,7 +104,7 @@ class TestAccountCreation(unittest.TestCase):
         self.assertEqual("False", ATM.currUser.loginStatus)
 
 
-    def test_forgotPassword(self):
+    def testForgotPassword(self):
         ATM.createTable()
         ATM.createAccount("John", "jdoe123", "passphrase", 1234, 100.99)
         ATM.forgotPassword("jdoe123", "1234", "newpassword")
@@ -119,7 +119,7 @@ class TestAccountCreation(unittest.TestCase):
         ATM.deleteAll()
 
 
-    def test_forgotPassword_incorrectPIN(self):
+    def testForgotPasswordIncorrectPIN(self):
         with self.assertRaises(ValueError):
             ATM.createTable()
             ATM.createAccount("John", "jdoe123", "passphrase", 1234, 100.99)
@@ -133,7 +133,7 @@ class TestAccountCreation(unittest.TestCase):
         ATM.deleteAll()
 
 
-    def test_userExists_True(self):
+    def testUserExistsTrue(self):
         ATM.createTable()
         ATM.createAccount("John", "jdoe123", "passphrase", 1234, 100.99)
 
@@ -141,7 +141,7 @@ class TestAccountCreation(unittest.TestCase):
         ATM.deleteAll()
 
 
-    def test_userExists_False(self):
+    def testUserExistsFalse(self):
         ATM.createTable()
         ATM.createAccount("John", "jdoe123", "passphrase", 1234, 100.99)
 
@@ -149,7 +149,7 @@ class TestAccountCreation(unittest.TestCase):
         ATM.deleteAll()
 
 
-    def test_deposit(self):
+    def testDeposit(self):
         ATM.createTable()
         ATM.createAccount("John", "jdoe123", "passphrase", 1234, 100.00)
         ATM.currUser.deposit(50.00)
@@ -158,7 +158,7 @@ class TestAccountCreation(unittest.TestCase):
         ATM.deleteAll()
 
 
-    def test_deposit_OverMax(self):
+    def testDepositOverMax(self):
         with self.assertRaises(ValueError):
             ATM.createTable()
             ATM.createAccount("John", "jdoe123", "passphrase", 1234, 100.00)
@@ -167,7 +167,7 @@ class TestAccountCreation(unittest.TestCase):
         ATM.deleteAll()
 
 
-    def test_deposit_UnderMin(self):
+    def testDepositUnderMin(self):
         with self.assertRaises(ValueError):
             ATM.createTable()
             ATM.createAccount("John", "jdoe123", "passphrase", 1234, 100.00)
@@ -176,7 +176,7 @@ class TestAccountCreation(unittest.TestCase):
         ATM.deleteAll()
 
 
-    def test_withdraw(self):
+    def testWithdraw(self):
         ATM.createTable()
         ATM.createAccount("John", "jdoe123", "passphrase", 1234, 100.00)
         ATM.currUser.withdraw(50.0)
@@ -185,7 +185,7 @@ class TestAccountCreation(unittest.TestCase):
         ATM.deleteAll()
 
 
-    def test_withdraw_TooMuch(self):
+    def testWithdrawTooMuch(self):
         with self.assertRaises(ValueError):
             ATM.createTable()
             ATM.createAccount("John", "jdoe123", "passphrase", 1234, 100.00)
@@ -194,7 +194,7 @@ class TestAccountCreation(unittest.TestCase):
         ATM.deleteAll()
 
 
-    def test_withdraw_TooLow(self):
+    def testWithdrawTooLow(self):
         with self.assertRaises(ValueError):
             ATM.createTable()
             ATM.createAccount("John", "jdoe123", "passphrase", 1234, 100.00)
@@ -203,7 +203,7 @@ class TestAccountCreation(unittest.TestCase):
         ATM.deleteAll()
 
 
-    def test_transfer(self):
+    def testTransfer(self):
         ATM.createTable()
         ATM.createAccount("John", "jdoe123", "passphrase", 1234, 100.00)
         ATM.logout()
@@ -216,7 +216,7 @@ class TestAccountCreation(unittest.TestCase):
         ATM.deleteAll()
 
 
-    def test_transfer_InvalidAmount(self):
+    def testTransferInvalidAmount(self):
         with self.assertRaises(Exception):
             ATM.createTable()
             ATM.createAccount("John", "jdoe123", "passphrase", 1234, 100.00)
@@ -229,7 +229,7 @@ class TestAccountCreation(unittest.TestCase):
         ATM.deleteAll()
 
 
-    def test_transfer_InvalidAmount2(self):
+    def testTransferInvalidAmount2(self):
         with self.assertRaises(Exception):
             ATM.createTable()
             ATM.createAccount("John", "jdoe123", "passphrase", 1234, 100.00)
@@ -242,7 +242,7 @@ class TestAccountCreation(unittest.TestCase):
         ATM.deleteAll()
 
 
-    def test_transfer_RecipientDNE(self):
+    def testTransferRecipientDNE(self):
         with self.assertRaises(Exception):
             ATM.createTable()
             ATM.createAccount("John", "jdoe123", "passphrase", 1234, 100.00)
@@ -251,7 +251,7 @@ class TestAccountCreation(unittest.TestCase):
         ATM.deleteAll()
 
 
-    def test_passwordChange(self):
+    def testPasswordChange(self):
         ATM.createTable()
         ATM.createAccount("John", "jdoe123", "passphrase", 1234, 100.00)
         ATM.currUser.changePassword("newPassword")

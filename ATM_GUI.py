@@ -2,13 +2,13 @@
 Module for running the ATM application on the front-end
 
 Functions:
-    toggle_password()\n
+    togglePassword()\n
     transfer()\n
     checkEntryBoxes()\n
     moneyMoves()\n
     dashboard()\n
     logout()\n
-    raise_frame(frame)\n
+    raiseFrame(frame)\n
     getCreationData()\n
     passChangeData()\n
     forgotPassword()\n
@@ -21,40 +21,40 @@ import ATM
 
 
 
-def toggle_password3():
+def togglePassword3():
     """
     Allows user to toggle between show/hide password in the input box
     """
     if password2.cget("show") == '*':
         password2.config(show='')
-        viewPass_btn3.config(text='Hide Password')
+        viewPassBtn3.config(text='Hide Password')
     else:
         password2.config(show='*')
-        viewPass_btn3.config(text='Show Password')
+        viewPassBtn3.config(text='Show Password')
 
 
-def toggle_password2():
+def togglePassword2():
     """
     Allows user to toggle between show/hide password in the input box
     """
     if password3.cget("show") == '*':
         password3.config(show='')
-        viewPass_btn2.config(text='Hide Password')
+        viewPassBtn2.config(text='Hide Password')
     else:
         password3.config(show='*')
-        viewPass_btn2.config(text='Show Password')
+        viewPassBtn2.config(text='Show Password')
 
 
-def toggle_password():
+def togglePassword():
     """
     Allows user to toggle between show/hide password in the input box
     """
     if Password.cget("show") == '*':
         Password.config(show='')
-        viewPass_btn.config(text='Hide Password')
+        viewPassBtn.config(text='Hide Password')
     else:
         Password.config(show='*')
-        viewPass_btn.config(text='Show Password')
+        viewPassBtn.config(text='Show Password')
 
 
 def transfer():
@@ -76,8 +76,8 @@ def transfer():
                         if (float(transferAmountEntry.get()) >0 and float(transferAmountEntry.get()) <=ATM.currUser.balance):
                             ATM.currUser.transfer(amount, recipient)
                             ATM.updateBalance()
-                            display_text.set("${:,.2f}".format(ATM.currUser.balance))
-                            raise_frame(Top_Frame)
+                            displayText.set("${:,.2f}".format(ATM.currUser.balance))
+                            raiseFrame(topFrame)
                         else:
                             messagebox.showerror("Error", "Amount must be greater than 0 and cannot be greater than your current balance")
                     else:
@@ -146,9 +146,9 @@ def moneymoves():
             moneyInput.delete(0, END)
         else:
             ATM.updateBalance()
-            display_text.set("${:,.2f}".format(ATM.currUser.balance))
+            displayText.set("${:,.2f}".format(ATM.currUser.balance))
             moneyInput.delete(0, END)
-            raise_frame(Top_Frame)
+            raiseFrame(topFrame)
 
 
 def dashboard():
@@ -168,10 +168,10 @@ def dashboard():
 
     if success:
         ATM.login(Username, Passw)
-        display_text.set("${:,.2f}".format(ATM.currUser.balance))
+        displayText.set("${:,.2f}".format(ATM.currUser.balance))
         User.delete(0, END)
         Password.delete(0, END)
-        raise_frame(Top_Frame)
+        raiseFrame(topFrame)
     else:
         if len(User.get()) == 0:
             messagebox.showerror("Invalid input", "You cannot leave \"Username\" empty")
@@ -186,10 +186,10 @@ def logout():
     Logs out the current user and returns to login page
     """
     ATM.logout()
-    raise_frame(homePage)
+    raiseFrame(homePage)
 
 
-def raise_frame(f):
+def raiseFrame(f):
     """
     Raises the next frame
     """
@@ -221,7 +221,7 @@ def getCreationData():
                 deposit.delete(0,END)
                 confirmPasswordEntry.delete(0, END)
                 confirmSecPIN1.delete(0, END)
-                raise_frame(homePage)
+                raiseFrame(homePage)
             else:
                 messagebox.showerror("Error", "PINs do not match.")
                 confirmSecPIN1.delete(0, END)
@@ -243,7 +243,7 @@ def passChangeData():
     if (ATM.currUser.PIN == pinNumIn and ATM.currUser.password == currentPassInput.get()):
         if ATM.currUser.password != newPass:
             ATM.currUser.changePassword(newPass)
-            raise_frame(Top_Frame)
+            raiseFrame(topFrame)
         else:
             messagebox.showerror("Error", "New password cannot be the same as old password")
     else:
@@ -266,7 +266,7 @@ def forgotPassword():
         if ATM.currUser.password != newPass:
             try:
                 ATM.forgotPassword(userNameData, pinNumIn, newPass)
-                raise_frame(homePage)
+                raiseFrame(homePage)
             except ValueError:
                 messagebox.showerror("Error", "Could not change password")
         else:
@@ -285,10 +285,10 @@ createAccount = Frame(root)
 moneyMoves = Frame(root)
 passwordChange = Frame(root)
 passwordChange2 = Frame(root)
-Top_Frame = Frame(root)
-Transfer_Frame = Frame(root)
+topFrame = Frame(root)
+transferFrame = Frame(root)
 
-for frame in (homePage, createAccount, passwordChange, passwordChange2, moneyMoves, Top_Frame, Transfer_Frame):
+for frame in (homePage, createAccount, passwordChange, passwordChange2, moneyMoves, topFrame, transferFrame):
     frame.grid(row=0, column=0, sticky='news')
 
 createAccountFrame = LabelFrame(createAccount, width=800, height=400)
@@ -345,7 +345,7 @@ updateButton = tk.Button(createAccountFrame, text="Add to database!", padx=60, p
 updateButton.place(x=500, y=275)
 
 backButton2 = tk.Button(createAccountFrame, text="Back", padx=17, pady=17, fg="white", bg='#343332',
-                        command=lambda:raise_frame(homePage))
+                        command=lambda:raiseFrame(homePage))
 backButton2.place(x=30, y=325)
 
 
@@ -382,12 +382,12 @@ doneButton = tk.Button(passwordChangeLabel, text="All Done!", padx=17, pady=17, 
 doneButton.place(x=590, y=330)
 
 backButton3 = tk.Button(passwordChangeLabel, text="Back", padx=17, pady=17, fg="white", bg='#343332',
-                        command=lambda:raise_frame(Top_Frame)) #CHANGE BACK AFTER DONE TESTING
+                        command=lambda:raiseFrame(topFrame)) #CHANGE BACK AFTER DONE TESTING
 backButton3.place(x=50, y=330)
 
-viewPass_btn3 = tk.Button(passwordChangeLabel, text="Show Password", width = 15, fg="white", bg='#343332',
-                        command=lambda:toggle_password3())
-viewPass_btn3.place(x=575, y=293)
+viewPassBtn3 = tk.Button(passwordChangeLabel, text="Show Password", width = 15, fg="white", bg='#343332',
+                        command=lambda:togglePassword3())
+viewPassBtn3.place(x=575, y=293)
 
 #password change used for inside home page
 passwordChangeLabel2 = LabelFrame(passwordChange2, width=800, height=400)
@@ -422,16 +422,16 @@ doneButton2 = tk.Button(passwordChangeLabel2, text="All Done!", padx=17, pady=17
 doneButton2.place(x=590, y=330)
 
 backButton4 = tk.Button(passwordChangeLabel2, text="Back", padx=17, pady=17, fg="white", bg='#343332',
-                        command=lambda:raise_frame(homePage)) #CHANGE BACK AFTER DONE TESTING
+                        command=lambda:raiseFrame(homePage)) #CHANGE BACK AFTER DONE TESTING
 backButton4.place(x=50, y=330)
 
-viewPass_btn2 = tk.Button(passwordChangeLabel2, text="Show Password", width = 15, fg="white", bg='#343332',
-                        command=lambda:toggle_password2())
-viewPass_btn2.place(x=575, y=293)
+viewPassBtn2 = tk.Button(passwordChangeLabel2, text="Show Password", width = 15, fg="white", bg='#343332',
+                        command=lambda:togglePassword2())
+viewPassBtn2.place(x=575, y=293)
 
 
-#Top_Frame Frame Original Selmir
-accountFrame = LabelFrame(Top_Frame, width=800, height=400)
+#topFrame Frame Original Selmir
+accountFrame = LabelFrame(topFrame, width=800, height=400)
 accountFrame.pack(fill="both", expand=1)
 
 # Define a Canvas Widget
@@ -457,21 +457,21 @@ availableBalanceLabel = Label(accountFrame, text="Available Balance", padx=10, p
                                   font="Italics 7")
 availableBalanceLabel.place(x=215, y=105)
 
-display_text = tk.StringVar()
+displayText = tk.StringVar()
 
-checkingAccountBalanceLabel = Label(accountFrame, textvariable=display_text, bg='#343332', fg='gray', font="Times 18 bold")
+checkingAccountBalanceLabel = Label(accountFrame, textvariable=displayText, bg='#343332', fg='gray', font="Times 18 bold")
 checkingAccountBalanceLabel.place(x=225, y=80)
 
 logoutButton = tk.Button(accountFrame, text="Logout", padx=7, pady=7, fg="white", bg='#343332', command=lambda:logout())
 logoutButton.place(x=620, y=240)
 
-moneyMovesButton = tk.Button(accountFrame, text="Deposit/Withdraw Screen", padx=7, pady=7, fg="white", bg='#343332', command=lambda:raise_frame(moneyMoves))
+moneyMovesButton = tk.Button(accountFrame, text="Deposit/Withdraw Screen", padx=7, pady=7, fg="white", bg='#343332', command=lambda:raiseFrame(moneyMoves))
 moneyMovesButton.place(x=120,y=240)
 
-transferButton = tk.Button(accountFrame, text="Transfer Portal", padx=7, pady=7, fg="white", bg='#343332', command=lambda:raise_frame(Transfer_Frame))
+transferButton = tk.Button(accountFrame, text="Transfer Portal", padx=7, pady=7, fg="white", bg='#343332', command=lambda:raiseFrame(transferFrame))
 transferButton.place(x=310, y=240)
 
-changePasswordButton = tk.Button(accountFrame, text="Change Password",padx=7, pady=7, fg="white", bg='#343332', command=lambda:raise_frame(passwordChange))
+changePasswordButton = tk.Button(accountFrame, text="Change Password",padx=7, pady=7, fg="white", bg='#343332', command=lambda:raiseFrame(passwordChange))
 changePasswordButton.place(x=450, y=240)
 
 
@@ -498,7 +498,7 @@ doneButton2 = tk.Button(depoWithFrame, text="Submit", padx=17, pady=17, fg="whit
 doneButton2.place(x=600, y=300)
 
 backButton = tk.Button(depoWithFrame, text="Back", padx=17, pady=17, fg="white", bg='#343332',
-                        command=lambda:raise_frame(Top_Frame))
+                        command=lambda:raiseFrame(topFrame))
 backButton.place(x=100, y=300)
 
 options = [
@@ -531,21 +531,21 @@ PasswordLabel.place(x=215, y=203)
 welcomeLabel = Label(homePage, text= "Welcome to the ATM!", font="Italics 36", fg="black")
 welcomeLabel.place(x=175, y=50)
 
-viewPass_btn = tk.Button(homePage, text='Show Password', width=15, fg="white", bg='#343332', command=toggle_password)
-viewPass_btn.place(x=500, y=200)
+viewPassBtn = tk.Button(homePage, text='Show Password', width=15, fg="white", bg='#343332', command=togglePassword)
+viewPassBtn.place(x=500, y=200)
 
 loginBtn = tk.Button(homePage, text="Login", padx=25, pady=5, fg="white", bg='#343332', command=lambda:dashboard(),
                     borderwidth=0)
 loginBtn.place(x=350, y=235)
 
-createAccBtn = tk.Button(homePage, text="Register", padx=5, pady=5, fg="white", bg='#343332', command=lambda:raise_frame(createAccount), borderwidth=0)
+createAccBtn = tk.Button(homePage, text="Register", padx=5, pady=5, fg="white", bg='#343332', command=lambda:raiseFrame(createAccount), borderwidth=0)
 createAccBtn.place(x=725, y=350)
 
-forgotPasswordButton = tk.Button(homePage, text="Forgot Password?", padx=5, pady=5, fg="white", bg='#343332', command=lambda:raise_frame(passwordChange2))
+forgotPasswordButton = tk.Button(homePage, text="Forgot Password?", padx=5, pady=5, fg="white", bg='#343332', command=lambda:raiseFrame(passwordChange2))
 forgotPasswordButton.place(x=670,y=305)
 
 #transfer
-TransferCanvas = LabelFrame(Transfer_Frame, width=800, height=400)
+TransferCanvas = LabelFrame(transferFrame, width=800, height=400)
 TransferCanvas.pack(fill="both", expand=1)
 
 greyTransferCanvas = Canvas(TransferCanvas, width=800, height=400, bg='#75706F')
@@ -577,9 +577,9 @@ doneButtonTransfer = tk.Button(TransferCanvas, text="All Done!", padx=17, pady=1
 doneButtonTransfer.place(x=600, y=300)
 
 backButton3 = tk.Button(TransferCanvas, text="Back", padx=17, pady=17, fg="white", bg='#343332',
-                        command=lambda:raise_frame(Top_Frame))
+                        command=lambda:raiseFrame(topFrame))
 backButton3.place(x=50, y=300)
 
 ATM.logoutAll()
-raise_frame(homePage)
+raiseFrame(homePage)
 root.mainloop()
