@@ -2,11 +2,13 @@
 Module to run the command line version of the application
 """
 #! /usr/bin/env python3
+import RPi.GPIO as GPIO
 
 import sqlite3
 import sys
 import getpass
 import ATM
+import ntag2
 
 
 def main():
@@ -79,7 +81,7 @@ def main():
             else:
                 nameInput = input("Enter your username: ")
                 # "Run" --> "Edit Configuration" --> Check "Emulate terminal in output console
-                passInput = getpass.getpass("Enter your password: ", stream=None)
+                passInput = ntag2.readCard()
                 c.execute("SELECT * FROM users where userID=? AND password=?",
                           (nameInput, passInput))
                 row = c.fetchone()
@@ -177,6 +179,14 @@ def main():
             else:
                 print("Incorrect username")
 
+
+        elif (action.lower() == "read"):
+            ntag2.readCard()
+
+        elif (action.lower() == "write"):
+            ntag2.write_UID_to_pass(ATM.currUser.userID)
+
+
         # LOGOUT
         elif (action.lower() == "logout"):
             if(ATM.inUse()):
@@ -197,11 +207,13 @@ def main():
         elif (action.lower() == "exit"):
             if(ATM.inUse()):
                 ATM.logout()
+                GPIO.cleanup()
                 print("Shutting Down")
                 sys.exit()
         else:
             print("Invalid command")
 
+        
 
 # ATM Boot-up
 print("Welcome to our ATM!")
